@@ -2,7 +2,7 @@ CREATE DATABASE POO;
 
 USE POO;
 
-CREATE TABLE Departamento(
+CREATE TABLE departamento(
     id int primary key auto_increment,
     Codigo varchar(20) unique,
     Nombre varchar(50) not null unique,
@@ -26,7 +26,7 @@ begin
 end$$
 delimiter ;
 call insertar_departamento('Ventas','');
-call insertar_departamento('Desarrollo','Este departamento lleva el control de las ventas de la empresa');
+call insertar_departamento('Desarrollo','Este departamento se encarga de desarrollar los proyecto');
 
 
 /*Procedimiento para la actualizacion de departamentos*/
@@ -40,7 +40,6 @@ begin
     end if;
 end$$
 delimiter ;
-call actualizar_departamento (2,'Nuevo','');
 
 /*Procedimiento para la eliminacion de departamentos*/
 delimiter $$
@@ -49,7 +48,8 @@ begin
 	delete from departamento where id = v_id;
 end$$
 delimiter ;
-call eliminar_departamento (1);
+
+--call eliminar_departamento (1);
 
 /*Procedimiento para mostrar departamentos*/
 delimiter $$
@@ -89,7 +89,7 @@ begin
     end if;
 end$$
 delimiter ;
-call insertar_rol('Jefe','Este departamento lleva el control de las ventas de la empresa');
+call insertar_rol('Administrador','Con la capacidad de solicitar la apertura de casos y monitorear el porcentaje de progreso y bitácora de los casos aperturados');
 
 /*Procedimiento para la actualizacion de departamentos*/
 delimiter $$
@@ -135,8 +135,34 @@ drop procedure buscar_departamento
 truncate departamento
 */
 
+--Testing
 
+CREATE TABLE Empleado(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    Apellidos VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) NOT NULL,
+    Contrasenia VARCHAR(50) NOT NULL,
+    idRol INT,
+    idDepartamento INT,
+    FOREIGN KEY (idRol) REFERENCES rol(id),
+    FOREIGN KEY (idDepartamento) REFERENCES departamento(id)
+);
+INSERT INTO Empleado VALUES(null,'Alejandro','Alejo','alejandroalejo714@gmail.com','password',1,1);
 
-select * from departamento
+delimiter $$
+CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
+    BEGIN
+        SELECT e.Nombre,r.rol AS Rol,d.Nombre AS Departamento
+        FROM Empleado e
+        INNER JOIN rol r
+        ON e.idRol = r.id
+        INNER JOIN departamento d
+        ON e.idDepartamento = d.id
+        WHERE e.Email = Usuario AND e.Contrasenia = Contrasenia; 
+    END $$
+delimiter ;
+
+CALL Loguearse ('alejandroalejo714@gmail.com','password');
 
 

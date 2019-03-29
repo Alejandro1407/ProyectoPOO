@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 
 public class Conexion {
     
-    private static Connection Conectarse(){
+    public static Connection Conectarse(){
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/POO","root","");
@@ -15,7 +15,7 @@ public class Conexion {
             return null;
         }
     }//Conectarse
-    
+    /*
     public static boolean ExecuteUpdate(String Query){
         try{
             Connection conn = Conectarse();
@@ -47,6 +47,15 @@ public class Conexion {
             return null;
         }
     }//ExecuteQuery
+    */
+   public static void CallProc(){
+       try{
+       
+       
+       }catch(Exception e){
+       
+       }
+   }//CallProc
     
     
     

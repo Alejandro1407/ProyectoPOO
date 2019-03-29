@@ -1,12 +1,13 @@
 package GUI;
 
 import Datos.Conexion;
+import GUI.Administrador.*;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-public class Main extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame {
 
-    public Main() {
+    public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -47,72 +48,89 @@ public class Main extends javax.swing.JFrame {
         PnelContenedor.setLayout(PnelContenedorLayout);
         PnelContenedorLayout.setHorizontalGroup(
             PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PnelContenedorLayout.createSequentialGroup()
-                .addContainerGap(107, Short.MAX_VALUE)
+            .addGroup(PnelContenedorLayout.createSequentialGroup()
+                .addGap(0, 83, Short.MAX_VALUE)
                 .addGroup(PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnIniciarSesion)
-                    .addComponent(jLabel2)
-                    .addGroup(PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel1)
-                        .addComponent(txtPassword)
-                        .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(87, 87, 87))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PnelContenedorLayout.createSequentialGroup()
+                        .addGroup(PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(68, 68, 68))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PnelContenedorLayout.createSequentialGroup()
+                        .addComponent(btnIniciarSesion)
+                        .addGap(106, 106, 106))))
         );
         PnelContenedorLayout.setVerticalGroup(
             PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PnelContenedorLayout.createSequentialGroup()
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(36, 36, 36)
                 .addComponent(btnIniciarSesion)
-                .addGap(0, 36, Short.MAX_VALUE))
+                .addGap(0, 55, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PnelContenedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(PnelContenedor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PnelContenedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(PnelContenedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-       if(txtUsuario.getText().equals("") || txtPassword.getPassword().equals("")){
+       if(txtUsuario.getText().equals("") || txtPassword.getText().equals("")){
            JOptionPane.showMessageDialog(this, "Debe Ingresar Usuario y Contraseña");
            return;
        }
-        try{
-        ResultSet rs = Conexion.ExecuteQuery("SELECT COUNT(*) FROM usuarios WHERE usuario = '" + txtUsuario.getText()+"' AND password = '"+ txtPassword.getText()+"'");
-        rs.first();
-       if(rs.getString(1).equals("0")){
-                JOptionPane.showMessageDialog(this, "No inicia Sesion");
-           }else{
-                
-                JOptionPane.showMessageDialog(null, "Inicia Sesion");
+       try{
+           
+            Connection conn = Conexion.Conectarse(); //Obtenemos la conexion
+            if(conn == null){
+               throw new Exception("No se Pudo Conectar");
             }
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(this,"Ocurrio un error" + e.getMessage());
-        }
+            CallableStatement proc; //Declara un objeto de CallableStatement
+            proc = conn.prepareCall("{call loguearse (?,?)}"); //Se encierra entre { la instruccion call y el procedimiento}
+            proc.setString(1,txtUsuario.getText()); //Segun los ? se le asigna sus valores siguiendo el orden y su tipo
+            proc.setString(2, txtPassword.getText()); //x2
+            ResultSet rs =  proc.executeQuery(); //Si el procedimiento es un select se guarda en un rs y se executeQuery()
+            if(rs.next()){
+                rs.first();
+                System.out.println(rs.getString(1));
+                if(rs.getString(2).equals("Administrador")){
+                      //Main m = new Main();
+                      //m.setVisible(true);
+                     //this.dispose();
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Usuario y/o Constraseña Incorrecto");
+            }
+       }catch (Exception e){
+           JOptionPane.showMessageDialog(null,"Ha Ocurrido un error al Conectarse");
+           System.out.println(e.getMessage());
+       }
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                new Login().setVisible(true);
             }
         });
     }

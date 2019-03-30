@@ -226,46 +226,9 @@ CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellido
     BEGIN
 		declare v_cnt int;
         declare v_sdepto varchar(50);
-		if v_rol = 2 then
-			set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2);
-            if v_cnt = 0 then
-				update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
-				set v_sdepto = (select nombre from departamento where id = v_depto);
-				select concat('Se actualizo un miembro del departamento: ',v_sdepto);
-			else
-				set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2 and id = v_id);
-				if v_cnt != 0 then
-					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
-					set v_sdepto = (select nombre from departamento where id = v_depto);
-					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
-				else
-					set v_sdepto = (select nombre from departamento where id = v_depto);
-					select concat('Ya existe un jefe para el departamento: ',v_sdepto);
-				end if;
-			end if;
-		else if v_rol = 3 then
-			set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 3);
-            if v_cnt = 0 then
-				update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
-				set v_sdepto = (select nombre from departamento where id = v_depto);
-				select concat('Se actualizo un miembro del departamento: ',v_sdepto);
-			else
-				set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2 and id = v_id);
-				if v_cnt != 0 then
-					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
-					set v_sdepto = (select nombre from departamento where id = v_depto);
-					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
-				else
-					set v_sdepto = (select nombre from departamento where id = v_depto);
-					select concat('Ya existe un jefe de desarrollo para el departamento: ',v_sdepto);
-				end if;
-			end if;
-		else
 			update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
 			set v_sdepto = (select nombre from departamento where id = v_depto);
 			select concat('Se actualizo un miembro del departamento: ',v_sdepto);
-		end if;
-        end if;
     END $$
 delimiter ;
 
@@ -487,11 +450,13 @@ create table rechazo(
 delimiter //
 create trigger crear_caso after update on solicitud
 for each row
+begin
 	declare sdepto varchar(50);
     set sdepto = (select substring(d.codigo,1,3) from departamento d join solicitud s on s.idDepartamento = d.id where s.idDepartamento = new.idDepartamento);
 	if new.idEstado = 3 then
 		insert into caso(nombre,descripcion,idDepartamento,idEstado,codigo) values (new.nombre,new.descripcion,new.idDepartamento,new.idEstado,concat(sdepto,date_format(new.fecha,'%y'),100 + round(rand() * 889)));
 	end if;
+end//
 delimiter ;
 
 select * from solicitud;
@@ -515,8 +480,8 @@ end//
 delimiter ;
 
 insert into solicitud(nombre,descripcion,pdf,idDepartamento,fecha,idEstado) values ('prueba',default,null,1,default,default);
-update solicitud set idEstado = 3 where id = 1;
-update solicitud set idEstado = 3 where id = 2;
+delete from solicitud where id = 2;
+update solicitud set idEstado = 3 where id = 3;
 
 select * from solicitud;
 select * from caso;

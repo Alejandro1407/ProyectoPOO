@@ -455,13 +455,18 @@ delimiter //
 create trigger crear_caso after update on solicitud
 for each row
 begin
+	declare sdepto varchar(9);
+    declare scodigo varchar(9);
+	if new.idEstado = 3 then
+    set sdepto = (select substring(d.codigo,1,3) from departamento d inner join solicitud s on s.idDepartamento = d.id where s.idDepartamento = new.idDepartamento limit 1);
+    set scodigo = concat(sdepto,date_format(new.fecha,'%y'),100 + round(rand() * 899 ));
 	insert into caso(nombre,descripcion,idDepartamento,idEstado,codigo) values
-	(new.nombre,new.descripcion,new.idDepartamento,new.idEstado,concat('Depato',date_format(new.fecha,'%y'),100 + round(rand() * 889)));
+	(new.nombre,new.descripcion,new.idDepartamento,new.idEstado,scodigo);
+    end if;
 end//
 delimiter ;
 
 select * from solicitud;
-drop trigger crear_caso;
 
 use poo;
 call insertar_departamento('Administracion','');
@@ -480,10 +485,10 @@ begin
 end//
 delimiter ;
 
-insert into solicitud(nombre,descripcion,pdf,idDepartamento,fecha,idEstado) values ('prueba',default,null,1,default,default);
-delete from solicitud where id = 4;
-update solicitud set idEstado = 2 where id = 5;
+insert into solicitud(nombre,descripcion,pdf,idDepartamento,fecha,idEstado) values ('prueba v2',default,null,2,default,default);
+update solicitud set idEstado = 3 where id = 7;
 
+select * from departamento;
 select * from solicitud;
 select * from caso;
 select * from rechazo;

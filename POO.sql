@@ -344,7 +344,7 @@ create procedure mostrar_solo_empleados()
 		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol = 4;
+        where e.idRol != 2 AND e.idRol != 1 AND e.idRol != 3;
     end//
 delimiter ;
 
@@ -368,15 +368,17 @@ create procedure mostrar_jefes_desarrollo()
     end//
 delimiter ;
 
+
 delimiter //
-create procedure mostrar_programadores()
+create procedure mostrar_jefes_todos()
 	begin
 		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol = 5;
+        where e.idRol = 3 and e.idRol = 2;
     end//
 delimiter ;
+
 
 call mostrar_empleados;
 

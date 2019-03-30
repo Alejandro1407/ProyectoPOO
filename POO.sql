@@ -25,8 +25,6 @@ begin
     update departamento set codigo = (v_aux) where id = v_id ;
 end$$
 delimiter ;
-call insertar_departamento('Ventas','');
-call insertar_departamento('Ventas2','Este departamento lleva el control de las ventas de la empresa');
 
 /*Procedimiento para la actualizacion de departamentos*/
 delimiter $$
@@ -39,7 +37,6 @@ begin
     end if;
 end$$
 delimiter ;
-call actualizar_departamento (2,'Nuevo','');
 
 /*Procedimiento para la eliminacion de departamentos*/
 delimiter $$
@@ -48,7 +45,6 @@ begin
 	delete from departamento where id = v_id;
 end$$
 delimiter ;
-call eliminar_departamento (1);
 
 /*Procedimiento para mostrar departamentos*/
 delimiter $$
@@ -57,7 +53,6 @@ begin
 	select D.codigo, D.nombre, D.descripcion  from departamento D;
 end$$
 delimiter ;
-call mostrar_departamento ();
 
 /*Procedimiento para buscar departamentos*/
 delimiter $$
@@ -66,9 +61,6 @@ begin
 	select D.codigo, D.nombre, D.descripcion  from departamento D where D.codigo LIKE concat('%',v_buscar,'%') OR D.nombre LIKE concat('%',v_buscar,'%');
 end$$
 delimiter ;
-call buscar_departamento('vent');
-
-
 
 
 create table rol(
@@ -88,7 +80,6 @@ begin
     end if;
 end$$
 delimiter ;
-call insertar_rol('Programador','');
 
 /*Procedimiento para la actualizacion de departamentos*/
 delimiter $$
@@ -101,7 +92,6 @@ begin
     end if;
 end$$
 delimiter ;
-call actualizar_rol (1,'su','');
 
 /*Procedimiento para la eliminacion de departamentos*/
 delimiter $$
@@ -110,7 +100,6 @@ begin
 	delete from rol where id = v_id;
 end$$
 delimiter ;
-call eliminar_rol (1);
 
 /*Procedimiento para mostrar departamentos*/
 delimiter $$
@@ -119,7 +108,6 @@ begin
 	select R.rol, R.descripcion  from rol R;
 end$$
 delimiter ;
-call mostrar_rol ();
 
 /*Procedimiento para buscar departamentos*/
 delimiter $$
@@ -128,8 +116,8 @@ begin
 	select R.rol, R.descripcion  from rol R where R.rol LIKE concat('%',v_buscar,'%') OR R.descripcion LIKE concat('%',v_buscar,'%');
 end$$
 delimiter ;
-call buscar_rol('sin des');
-/*
+/*call buscar_rol('sin des');
+
 drop procedure buscar_departamento
 truncate departamento
 */
@@ -148,7 +136,7 @@ CREATE TABLE Empleado(
     FOREIGN KEY (idDepartamento) REFERENCES departamento(id) on update cascade
 );
 
-INSERT INTO Empleado VALUES(null,'Alejandro','Alejo','alejandroalejo714@gmail.com','password',1,1);
+/*INSERT INTO Empleado VALUES(null,'Alejandro','Alejo','alejandroalejo714@gmail.com','password',1,1);
 select * from empleado;
 select * from departamento;
 call insertar_empleado('Denys','Inestroza','dennyscr@gmail.com',2,1);
@@ -156,7 +144,7 @@ call actualizar_empleado(2,'Enrique','Inestroza','enr@gmail.com',4,1);
 call actualizar_empleado(3,'Denys','Inestroza','de@gmail.com',3,1);
 call mostrar_empleados;
 select * from empleado;
-
+*/
 delimiter $$
 CREATE PROCEDURE insertar_empleado (v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_rol int, v_depto int)
     BEGIN
@@ -215,11 +203,11 @@ CREATE PROCEDURE insertar_empleado (v_nombre VARCHAR(50), v_apellidos VARCHAR(50
 delimiter ;
 
 set SQL_SAFE_UPDATES = 0;
-
+/*
 call insertar_empleado('Jose','Alejo','alejo@gmail.com',2,2);
 call actualizar_empleado(1,'Denys','Inestroza','contrasenia','denny@gmail.com',2,2);
 select * from empleado;
-
+*/
 
 delimiter $$
 CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_rol int, v_depto int)
@@ -245,8 +233,9 @@ CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
         WHERE e.Email = Usuario AND e.Contrasenia = Contrasenia; 
     END $$
 delimiter ;
+/*
 CALL Loguearse ('alejandroalejo714@gmail.com','password');
-
+*/
 delimiter //
 create procedure eliminar_empleado(v_id int)
 	begin
@@ -350,6 +339,7 @@ create table tipo_estado(
     tipo_estado varchar(50) not null unique
 );
 /**/
+
 insert into tipo_estado(tipo_estado) values ('Solicitud');
 insert into tipo_estado(tipo_estado) values ('Caso');
 insert into tipo_estado(tipo_estado) values ('Ambos');
@@ -419,9 +409,9 @@ create table solicitud(
 );
 
 select * from solicitud;
-
+/*
 update solicitud set idEstado = 3 where id = 4;
-
+*/
 create table caso(
 	id int primary key auto_increment,
     codigo char(9) not null,
@@ -465,7 +455,7 @@ begin
     end if;
 end//
 delimiter ;
-
+/*
 select * from solicitud;
 
 use poo;
@@ -474,6 +464,7 @@ select * from departamento;
 
 use poo
 drop trigger crear_rechazo
+*/
 
 delimiter //
 create trigger crear_rechazo before update on solicitud
@@ -484,12 +475,28 @@ begin
 	end if;
 end//
 delimiter ;
-
+/*
 insert into solicitud(nombre,descripcion,pdf,idDepartamento,fecha,idEstado) values ('prueba v2',default,null,2,default,default);
-update solicitud set idEstado = 3 where id = 7;
 
+update solicitud set idEstado = 3 where id = 7;
+*/
 select * from departamento;
 select * from solicitud;
 select * from caso;
 select * from rechazo;
 
+create table bitacora(
+	id int primary key auto_increment,
+    idCaso int unique not null,
+    informacion varchar(1000) not null,
+    porcentajeAvance int not null check(porcentajeAvance < 101 AND porcentajeAvance > 0),
+    finalizado boolean
+);
+
+create table grupos(
+	id int primary key auto_increment,
+    idJefeDesarrollo int not null,
+    idProgramador int not null unique,
+    foreign key (idJefeDesarrollo) references empleado(id),
+    foreign key (idProgramador) references empleado(id)
+);

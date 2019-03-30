@@ -139,7 +139,7 @@ call insertar_rol('Jefe de Area','');
 
 
 /*Empleado*/
-CREATE TABLE Empleado(
+CREATE TABLE empleado(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL check (nombre NOT LIKE '%[0-9]%'),
     apellidos VARCHAR(50) NOT NULL check (apellidos NOT LIKE '%[0-9]%'),

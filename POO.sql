@@ -147,8 +147,8 @@ CREATE TABLE Empleado(
     contrasenia VARCHAR(50) NOT NULL check(length(contrasenia) > 8),
     idRol INT not null default 3,
     idDepartamento INT not null,
-    FOREIGN KEY (idRol) REFERENCES rol(id),
-    FOREIGN KEY (idDepartamento) REFERENCES departamento(id)
+    FOREIGN KEY (idRol) REFERENCES rol(id) on update cascade,
+    FOREIGN KEY (idDepartamento) REFERENCES departamento(id) on update cascade
 );
 
 
@@ -156,9 +156,8 @@ INSERT INTO Empleado VALUES(null,'Alejandro','Alejo','alejandroalejo714@gmail.co
 select * from empleado;
 
 
-
 delimiter $$
-CREATE PROCEDURE insertar_empleado  (v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_contrasenia varchar(1), v_rol int, v_depto int)
+CREATE PROCEDURE insertar_empleado (v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_contrasenia varchar(1), v_rol int, v_depto int)
     BEGIN
 		declare v_cnt int;
         declare v_sdepto varchar(50);
@@ -171,9 +170,13 @@ CREATE PROCEDURE insertar_empleado  (v_nombre VARCHAR(50), v_apellidos VARCHAR(5
 				if v_rol = 0 then
 					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
 					(v_nombre,v_apellidos,v_email,v_contrasenia,default,v_depto);
+                    set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 				else
 					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
 					(v_nombre,v_apellidos,v_email,v_contrasenia,v_rol,v_depto);
+                    set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 				end if;
 			end if;
 		elseif v_rol = 2 then
@@ -185,23 +188,82 @@ CREATE PROCEDURE insertar_empleado  (v_nombre VARCHAR(50), v_apellidos VARCHAR(5
 				if v_rol = 0 then
 					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
 					(v_nombre,v_apellidos,v_email,v_contrasenia,default,v_depto);
+                    set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 				else
 					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
 					(v_nombre,v_apellidos,v_email,v_contrasenia,v_rol,v_depto);
+                    set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 				end if;
 			end if;
 		else
 			if v_rol = 0 then
 				insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
 				(v_nombre,v_apellidos,v_email,v_contrasenia,default,v_depto);
+                set v_sdepto = (select nombre from departamento where id = v_depto);
+				select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 			else
 				insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
 				(v_nombre,v_apellidos,v_email,v_contrasenia,v_rol,v_depto);
+                set v_sdepto = (select nombre from departamento where id = v_depto);
+				select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 			end if;
 		end if;
     END $$
 delimiter ;
 
+
+delimiter $$
+CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_contrasenia varchar(1), v_rol int, v_depto int)
+    BEGIN
+		declare v_cnt int;
+        declare v_sdepto varchar(50);
+		if v_rol = 1 then
+			set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 1 and id = v_id);
+            if v_cnt = 0 then
+				set v_sdepto = (select nombre from departamento where id = v_depto);
+				select concat('Ya existe un jefe para el departamento: ',v_sdepto);
+			else
+				if v_rol = 0 then
+					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = default, idDepartamento = v_depto;
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
+				else
+					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = v_rol, idDepartamento = v_depto;
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
+				end if;
+			end if;
+		elseif v_rol = 2 then
+			set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2 and id = v_id);
+            if v_cnt = 0 then
+				set v_sdepto = (select nombre from departamento where id = v_depto);
+				select concat('Ya existe un jefe de desarrollo para el departamento: ',v_sdepto);
+			else
+				if v_rol = 0 then
+					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = default, idDepartamento = v_depto;
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
+				else
+					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = v_rol, idDepartamento = v_depto;
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
+				end if;
+			end if;
+		else
+			if v_rol = 0 then
+				update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = default, idDepartamento = v_depto;
+				set v_sdepto = (select nombre from departamento where id = v_depto);
+				select concat('Se actualizo un miembro del departamento: ',v_sdepto);
+			else
+				update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = v_rol, idDepartamento = v_depto;
+				set v_sdepto = (select nombre from departamento where id = v_depto);
+				select concat('Se actualizo un miembro del departamento: ',v_sdepto);
+			end if;
+		end if;
+    END $$
+delimiter ;
 
 
 delimiter $$
@@ -217,3 +279,26 @@ CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
     END $$
 delimiter ;
 CALL Loguearse ('alejandroalejo714@gmail.com','password');
+
+delimiter //
+create procedure eliminar_empleado(v_id int)
+	begin
+		delete from empleado where id = v_id;
+        if (row_count() > 0 ) then
+			select 'No se pudo eliminar';
+		else
+			select 'Se elimino con exito';
+		end if;
+    end //
+delimiter ;
+
+
+delimiter //
+create procedure buscar_empleados(v_buscar varchar(50))
+	begin
+		select * from empleado E join rol R on R.id = E.idRol join departamento D on D.id = E.idDepartamento
+        where E.nombre LIKE concat('%',v_buscar,'%') OR E.apellidos LIKE concat('%',v_buscar,'%') OR E.email LIKE concat('%',v_buscar,'%')
+        OR R.rol LIKE concat('%',v_buscar,'%') OR D.nombre LIKE concat('%',v_buscar,'%');
+    end //
+delimiter ;
+

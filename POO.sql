@@ -302,11 +302,14 @@ delimiter ;
 delimiter //
 create procedure buscar_empleados(v_buscar varchar(50))
 	begin
-		select * from empleado E join rol R on R.id = E.idRol join departamento D on D.id = E.idDepartamento
-        where E.nombre LIKE concat('%',v_buscar,'%') OR E.apellidos LIKE concat('%',v_buscar,'%') OR E.email LIKE concat('%',v_buscar,'%')
-        OR R.rol LIKE concat('%',v_buscar,'%') OR D.nombre LIKE concat('%',v_buscar,'%');
+		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
+        FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
+        INNER JOIN departamento d ON e.idDepartamento = d.id
+        where e.nombre LIKE concat('%',v_buscar,'%') OR e.apellidos LIKE concat('%',v_buscar,'%') OR e.email LIKE concat('%',v_buscar,'%')
+        OR r.rol LIKE concat('%',v_buscar,'%') OR d.nombre LIKE concat('%',v_buscar,'%');
     end //
 delimiter ;
+
 
 delimiter //
 create procedure mostrar_empleados()
@@ -317,13 +320,31 @@ create procedure mostrar_empleados()
     end//
 delimiter ;
 
+/*
+Administrador (SU): 1
+Jefes de area: 2
+Jefe de desarrollo: 3
+Empleado: 4
+Programador: 5
+*/
+delimiter //
+create procedure mostrar_administradores()
+	begin
+		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
+        FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
+        INNER JOIN departamento d ON e.idDepartamento = d.id
+        where e.idRol = 1;
+    end//
+delimiter ;
+
+
 delimiter //
 create procedure mostrar_solo_empleados()
 	begin
 		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol = 3;
+        where e.idRol = 4;
     end//
 delimiter ;
 
@@ -333,7 +354,7 @@ create procedure mostrar_jefes_area()
 		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol = 1;
+        where e.idRol = 2;
     end//
 delimiter ;
 
@@ -343,7 +364,17 @@ create procedure mostrar_jefes_desarrollo()
 		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol = 2;
+        where e.idRol = 3;
+    end//
+delimiter ;
+
+delimiter //
+create procedure mostrar_programadores()
+	begin
+		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
+        FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
+        INNER JOIN departamento d ON e.idDepartamento = d.id
+        where e.idRol = 5;
     end//
 delimiter ;
 

@@ -95,7 +95,11 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-       if(txtUsuario.getText().equals("") || txtPassword.getText().equals("")){
+         AdministradorMain m = new AdministradorMain();
+                      m.setVisible(true);
+                     this.dispose();
+                     /* Debug */
+        if(txtUsuario.getText().equals("") || txtPassword.getText().equals("")){
            JOptionPane.showMessageDialog(this, "Debe Ingresar Usuario y Contraseña");
            return;
        }
@@ -114,7 +118,7 @@ public class Login extends javax.swing.JFrame {
                 rs.first();
                 System.out.println(rs.getString(1));
                 if(rs.getString(2).equals("Administrador")){
-                      //Main m = new Main();
+                      //AdministradorMain m = new AdministradorMain();
                       //m.setVisible(true);
                      //this.dispose();
                 }

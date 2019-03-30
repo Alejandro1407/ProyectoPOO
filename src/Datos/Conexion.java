@@ -15,7 +15,7 @@ public class Conexion {
             return null;
         }
     }//Conectarse
-    /*
+    
     public static boolean ExecuteUpdate(String Query){
         try{
             Connection conn = Conectarse();
@@ -47,16 +47,4 @@ public class Conexion {
             return null;
         }
     }//ExecuteQuery
-    */
-   public static void CallProc(){
-       try{
-       
-       
-       }catch(Exception e){
-       
-       }
-   }//CallProc
-    
-    
-    
 }

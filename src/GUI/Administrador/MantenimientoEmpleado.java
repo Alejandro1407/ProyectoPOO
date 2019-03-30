@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 public class MantenimientoEmpleado extends javax.swing.JFrame {
     private ResultSet Data;
+    
     public MantenimientoEmpleado() {
         initComponents();
         txtid.setVisible(false);
@@ -131,6 +132,7 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Acciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         btnAgregar.setText("Agregar");
+        btnAgregar.setEnabled(false);
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
@@ -251,7 +253,15 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    private boolean IsNumeric(String x){
+        try{
+            int y = Integer.parseInt(x);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+    
     private void getData(){
         btnAnterior.setEnabled(false);
         btnSiguiente.setEnabled(true);
@@ -261,8 +271,9 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
                throw new Exception("No se pudo Conectar");
             }
             CallableStatement proc;
-            //proc = conn.prepareCall("{call }");
-            this.Data = Conexion.ExecuteQuery("SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre FROM empleado e INNER JOIN rol r ON e.idRol = r.id INNER JOIN departamento d ON e.idDepartamento = d.id");//proc.executeQuery();
+            proc = conn.prepareCall("{call  mostrar_solo_empleados }");
+            this.Data = proc.executeQuery();
+            //this.Data = Conexion.ExecuteQuery("SELECT e.id,e.nombre,e.apellidos,e.email,r.id,r.rol,d.id,d.Nombre FROM empleado e INNER JOIN rol r ON e.idRol = r.id INNER JOIN departamento d ON e.idDepartamento = d.id");//proc.executeQuery();
             if(!Data.next()){
                 JOptionPane.showMessageDialog(this,"No Hay Registro que mostrar");
                 return;
@@ -273,8 +284,11 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
             txtNombre.setText(Data.getString(2));
             txtApellidos.setText(Data.getString(3));
             txtEmail.setText(Data.getString(4));
-            cmbRol.setSelectedItem(new Rol(Data.getInt(1),Data.getString(5)));
-            cmbDepartamento.setSelectedItem(new Departamento(Data.getInt(1), Data.getString(6)));
+            cmbRol.setSelectedItem(new Rol(Data.getInt(5),Data.getString(6)));
+            cmbDepartamento.setSelectedItem(new Departamento(Data.getInt(7), Data.getString(8))); if(!Data.next()){
+                btnSiguiente.setEnabled(false);
+            }
+             Data.previous();
         }catch(Exception e){
             System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null, "Fallo al recuperar la informacion");
@@ -283,7 +297,28 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
     }
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-           try{
+           if(txtNombre.getText().equals("") || IsNumeric(txtNombre.getText())){
+               JOptionPane.showMessageDialog(this,"Nombre no puede estar vacio o ser numerico");
+               return;
+           }
+           if(txtApellidos.getText().equals("") || IsNumeric(txtApellidos.getText())){
+               JOptionPane.showMessageDialog(this,"Apellidos no puede estar vacio o ser numerico");
+               return;
+           }
+           if(!txtEmail.getText().matches("^\\w{5,}@\\w{3,}((\\.)[A-Za-z]{2,3}){1,}$") || IsNumeric(txtEmail.getText())){
+               JOptionPane.showMessageDialog(this,"Email Ingresado es Invalido o Numerico");
+               return;
+           }
+           if(cmbDepartamento.getSelectedIndex() == 0){
+               JOptionPane.showMessageDialog(this, "Debe Selecciona un Departamento");
+               return;
+           }
+           if(cmbRol.getSelectedIndex() == 0){
+               JOptionPane.showMessageDialog(this,"Debe Asignarle un Rol");
+               return;
+           }
+        
+            try{
                 Connection conn = Conexion.Conectarse();
                 if(conn == null){
                     throw new Exception("No se pudo Conectar");
@@ -299,7 +334,8 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,"Registro Insertado con Exito");
                     btnLimpiarActionPerformed(evt);
                     getData();
-            }else{throw new Exception("Fallo Al Insertar");}
+                   
+                }else{throw new Exception("Fallo Al Insertar");}
            
            }catch(Exception e){
                System.out.println(e.getMessage());
@@ -328,6 +364,27 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+             if(txtNombre.getText().equals("") || IsNumeric(txtNombre.getText())){
+               JOptionPane.showMessageDialog(this,"Nombre no puede estar vacio o ser numerico");
+               return;
+           }
+           if(txtApellidos.getText().equals("") || IsNumeric(txtApellidos.getText())){
+               JOptionPane.showMessageDialog(this,"Apellidos no puede estar vacio o ser numerico");
+               return;
+           }
+           if(!txtEmail.getText().matches("^\\w{5,}@\\w{3,}((\\.)[A-Za-z]{2,3}){1,}$") || IsNumeric(txtEmail.getText())){
+               JOptionPane.showMessageDialog(this,"Email Ingresado es Invalido o Numerico");
+               return;
+           }
+           if(cmbDepartamento.getSelectedIndex() == 0){
+               JOptionPane.showMessageDialog(this, "Debe Selecciona un Departamento");
+               return;
+           }
+           if(cmbRol.getSelectedIndex() == 0){
+               JOptionPane.showMessageDialog(this,"Debe Asignarle un Rol");
+               return;
+           }
+        
         if(JOptionPane.showConfirmDialog(this,"¿Seguro desea Actulizar este registro?") != JOptionPane.YES_OPTION){
             return;
         } 
@@ -362,6 +419,9 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
        txtEmail.setText("");
        cmbDepartamento.setSelectedIndex(0);
        cmbRol.setSelectedIndex(0);
+       btnAgregar.setEnabled(true);
+       btnEditar.setEnabled(false);
+       btnEliminar.setEnabled(false);
        try{Data.beforeFirst();}catch(Exception e){}
        btnAnterior.setEnabled(false);
        btnSiguiente.setEnabled(true);
@@ -370,47 +430,48 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
         try{
             btnAnterior.setEnabled(true);
+            btnEditar.setEnabled(true);
+            btnEliminar.setEnabled(true);
+            btnAgregar.setEnabled(false);
             if(Data.next()){
             txtid.setText(Data.getString(1));
             txtNombre.setText(Data.getString(2));
             txtApellidos.setText(Data.getString(3));
             txtEmail.setText(Data.getString(4));
-            cmbRol.setSelectedItem(new Rol(Data.getInt(1),Data.getString(5)));
-            cmbDepartamento.setSelectedItem(new Departamento(Data.getInt(1), Data.getString(6)));
+            cmbRol.setSelectedItem(new Rol(Data.getInt(5),Data.getString(6)));
+            cmbDepartamento.setSelectedItem(new Departamento(Data.getInt(7), Data.getString(8)));
             if(!Data.next()){
-             btnSiguiente.setEnabled(false);
+                btnSiguiente.setEnabled(false);
             }
              Data.previous();
             
           }
-           
-            
         }catch(Exception e){
-        
+            System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
         try{
             btnSiguiente.setEnabled(true);
+            btnEditar.setEnabled(true);
+            btnEliminar.setEnabled(true);
+            btnAgregar.setEnabled(false);
             if(Data.previous()){
                 txtid.setText(Data.getString(1));
                 txtNombre.setText(Data.getString(2));
                 txtApellidos.setText(Data.getString(3));
                 txtEmail.setText(Data.getString(4));
-                cmbRol.setSelectedItem(new Rol(Data.getInt(1),Data.getString(5)));
-                cmbDepartamento.setSelectedItem(new Departamento(Data.getInt(1), Data.getString(6)));
+                cmbRol.setSelectedItem(new Rol(Data.getInt(5),Data.getString(6)));
+                cmbDepartamento.setSelectedItem(new Departamento(Data.getInt(7), Data.getString(8)));
                  if(!Data.previous()){
                     btnAnterior.setEnabled(false);
                 }
                 Data.next();
                 
             }
-           
-        
         }catch(Exception e){
-        
-        
+            System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
     public static void main(String args[]) {
@@ -475,7 +536,8 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,"Lo Sentimos no hay Roles Registrados");
                 this.dispose();
             }
-           rs.beforeFirst();
+           rs.next();
+           rs.next();
             while(rs.next()){
                 model.addElement(new Rol(rs.getInt(1),rs.getString(2)));
             }

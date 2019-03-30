@@ -38,7 +38,7 @@ public class Rol {
     }
      @Override
     public boolean equals(Object other) {
-        return this.id == ((Rol) other).id;
+        return this.id == ((Rol) other).getId();
     }
 
 }

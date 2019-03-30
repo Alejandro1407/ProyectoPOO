@@ -134,12 +134,9 @@ drop procedure buscar_departamento
 truncate departamento
 */
 
-/*Ingreso de roles*/
-call insertar_rol('Jefe de Area','');
-
 
 /*Empleado*/
-CREATE TABLE empleado(
+CREATE TABLE Empleado(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL check (nombre NOT LIKE '%[0-9]%'),
     apellidos VARCHAR(50) NOT NULL check (apellidos NOT LIKE '%[0-9]%'),
@@ -314,9 +311,12 @@ delimiter ;
 delimiter //
 create procedure mostrar_empleados()
 	begin
-		select * from empleado;
+		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
+        FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
+        INNER JOIN departamento d ON e.idDepartamento = d.id;
     end//
 delimiter ;
+call mostrar_empleados
 
 /*Para diferenciar los estados y solo mostrar los estados de solicitudes para las opciones de solicitudes y de igual manera para los casos*/
 create table tipo_estado(

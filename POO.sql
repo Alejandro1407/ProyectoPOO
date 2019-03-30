@@ -302,3 +302,31 @@ create procedure buscar_empleados(v_buscar varchar(50))
     end //
 delimiter ;
 
+create table tipo_estado(
+	id int primary key auto_increment,
+    tipo_estado varchar(50) not null unique,
+    descripcion varchar(100) not null default 'sin descripcion'
+);
+
+/*Estado*/
+create table estado(
+	id int primary key auto_increment,
+    estado varchar(50) not null,
+    descripcion varchar(100) not null default 'sin descripcion',
+    tipo int not null default 1,
+    foreign key (tipo) references tipo_estado(id)
+);
+
+/*Solicitud*/
+
+create table solicitud(
+	id int primary key auto_increment,
+    nombre varchar(50) not null,
+    descripcion varchar(1000) not null default 'Sin descripcion',
+    pdf bit(64),
+    idDepartamento int not null,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    idEstado int not null default 1,
+    foreign key (idDepartamento) references departamento(id),
+    foreign key (idEstado) references estado(id)
+);

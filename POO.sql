@@ -317,35 +317,37 @@ create procedure mostrar_empleados()
     end//
 delimiter ;
 
+delimiter //
 create procedure mostrar_solo_empleados()
 	begin
 		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
-        INNER JOIN departamento d ON e.idDepartamento = d.id;
+        INNER JOIN departamento d ON e.idDepartamento = d.id
+        where e.idRol = 3;
     end//
 delimiter ;
 
-
+delimiter //
 create procedure mostrar_jefes_area()
 	begin
 		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
-        INNER JOIN departamento d ON e.idDepartamento = d.id;
+        INNER JOIN departamento d ON e.idDepartamento = d.id
+        where e.idRol = 1;
     end//
 delimiter ;
 
-
+delimiter //
 create procedure mostrar_jefes_desarrollo()
 	begin
 		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
-        INNER JOIN departamento d ON e.idDepartamento = d.id;
+        INNER JOIN departamento d ON e.idDepartamento = d.id
+        where e.idRol = 2;
     end//
 delimiter ;
 
-
-
-call mostrar_empleados
+call mostrar_empleados;
 
 /*Para diferenciar los estados y solo mostrar los estados de solicitudes para las opciones de solicitudes y de igual manera para los casos*/
 create table tipo_estado(

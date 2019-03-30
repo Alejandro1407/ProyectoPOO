@@ -267,7 +267,7 @@ create procedure buscar_empleados(v_buscar varchar(50))
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id
         where e.nombre LIKE concat('%',v_buscar,'%') OR e.apellidos LIKE concat('%',v_buscar,'%') OR e.email LIKE concat('%',v_buscar,'%')
-        OR r.rol LIKE concat('%',v_buscar,'%') OR d.nombre LIKE concat('%',v_buscar,'%');
+        OR r.rol LIKE concat('%',v_buscar,'%') OR d.nombre LIKE concat('%',v_buscar,'%') and e.idRol not in(1,2,3);
     end //
 delimiter ;
 
@@ -418,6 +418,10 @@ create table solicitud(
     foreign key (idEstado) references estado(id)
 );
 
+select * from solicitud;
+
+update solicitud set idEstado = 3 where id = 4;
+
 create table caso(
 	id int primary key auto_increment,
     codigo char(9) not null,
@@ -451,11 +455,8 @@ delimiter //
 create trigger crear_caso after update on solicitud
 for each row
 begin
-	declare sdepto varchar(50);
-    set sdepto = (select substring(d.codigo,1,3) from departamento d join solicitud s on s.idDepartamento = d.id where s.idDepartamento = new.idDepartamento);
-	if new.idEstado = 3 then
-		insert into caso(nombre,descripcion,idDepartamento,idEstado,codigo) values (new.nombre,new.descripcion,new.idDepartamento,new.idEstado,concat(sdepto,date_format(new.fecha,'%y'),100 + round(rand() * 889)));
-	end if;
+	insert into caso(nombre,descripcion,idDepartamento,idEstado,codigo) values
+	(new.nombre,new.descripcion,new.idDepartamento,new.idEstado,concat('Depato',date_format(new.fecha,'%y'),100 + round(rand() * 889)));
 end//
 delimiter ;
 
@@ -480,8 +481,8 @@ end//
 delimiter ;
 
 insert into solicitud(nombre,descripcion,pdf,idDepartamento,fecha,idEstado) values ('prueba',default,null,1,default,default);
-delete from solicitud where id = 2;
-update solicitud set idEstado = 3 where id = 3;
+delete from solicitud where id = 4;
+update solicitud set idEstado = 2 where id = 5;
 
 select * from solicitud;
 select * from caso;

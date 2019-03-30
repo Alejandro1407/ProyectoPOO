@@ -302,20 +302,66 @@ create procedure buscar_empleados(v_buscar varchar(50))
     end //
 delimiter ;
 
+
+/*Para diferenciar los estados y solo mostrar los estados de solicitudes para las opciones de solicitudes y de igual manera para los casos*/
 create table tipo_estado(
 	id int primary key auto_increment,
-    tipo_estado varchar(50) not null unique,
-    descripcion varchar(100) not null default 'sin descripcion'
+    tipo_estado varchar(50) not null unique
 );
+/**/
+insert into tipo_estado(tipo_estado) values ('Solicitud');
+insert into tipo_estado(tipo_estado) values ('Caso');
+insert into tipo_estado(tipo_estado) values ('Ambos');
+insert into tipo_estado(tipo_estado) values ('Probador');
+
+select * from tipo_estado order by id;
 
 /*Estado*/
 create table estado(
 	id int primary key auto_increment,
     estado varchar(50) not null,
-    descripcion varchar(100) not null default 'sin descripcion',
-    tipo int not null default 1,
-    foreign key (tipo) references tipo_estado(id)
+    tipo int not null check(tipo = 1 OR tipo = 2 OR tipo = 3 OR tipo = 4),
+    foreign key (tipo) references tipo_estado(id) on update cascade
 );
+insert into estado(estado,tipo) values ('En espera de respuesta',1);
+insert into estado(estado,tipo) values ('Solicitud rechazada',1);
+insert into estado(estado,tipo) values ('En desarrollo',3);
+insert into estado(estado,tipo) values ('Vencido',2);
+insert into estado(estado,tipo) values ('Esperando aprobacion del area solicitante',2);
+insert into estado(estado,tipo) values ('Devuelto con observaciones',4);
+insert into estado(estado,tipo) values ('Aprobado',4);
+insert into estado(estado,tipo) values ('Rechazado',4);
+
+select * from estado;
+
+
+/*Los estados que se mostraran para los diferentes usuarios*/
+delimiter //
+create procedure estados_programador()
+	begin
+		select E.id, E.estado from estado E join tipo_estado TE on E.tipo = TE.id where TE.id = 2 OR TE.id = 3 order by E.id;
+	end//
+delimiter ;
+call estados_programador;
+
+
+delimiter //
+create procedure estados_probador()
+	begin
+		select E.id, E.estado from estado E join tipo_estado TE on E.tipo = TE.id where TE.id = 4 order by E.id;
+	end//
+delimiter ;
+call estados_probador;
+
+
+delimiter //
+create procedure estados_solicitud()
+	begin
+		select E.id, E.estado from estado E join tipo_estado TE on E.tipo = TE.id where TE.id = 1 OR TE.id = 3 order by E.id;
+	end//
+delimiter ;
+call estados_solicitud;
+
 
 /*Solicitud*/
 
@@ -330,3 +376,31 @@ create table solicitud(
     foreign key (idDepartamento) references departamento(id),
     foreign key (idEstado) references estado(id)
 );
+
+
+create table caso(
+	nombre varchar(50) not null,
+    descripcion varchar(1000) not null default 'Sin descripcion',
+    idDepartamento int not null,
+    fecha TIMESTAMP default CURRENT_TIMESTAMP,
+    idEstado int not null default 1
+);
+
+
+delimiter //
+create trigger crear_caso before update on solicitud
+for each row
+begin
+	if new.idEstado = 2 then
+		insert into caso(nombre,descripcion,idDepartamento,idEstado,fecha) values (new.nombre,new.descripcion,new.idDepartamento,new.idEstado,default);
+	end if;
+end//
+delimiter ;
+
+drop trigger crear_caso;
+insert into solicitud(nombre,descripcion,pdf,idDepartamento,fecha,idEstado) values ('Solicitud',default,null,1,default,default);
+update solicitud set idEstado = 2 where id = 1;
+
+select * from solicitud;
+select * from caso;
+

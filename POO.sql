@@ -222,20 +222,20 @@ select * from empleado;
 
 
 delimiter $$
-CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellidos VARCHAR(50),v_contrasenia varchar(50), v_email varchar(50), v_rol int, v_depto int)
+CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_rol int, v_depto int)
     BEGIN
 		declare v_cnt int;
         declare v_sdepto varchar(50);
 		if v_rol = 2 then
 			set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2);
             if v_cnt = 0 then
-				update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = v_rol, idDepartamento = v_depto where id = v_id;
+				update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
 				set v_sdepto = (select nombre from departamento where id = v_depto);
 				select concat('Se actualizo un miembro del departamento: ',v_sdepto);
 			else
 				set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2 and id = v_id);
 				if v_cnt != 0 then
-					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = v_rol, idDepartamento = v_depto where id = v_id;
+					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
 					set v_sdepto = (select nombre from departamento where id = v_depto);
 					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
 				else
@@ -246,13 +246,13 @@ CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellido
 		else if v_rol = 3 then
 			set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 3);
             if v_cnt = 0 then
-				update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = v_rol, idDepartamento = v_depto where id = v_id;
+				update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
 				set v_sdepto = (select nombre from departamento where id = v_depto);
 				select concat('Se actualizo un miembro del departamento: ',v_sdepto);
 			else
 				set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2 and id = v_id);
 				if v_cnt != 0 then
-					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = v_rol, idDepartamento = v_depto where id = v_id;
+					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
 					set v_sdepto = (select nombre from departamento where id = v_depto);
 					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
 				else
@@ -261,7 +261,7 @@ CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellido
 				end if;
 			end if;
 		else
-			update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, contrasenia = v_contrasenia, idRol = v_rol, idDepartamento = v_depto where id = v_id;
+			update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
 			set v_sdepto = (select nombre from departamento where id = v_depto);
 			select concat('Se actualizo un miembro del departamento: ',v_sdepto);
 		end if;
@@ -487,13 +487,11 @@ create table rechazo(
 delimiter //
 create trigger crear_caso after update on solicitud
 for each row
-begin
 	declare sdepto varchar(50);
     set sdepto = (select substring(d.codigo,1,3) from departamento d join solicitud s on s.idDepartamento = d.id where s.idDepartamento = new.idDepartamento);
 	if new.idEstado = 3 then
 		insert into caso(nombre,descripcion,idDepartamento,idEstado,codigo) values (new.nombre,new.descripcion,new.idDepartamento,new.idEstado,concat(sdepto,date_format(new.fecha,'%y'),100 + round(rand() * 889)));
 	end if;
-end//
 delimiter ;
 
 select * from solicitud;

@@ -10,6 +10,10 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
+            AdministradorMain m = new AdministradorMain();
+                      m.setVisible(true);
+                     this.dispose();
+                     /* Debug */
     }
 
     @SuppressWarnings("unchecked")
@@ -61,7 +65,7 @@ public class Login extends javax.swing.JFrame {
                         .addGap(68, 68, 68))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PnelContenedorLayout.createSequentialGroup()
                         .addComponent(btnIniciarSesion)
-                        .addGap(106, 106, 106))))
+                        .addGap(114, 114, 114))))
         );
         PnelContenedorLayout.setVerticalGroup(
             PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -75,9 +79,9 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(28, 28, 28)
                 .addComponent(btnIniciarSesion)
-                .addGap(0, 55, Short.MAX_VALUE))
+                .addGap(0, 63, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -95,10 +99,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-         AdministradorMain m = new AdministradorMain();
-                      m.setVisible(true);
-                     this.dispose();
-                     /* Debug */
+     
         if(txtUsuario.getText().equals("") || txtPassword.getText().equals("")){
            JOptionPane.showMessageDialog(this, "Debe Ingresar Usuario y Contraseña");
            return;

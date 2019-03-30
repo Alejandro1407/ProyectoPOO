@@ -339,12 +339,13 @@ delimiter ;
 delimiter //
 create procedure mostrar_solo_empleados()
 	begin
-		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
+		SELECT e.id,e.nombre,e.apellidos,e.email,r.id,r.rol,d.id,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol != 2 AND e.idRol != 1 AND e.idRol != 3;
+        where e.idRol not in(1,2,3);
     end//
 delimiter ;
+
 
 delimiter //
 create procedure mostrar_jefes_area()
@@ -484,7 +485,7 @@ create table rechazo(
 
 
 delimiter //
-create trigger crear_caso before update on solicitud
+create trigger crear_caso after update on solicitud
 for each row
 begin
 	declare sdepto varchar(50);
@@ -494,6 +495,10 @@ begin
 	end if;
 end//
 delimiter ;
+
+select * from solicitud;
+drop trigger crear_caso;
+
 use poo;
 call insertar_departamento('Administracion','');
 select * from departamento;

@@ -693,8 +693,40 @@ begin
 end//
 delimiter ;
 
+
+delimiter //
+create procedure crear_rechazo(v_solicitud int, v_motivo varchar(500))
+begin
+	declare count_soli int;
+    declare ssoli varchar(50);
+    set count_soli = (select count(*) from caso c inner join solicitud s on s.id = c.idSolicitud where c.idSolicitud = v_solicitud);
+    if count_soli != 0 then
+		select 'Esta solicitud ya pertenece a un caso';
+	else
+		set count_soli = (select count(*) from rechazo r inner join solicitud s on s.id = r.idSolicitud where r.idSolicitud = v_solicitud);
+		if count_soli != 0 then
+			select 'Esta solicitud ya fue rechazada';
+		else
+            if length(v_motivo) = 0 then
+				set ssoli = (select nombre from solicitud where id = v_solicitud);
+				select concat('Debe escribir el motivo para rechazar la solicitud: ',ssoli);
+            else
+				insert into rechazo(idSolicitud,motivo) 
+                values
+				(v_solicitud,v_motivo);
+                update solicitud set idEstado = 2 where id = v_solicitud;
+			end if;
+        end if;
+	end if;
+end//
+delimiter ;
+/*
+select * from caso;
+select * from solicitud;
+call crear_rechazo(5,'Algun motivo debe haber');
+*/
 /*
 call crear_caso(5,'2019/04/10',1,2,'descricpon');
 */
 
-select * from caso;
+select * from rechazo;

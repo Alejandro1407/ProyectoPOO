@@ -555,7 +555,7 @@ create table caso(
     foreign key (idDepartamento) references departamento(id) on update cascade,
     foreign key (idEstado) references estado(id) on update cascade,
     foreign key (idEncargado) references empleado(id) on update cascade,
-    foreign key (Tester) references empleado(id) on update cascade
+    foreign key (idTester) references empleado(id) on update cascade
 );
 
 

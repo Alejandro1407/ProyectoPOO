@@ -541,6 +541,7 @@ create table caso(
 	id int primary key auto_increment,
     codigo char(9) not null,
 	nombre varchar(50) not null,
+    idSolicitud int not null,
     descripcion varchar(1000) not null default 'Sin descripcion',
     fechaInicio date check(fechaInicio >= now()),
     fechaFinal date check(fechaFinal > fechaInicio),
@@ -561,7 +562,6 @@ create table caso(
 create table rechazo(
 	id int primary key auto_increment,
     idSolicitud int unique not null,
-    nombre varchar(50) not null,
     motivo varchar(500),
     foreign key(idSolicitud) references solicitud(id)
 );
@@ -594,8 +594,8 @@ begin
 	if new.idEstado = 3 then
 		set sdepto = (select substring(d.codigo,1,3) from departamento d inner join solicitud s on s.idDepartamento = d.id where s.idDepartamento = new.idDepartamento limit 1);
 		set scodigo = concat(sdepto,date_format(new.fecha,'%y'),100 + round(rand() * 899 ));
-		insert into caso(nombre,descripcion,idDepartamento,idEstado,codigo) values
-		(new.nombre,new.descripcion,new.idDepartamento,new.idEstado,scodigo);
+		insert into caso(idSolicitud,nombre,descripcion,idDepartamento,idEstado,codigo) values
+		(new.id,new.nombre,new.descripcion,new.idDepartamento,new.idEstado,scodigo);
     else
 		if new.idEstado = 2 then
 			insert into rechazo(idSolicitud,nombre) values
@@ -632,3 +632,35 @@ create table bitacora(
     foreign key (idCaso) references caso(id)
 );
 
+select now();
+
+create table prueba(
+	fecha date
+);
+select * from prueba;
+insert into prueba values ('2019/03/31');
+
+delimiter //
+create procedure crear_caso(v_solicitud int, v_fecha date, v_programador int, v_tester int, v_descripcion varchar(1000))
+begin
+	declare count_soli int;
+    set count_soli = (select count(*) from caso c inner join solicitud s on s.id = c.idSolicitud where c.idSolicitud = v_solicitud);
+    if count_soli != 0 then
+		select 'Esta solicitud ya pertenece a un caso';
+	else
+		set count_soli = (select count(*) from rechazo r inner join solicitud s on s.id = r.idSolicitud where r.idSolicitud = v_solicitud);
+		if count_soli != 0 then
+			select 'Esta solicitud ya fue rechazada';
+		else
+			update solicitud set idEstado = 3 where id = v_solicitud;
+            if length(v_descripcion) != 0 then
+				update caso set fechaInicio = now(),fechaFinal = v_fecha,idEncargado = v_programador, idTester = v_tester, descripcionElementos = v_descripcion where idSolicitud = v_solicitud;
+            else
+				update caso set fechaInicio = now(),fechaFinal = v_fecha,idEncargado = v_programador, idTester = v_tester, descripcionElementos = 'Sin descripcion de elementos clave' where idSolicitud = v_solicitud;
+			end if;
+        end if;
+	end if;
+end//
+delimiter ;
+
+select * from caso;

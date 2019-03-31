@@ -643,10 +643,19 @@ call mostrar_empleados();
 call crear_caso(3,'2019/04/10',1,2,'');
 */
 
+
 delimiter //
 create procedure crear_caso(v_solicitud int, v_fecha date, v_programador int, v_tester int, v_descripcion varchar(1000))
 begin
 	declare count_soli int;
+    declare scodigo varchar(9);
+    declare sdepto varchar(4);
+    declare sfecha date;
+    
+    declare snombre varchar(50);
+    declare sdescripcion varchar(1000);
+    declare ndepartamento int;
+    
     set count_soli = (select count(*) from caso c inner join solicitud s on s.id = c.idSolicitud where c.idSolicitud = v_solicitud);
     if count_soli != 0 then
 		select 'Esta solicitud ya pertenece a un caso';
@@ -656,14 +665,36 @@ begin
 			select 'Esta solicitud ya fue rechazada';
 		else
 			update solicitud set idEstado = 3 where id = v_solicitud;
-            if length(v_descripcion) != 0 then
-				update caso set fechaInicio = current_date(),fechaFinal = v_fecha,idEncargado = v_programador, Tester = v_tester, descripcionElementos = v_descripcion where idSolicitud = v_solicitud;
+            if length(v_descripcion) = 0 then
+				set sfecha = (select fecha from solicitud where id = v_solicitud limit 1);
+                set snombre = (select nombre from solicitud where id = v_solicitud limit 1);
+                set sdescripcion = (select descripcion from solicitud where id = v_solicitud limit 1);
+                set ndepartamento = (select idDepartamento from solicitud where id = v_solicitud limit 1);
+                set sdepto = (select substring(nombre,1,3) from departamento where id = ndepartamento limit 1);
+				set scodigo = concat(sdepto,date_format(sfecha,'%y'), 100 + round(rand() * 899 ));
+				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,codigo, fechaInicio,fechaFinal,idEncargado,Tester,descripcionElementos) 
+                values
+				(v_solicitud,snombre,sdescripcion,ndepartamento,3,scodigo,current_date(),v_fecha,v_programador,v_tester,'Sin descripcion de elementos clave');
+                update solicitud set idEstado = 3 where id = v_solicitud;
             else
-				update caso set fechaInicio = current_date(),fechaFinal = v_fecha,idEncargado = v_programador, Tester = v_tester, descripcionElementos = 'Sin descripcion de elementos clave' where idSolicitud = v_solicitud;
+				set sfecha = (select fecha from solicitud where id = v_solicitud limit 1);
+                set snombre = (select nombre from solicitud where id = v_solicitud limit 1);
+                set sdescripcion = (select descripcion from solicitud where id = v_solicitud limit 1);
+                set ndepartamento = (select idDepartamento from solicitud where id = v_solicitud limit 1);
+                set sdepto = (select substring(nombre,1,3) from departamento where id = ndepartamento limit 1);
+				set scodigo = concat(sdepto,date_format(sfecha,'%y'), 100 + round(rand() * 899 ));
+				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,idEstado,codigo, fechaInicio,fechaFinal,idEncargado,Tester,descripcionElementos) 
+                values
+				(v_solicitud,snombre,sdescripcion,ndepartamento,3,scodigo,current_date(),v_fecha,v_programador,v_tester,v_descripcion);
+                update solicitud set idEstado = 3 where id = v_solicitud;
 			end if;
         end if;
 	end if;
 end//
 delimiter ;
+
+/*
+call crear_caso(5,'2019/04/10',1,2,'descricpon');
+*/
 
 select * from caso;

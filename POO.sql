@@ -550,12 +550,12 @@ create table caso(
     idEncargado int,
     pdf bit(64),
     descripcionElementos varchar(1000),
-    Tester int,
+    idTester int,
     fechaLanzamiento date check(fechaLanzamiento >= fechaFinal),
     foreign key (idDepartamento) references departamento(id) on update cascade,
     foreign key (idEstado) references estado(id) on update cascade,
     foreign key (idEncargado) references empleado(id) on update cascade,
-    foreign key (Tester) references empleado(id) on update cascade
+    foreign key (idTester) references empleado(id) on update cascade
 );
 
 
@@ -632,13 +632,9 @@ create table bitacora(
     foreign key (idCaso) references caso(id)
 );
 
-select now();
-
-create table prueba(
-	fecha date
-);
 /*
 select * from prueba;
+<<<<<<< HEAD
 insert into prueba values ('2019/03/31');
 select * from solicitud;
 select * from caso;
@@ -646,6 +642,7 @@ delete from caso;
 call mostrar_empleados();
 call crear_caso(3,'2019/04/10',1,2,'');
 */
+
 delimiter //
 create procedure crear_caso(v_solicitud int, v_fecha date, v_programador int, v_tester int, v_descripcion varchar(1000))
 begin

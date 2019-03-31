@@ -126,7 +126,7 @@ truncate departamento
 */
 
 /*Empleado*/
-CREATE TABLE Empleado(
+CREATE TABLE empleado(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL check (nombre NOT LIKE '%[0-9]%'),
     apellidos VARCHAR(50) NOT NULL check (apellidos NOT LIKE '%[0-9]%'),
@@ -470,17 +470,10 @@ call realizar_solicitud('solicitud v2','',1);
 
 
 delimiter //
-create procedure mostrar_solicitud_jefe(v_idDepto int)
-	begin
-		declare v_count_soli int;
-        set v_count_soli = (select count(*) from solicitud s inner join departamento d on s.idDepartamento = d.id where s.idDepartamento = v_idDepto);
-        if v_count_soli != 0 then
-			select s.id, s.nombre, s.descripcion, s.idDepartamento, d.nombre from solicitud s inner join departamento d on s.idDepartamento = d.id
-			where s.idDepartamento = v_idDepto;
-		else
-			select 'No hay solicitudes para mostrar';
-		end if;
-	end//
+create procedure mostrar_solicitudes(v_idDepto int)
+begin
+       SELECT id,nombre,descripcion FROM solicitud WHERE idDepartamento = v_depto AND idEstado = 1;
+end //
 delimiter ;
 /*call mostrar_solicitud_jefe(1);*/
 

@@ -2,6 +2,8 @@ create database POO;
 
 use POO;
 
+set SQL_SAFE_UPDATES = 0;
+
 create table departamento(
 	id int primary key auto_increment,
     codigo varchar(20) unique,
@@ -81,6 +83,7 @@ begin
 end$$
 delimiter ;
 
+
 /*Procedimiento para la actualizacion de departamentos*/
 delimiter $$
 create procedure actualizar_rol (v_id int, v_rol varchar(25),v_descripcion varchar(100))
@@ -105,7 +108,7 @@ delimiter ;
 delimiter $$
 create procedure mostrar_rol ()
 begin
-	select R.rol, R.descripcion  from rol R;
+	select R.id, R.rol, R.descripcion  from rol R;
 end$$
 delimiter ;
 
@@ -113,7 +116,7 @@ delimiter ;
 delimiter $$
 create procedure buscar_rol(v_buscar varchar(50))
 begin
-	select R.rol, R.descripcion  from rol R where R.rol LIKE concat('%',v_buscar,'%') OR R.descripcion LIKE concat('%',v_buscar,'%');
+	select R.id, R.rol, R.descripcion  from rol R where R.rol LIKE concat('%',v_buscar,'%') OR R.descripcion LIKE concat('%',v_buscar,'%');
 end$$
 delimiter ;
 /*call buscar_rol('sin des');
@@ -122,21 +125,20 @@ drop procedure buscar_departamento
 truncate departamento
 */
 
-
 /*Empleado*/
-CREATE TABLE empleado(
+CREATE TABLE Empleado(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL check (nombre NOT LIKE '%[0-9]%'),
     apellidos VARCHAR(50) NOT NULL check (apellidos NOT LIKE '%[0-9]%'),
     email VARCHAR(50) NOT NULL unique check(email LIKE '%_@_%_.__%'),
     contrasenia VARCHAR(50) NOT NULL,
-    idRol INT not null default 4,
-    idDepartamento INT not null,
+    idRol INT not null,
+    idDepartamento INT,
     FOREIGN KEY (idRol) REFERENCES rol(id) on update cascade,
     FOREIGN KEY (idDepartamento) REFERENCES departamento(id) on update cascade
 );
 
-    /*INSERT INTO empleado VALUES(null,'Alejandro','Alejo','alejandroalejo714@gmail.com','password',1,1);
+/*INSERT INTO Empleado VALUES(null,'Alejandro','Alejo','alejandroalejo714@gmail.com','password',1,1);
 select * from empleado;
 select * from departamento;
 call insertar_empleado('Denys','Inestroza','dennyscr@gmail.com',2,1);
@@ -145,70 +147,55 @@ call actualizar_empleado(3,'Denys','Inestroza','de@gmail.com',3,1);
 call mostrar_empleados;
 select * from empleado;
 */
+
 delimiter $$
 CREATE PROCEDURE insertar_empleado (v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_rol int, v_depto int)
     BEGIN
 		declare v_cnt int;
         declare v_sdepto varchar(50);
-		if v_rol = 2 then
-			set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2);
-            if v_cnt != 0 then
-				set v_sdepto = (select nombre from departamento where id = v_depto);
-				select concat('Ya existe un jefe para el departamento: ',v_sdepto);
-			else
-				if v_rol = 0 then
-					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
-					(v_nombre,v_apellidos,v_email,concat(lower(reverse(v_nombre)),503),default,v_depto);
-                    set v_sdepto = (select nombre from departamento where id = v_depto);
-					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
+        declare v_mail_exist int;
+        set v_mail_exist = (select count(*) from empleado where email = v_email limit 1);
+        if v_mail_exist = 0 then 
+			if v_rol = 2 then
+				set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2);
+				if v_cnt != 0 then
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Ya existe un jefe para el departamento: ',v_sdepto);
 				else
 					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
 					(v_nombre,v_apellidos,v_email,concat(lower(reverse(v_nombre)),503),v_rol,v_depto);
-                    set v_sdepto = (select nombre from departamento where id = v_depto);
+					set v_sdepto = (select nombre from departamento where id = v_depto);
 					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 				end if;
-			end if;
-		elseif v_rol = 3 then
-			set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 3);
-            if v_cnt != 0 then
-				set v_sdepto = (select nombre from departamento where id = v_depto);
-				select concat('Ya existe un jefe de desarrollo para el departamento: ',v_sdepto);
-			else
-				if v_rol = 0 then
-					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
-					(v_nombre,v_apellidos,v_email,concat(lower(reverse(v_nombre)),503),default,v_depto);
-                    set v_sdepto = (select nombre from departamento where id = v_depto);
-					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
+			elseif v_rol = 3 then
+				set v_cnt = (select count(*) from empleado where idDepartamento = v_depto and idRol = 3);
+				if v_cnt != 0 then
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Ya existe un jefe de desarrollo para el departamento: ',v_sdepto);
 				else
 					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
 					(v_nombre,v_apellidos,v_email,concat(lower(reverse(v_nombre)),503),v_rol,v_depto);
-                    set v_sdepto = (select nombre from departamento where id = v_depto);
+					set v_sdepto = (select nombre from departamento where id = v_depto);
 					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 				end if;
-			end if;
-		else
-			if v_rol = 0 then
-				insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
-				(v_nombre,v_apellidos,v_email,concat(lower(reverse(v_nombre)),503),default,v_depto);
-                set v_sdepto = (select nombre from departamento where id = v_depto);
-				select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 			else
 				insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
 				(v_nombre,v_apellidos,v_email,concat(lower(reverse(v_nombre)),503),v_rol,v_depto);
-                set v_sdepto = (select nombre from departamento where id = v_depto);
+				set v_sdepto = (select nombre from departamento where id = v_depto);
 				select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 			end if;
+		else
+			select concat('El correo: ',v_email,', ya esta registrado');
 		end if;
     END $$
 delimiter ;
-
-set SQL_SAFE_UPDATES = 0;
 /*
 call insertar_empleado('Jose','Alejo','alejo@gmail.com',2,2);
 call actualizar_empleado(1,'Denys','Inestroza','contrasenia','denny@gmail.com',2,2);
 select * from empleado;
 */
 
+/*
 delimiter $$
 CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_rol int, v_depto int)
     BEGIN
@@ -219,12 +206,65 @@ CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellido
 			select concat('Se actualizo un miembro del departamento: ',v_sdepto);
     END $$
 delimiter ;
+*/
+
+delimiter $$
+CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_rol int, v_depto int)
+    BEGIN
+		declare v_cnt_rol_f int;
+        declare v_cnt_rol_t int;
+        declare v_sdepto varchar(50);
+        declare v_cnt_email_t int;
+        declare v_cnt_email_f int;
+        
+        set v_cnt_email_f = (select count(*) from empleado where email = v_email);
+        set v_cnt_email_t = (select count(*) from empleado where email = v_email and id = v_id);
+        if v_cnt_email_f = v_cnt_email_t then
+        
+			if v_rol = 2 then
+            
+				set v_cnt_rol_f = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2);
+				set v_cnt_rol_t = (select count(*) from empleado where idDepartamento = v_depto and idRol = 2 and id = v_id);
+                
+				if v_cnt_rol_f = v_cnt_rol_t then
+					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
+				else
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Ya existe un jefe para el departamento: ',v_sdepto);
+				end if;
+                
+			else if v_rol = 3 then
+            
+				set v_cnt_rol_f = (select count(*) from empleado where idDepartamento = v_depto and idRol = 3);
+				set v_cnt_rol_t = (select count(*) from empleado where idDepartamento = v_depto and idRol = 3 and id = v_id);
+                
+				if v_cnt_rol_f = v_cnt_rol_t then
+					update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Se actualizo un miembro del departamento: ',v_sdepto);
+				else
+					set v_sdepto = (select nombre from departamento where id = v_depto);
+					select concat('Ya existe un jefe de desarrollo para el departamento: ',v_sdepto);
+				end if;
+			else
+				update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
+				set v_sdepto = (select nombre from departamento where id = v_depto);
+				select concat('Se actualizo un miembro del departamento: ',v_sdepto);
+			end if;
+		end if;
+		else
+			select concat('El correo: ',v_email,', ya esta registrado');
+		end if;
+    END $$
+delimiter ;
 
 
 delimiter $$
 CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
     BEGIN
-        SELECT e.Nombre,r.rol AS Rol,d.Nombre AS Departamento
+        SELECT e.Nombre,r.rol AS Rol,d.Nombre AS departamento
         FROM empleado e
         INNER JOIN rol r
         ON e.idRol = r.id
@@ -233,6 +273,8 @@ CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
         WHERE e.Email = Usuario AND e.Contrasenia = Contrasenia; 
     END $$
 delimiter ;
+
+
 /*
 CALL Loguearse ('alejandroalejo714@gmail.com','password');
 */
@@ -241,25 +283,22 @@ create procedure eliminar_empleado(v_id int)
 	begin
 		delete from empleado where id = v_id;
         if (row_count() > 0 ) then
-			select 'No se pudo eliminar';
-		else
 			select 'Se elimino con exito';
+		else
+			select 'No se pudo eliminar';
 		end if;
     end //
 delimiter ;
 
-
 delimiter //
 create procedure buscar_empleados(v_buscar varchar(50))
-	begin
-		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
+    begin
+        SELECT e.id,e.nombre,e.apellidos,e.email,r.id,r.rol,d.id,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.nombre LIKE concat('%',v_buscar,'%') OR e.apellidos LIKE concat('%',v_buscar,'%') OR e.email LIKE concat('%',v_buscar,'%')
-        OR r.rol LIKE concat('%',v_buscar,'%') OR d.nombre LIKE concat('%',v_buscar,'%') and e.idRol not in(1,2,3);
+        where e.nombre LIKE concat('%',v_buscar,'%') OR e.apellidos LIKE concat('%',v_buscar,'%') OR e.email LIKE concat('%',v_buscar,'%');
     end //
 delimiter ;
-
 
 delimiter //
 create procedure mostrar_empleados()
@@ -280,10 +319,10 @@ Programador: 5
 delimiter //
 create procedure mostrar_administradores()
 	begin
-		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
+		SELECT e.id,e.nombre,e.apellidos,e.email,r.id,r.rol,d.id,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol = 1;
+        where e.idRol in (1,2,3);
     end//
 delimiter ;
 
@@ -408,7 +447,100 @@ create table solicitud(
     foreign key (idEstado) references estado(id)
 );
 
+
+delimiter //
+create procedure realizar_solicitud(v_nombre varchar(50), v_descripcion varchar(1000),v_depto int)
+begin
+	declare sdepto varchar(50);
+    declare count_nombre varchar(50);
+    set count_nombre = (select count(*) from solicitud where nombre = v_nombre and idDepartamento = v_depto);
+    set sdepto = (select d.nombre from departamento d where d.id = v_depto);
+    if count_nombre = 0 then
+		if length(v_descripcion) = 0 then
+			insert into solicitud(nombre, descripcion,idDepartamento) values (v_nombre,default,v_depto);
+        else 
+			insert into solicitud(nombre, descripcion,idDepartamento) values (v_nombre,v_descripcion,v_depto);
+		end if;
+	else
+		select concat('ya existe una solicitud con el nombre: ',v_nombre,', en el departamento: ', sdepto);
+	end if;
+end//
+delimiter ;
+call realizar_solicitud('solicitud v2','',1);
+
+
+delimiter //
+create procedure mostrar_solicitud_jefe(v_idDepto int)
+	begin
+		declare v_count_soli int;
+        set v_count_soli = (select count(*) from solicitud s inner join departamento d on s.idDepartamento = d.id where s.idDepartamento = v_idDepto);
+        if v_count_soli != 0 then
+			select s.id, s.nombre, s.descripcion, s.idDepartamento, d.nombre from solicitud s inner join departamento d on s.idDepartamento = d.id
+			where s.idDepartamento = v_idDepto;
+		else
+			select 'No hay solicitudes para mostrar';
+		end if;
+	end//
+delimiter ;
+/*call mostrar_solicitud_jefe(1);*/
+
+
+delimiter //
+create procedure buscar_solicitud_jefe(v_buscar varchar(50), v_depto int)
+	begin
+		declare v_count_soli int;
+        set v_count_soli = (select count(*) from solicitud s inner join departamento d on s.idDepartamento = d.id where s.idDepartamento = v_depto 
+							and s.nombre LIKE concat('%',v_buscar,'%'));
+        if v_count_soli != 0 then
+			select s.id, s.nombre, s.descripcion, s.idDepartamento, d.nombre from solicitud s inner join departamento d on s.idDepartamento = d.id
+			where s.idDepartamento = v_depto and s.nombre LIKE concat('%',v_buscar,'%');
+		else
+			select 'No existen coincidencias';
+		end if;
+	end//
+delimiter ;
+/*call buscar_solicitud_jefe('you',1);*/
+
+
+
 select * from solicitud;
+select * from departamento;
+
+delimiter //
+create procedure modificar_solicitud_jefe(v_id int, v_nombre varchar(50), v_descripcion varchar(1000), v_depto int)
+begin
+	declare count_name_f int;
+    declare count_name_t int;
+    set count_name_f = (select count(*) from solicitud where nombre = v_nombre and idDepartamento = v_depto);
+    set count_name_t = (select count(*) from solicitud where nombre = v_nombre and idDepartamento = v_depto and id = v_id);
+    if (count_name_f = count_name_t) then
+		if (length(v_descripcion) = 0) then
+			update solicitud set nombre = v_nombre, descripcion = default where id = v_id;
+		else 
+			update solicitud set nombre = v_nombre, descripcion = v_descripcion where id = v_id;
+		end if;
+	else
+		select 'El nombre de la solicitud ya existe, intente con un nombre diferente';
+    end if;
+end//
+delimiter ;
+/*call modificar_solicitud_jefe(3,'Prueba','con descripcion',1);*/
+
+delimiter //
+create procedure eliminar_solicitud (v_id int)
+begin
+	delete from solicitud where id=v_id;
+    if (row_count() > 0 ) then
+			select 'Se elimino con exito';
+		else
+			select 'No se pudo eliminar';
+		end if;
+end//
+delimiter ;
+call eliminar_solicitud (7);
+
+select * from empleado;
+
 /*
 update solicitud set idEstado = 3 where id = 4;
 */
@@ -432,6 +564,7 @@ create table caso(
     foreign key (Tester) references empleado(id) on update cascade
 );
 
+
 create table rechazo(
 	id int primary key auto_increment,
     idSolicitud int unique not null,
@@ -441,20 +574,44 @@ create table rechazo(
 );
 
 
+/*Encontrar programadores y empleados sin caso*/
 delimiter //
-create trigger crear_caso after update on solicitud
+create procedure programadores_sin_caso(v_depto int)
+begin
+	select e.id, e.nombre from empleado e left join caso c on e.id = c.idEncargado where c.idEncargado is null and e.idRol = 5 and e.idDepartamento = v_depto;
+end//
+delimiter ;
+call programadores_sin_caso(1);
+
+
+delimiter //
+create procedure empleados_sin_caso(v_depto int)
+begin
+	select e.id, e.nombre from empleado e left join caso c on e.id = c.tester where c.idEncargado is null and e.idRol = 4 and e.idDepartamento = v_depto;
+end//
+delimiter ;
+call empleados_sin_caso(1);
+
+delimiter //
+create trigger solicitud_accion after update on solicitud
 for each row
 begin
 	declare sdepto varchar(9);
     declare scodigo varchar(9);
 	if new.idEstado = 3 then
-    set sdepto = (select substring(d.codigo,1,3) from departamento d inner join solicitud s on s.idDepartamento = d.id where s.idDepartamento = new.idDepartamento limit 1);
-    set scodigo = concat(sdepto,date_format(new.fecha,'%y'),100 + round(rand() * 899 ));
-	insert into caso(nombre,descripcion,idDepartamento,idEstado,codigo) values
-	(new.nombre,new.descripcion,new.idDepartamento,new.idEstado,scodigo);
-    end if;
+		set sdepto = (select substring(d.codigo,1,3) from departamento d inner join solicitud s on s.idDepartamento = d.id where s.idDepartamento = new.idDepartamento limit 1);
+		set scodigo = concat(sdepto,date_format(new.fecha,'%y'),100 + round(rand() * 899 ));
+		insert into caso(nombre,descripcion,idDepartamento,idEstado,codigo) values
+		(new.nombre,new.descripcion,new.idDepartamento,new.idEstado,scodigo);
+    else
+		if new.idEstado = 2 then
+			insert into rechazo(idSolicitud,nombre) values
+			(new.id,new.nombre);
+		end if;
+	end if;
 end//
 delimiter ;
+
 /*
 select * from solicitud;
 
@@ -462,24 +619,12 @@ use poo;
 call insertar_departamento('Administracion','');
 select * from departamento;
 
-use poo
-drop trigger crear_rechazo
-*/
-
-delimiter //
-create trigger crear_rechazo before update on solicitud
-for each row
-begin
-	if new.idEstado = 2 then
-		insert into rechazo(idSolicitud,nombre) values (new.id,new.nombre);
-	end if;
-end//
-delimiter ;
 /*
 insert into solicitud(nombre,descripcion,pdf,idDepartamento,fecha,idEstado) values ('prueba v2',default,null,2,default,default);
 
-update solicitud set idEstado = 3 where id = 7;
+update solicitud set idEstado = 3 where id = 8;
 */
+
 select * from departamento;
 select * from solicitud;
 select * from caso;
@@ -490,13 +635,7 @@ create table bitacora(
     idCaso int unique not null,
     informacion varchar(1000) not null,
     porcentajeAvance int not null check(porcentajeAvance < 101 AND porcentajeAvance > 0),
-    finalizado boolean
+    finalizado boolean,
+    foreign key (idCaso) references caso(id)
 );
 
-create table grupos(
-	id int primary key auto_increment,
-    idJefeDesarrollo int not null,
-    idProgramador int not null unique,
-    foreign key (idJefeDesarrollo) references empleado(id),
-    foreign key (idProgramador) references empleado(id)
-);

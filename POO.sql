@@ -472,7 +472,7 @@ call realizar_solicitud('solicitud v2','',1);
 delimiter //
 create procedure mostrar_solicitudes(v_idDepto int)
 begin
-       SELECT id,nombre,descripcion FROM solicitud WHERE idDepartamento = v_depto AND idEstado = 1;
+       SELECT id,nombre,descripcion FROM solicitud WHERE idDepartamento = v_idDepto AND idEstado = 1;
 end //
 delimiter ;
 /*call mostrar_solicitud_jefe(1);*/

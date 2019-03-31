@@ -580,7 +580,7 @@ call programadores_sin_caso(1);
 delimiter //
 create procedure empleados_sin_caso(v_depto int)
 begin
-	select e.id, e.nombre from empleado e left join caso c on e.id = c.tester where c.idEncargado is null and e.idRol = 4 and e.idDepartamento = v_depto;
+	select e.id, e.nombre from empleado e left join caso c on e.id = c.idTester where c.idEncargado is null and e.idRol = 4 and e.idDepartamento = v_depto;
 end//
 delimiter ;
 call empleados_sin_caso(1);

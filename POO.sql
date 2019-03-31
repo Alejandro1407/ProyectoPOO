@@ -637,9 +637,15 @@ select now();
 create table prueba(
 	fecha date
 );
+/*
 select * from prueba;
 insert into prueba values ('2019/03/31');
-
+select * from solicitud;
+select * from caso;
+delete from caso;
+call mostrar_empleados();
+call crear_caso(3,'2019/04/10',1,2,'');
+*/
 delimiter //
 create procedure crear_caso(v_solicitud int, v_fecha date, v_programador int, v_tester int, v_descripcion varchar(1000))
 begin
@@ -654,9 +660,9 @@ begin
 		else
 			update solicitud set idEstado = 3 where id = v_solicitud;
             if length(v_descripcion) != 0 then
-				update caso set fechaInicio = now(),fechaFinal = v_fecha,idEncargado = v_programador, idTester = v_tester, descripcionElementos = v_descripcion where idSolicitud = v_solicitud;
+				update caso set fechaInicio = current_date(),fechaFinal = v_fecha,idEncargado = v_programador, Tester = v_tester, descripcionElementos = v_descripcion where idSolicitud = v_solicitud;
             else
-				update caso set fechaInicio = now(),fechaFinal = v_fecha,idEncargado = v_programador, idTester = v_tester, descripcionElementos = 'Sin descripcion de elementos clave' where idSolicitud = v_solicitud;
+				update caso set fechaInicio = current_date(),fechaFinal = v_fecha,idEncargado = v_programador, Tester = v_tester, descripcionElementos = 'Sin descripcion de elementos clave' where idSolicitud = v_solicitud;
 			end if;
         end if;
 	end if;

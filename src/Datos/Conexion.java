@@ -47,4 +47,14 @@ public class Conexion {
             return null;
         }
     }//ExecuteQuery
+    
+    public static ResultSet ExecuteProcQuery(String ProcName){
+        try{
+            Connection conn = Conectarse();
+            CallableStatement proc = conn.prepareCall("{call" + ProcName +"}");
+            return proc.executeQuery();
+        }catch(Exception e){
+            return null;
+        }
+    }
 }

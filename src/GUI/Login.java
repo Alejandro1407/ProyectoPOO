@@ -1,19 +1,23 @@
 package GUI;
 
 import Datos.Conexion;
-import GUI.Administrador.*;
 import java.sql.*;
 import javax.swing.JOptionPane;
+import GUI.Administrador.AdministradorMain;
+import GUI.Empleados.EmpleadosMain;
+import GUI.JefeArea.JefeAreaMain;
+import GUI.JefeDesarrollo.JefeDesarrolloMain;
 
 public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
-            AdministradorMain m = new AdministradorMain();
+           /* AdministradorMain m = new AdministradorMain();
                       m.setVisible(true);
                      this.dispose();
                      /* Debug */
+           
     }
 
     @SuppressWarnings("unchecked")
@@ -156,12 +160,32 @@ public class Login extends javax.swing.JFrame {
             ResultSet rs =  proc.executeQuery(); //Si el procedimiento es un select se guarda en un rs y se executeQuery()
             if(rs.next()){
                 rs.first();
-                System.out.println(rs.getString(1));
-                if(rs.getString(2).equals("Administrador")){
-                      //AdministradorMain m = new AdministradorMain();
-                      //m.setVisible(true);
-                     //this.dispose();
+                System.out.println(rs.getString(2));
+                switch (rs.getString(2)){
+                    case "Administrador":
+                            AdministradorMain am = new AdministradorMain();
+                            am.setVisible(true);
+                        break;
+                    case "Jefe de Area":
+                            JefeAreaMain JAM = new JefeAreaMain();
+                            JAM.setVisible(true);
+                        break;
+                    case "Jefe de Desarrollo":
+                            JefeDesarrolloMain JDM = new JefeDesarrolloMain();
+                            JDM.setNombreUser(rs.getString(1));
+                            JDM.setidDepartament(rs.getInt(3));
+                            JDM.setNombreDepartamento(rs.getString(4));
+                            JDM.setVisible(true);
+                        break;
+                    case "Empleado":
+                            EmpleadosMain EM = new EmpleadosMain();
+                            EM.setVisible(true);
+                        break;
+                    case "Programador":
+                            EmpleadosMain EM2 = new EmpleadosMain();
+                            EM2.setVisible(true);
                 }
+                this.dispose();
             }else{
                 JOptionPane.showMessageDialog(null, "Usuario y/o Constraseña Incorrecto");
             }

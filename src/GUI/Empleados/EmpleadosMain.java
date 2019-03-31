@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GUI.Administrador;
+package GUI.Empleados;
 
+import GUI.Administrador.*;
 import GUI.JefeArea.Solicitudes;
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -16,12 +17,12 @@ import GUI.*;
  *
  * @author alejandro
  */
-public class AdministradorMain extends javax.swing.JFrame {
+public class EmpleadosMain extends javax.swing.JFrame {
 
     /**
      * Creates new form AdministradorMain
      */
-    public AdministradorMain() {
+    public EmpleadosMain() {
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -36,15 +37,13 @@ public class AdministradorMain extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        btnEmpleados = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Administrador");
@@ -56,43 +55,9 @@ public class AdministradorMain extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(238, 112, 82));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Departamento.png"))); // NOI18N
-        jButton1.setText("Departamentos");
-        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton1.setContentAreaFilled(false);
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 190, 82));
-
         jLabel1.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
         jLabel1.setText("Administración");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, -1, -1));
-
-        btnEmpleados.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnEmpleados.setForeground(new java.awt.Color(238, 112, 82));
-        btnEmpleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Empleados.png"))); // NOI18N
-        btnEmpleados.setText("Empleados");
-        btnEmpleados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnEmpleados.setContentAreaFilled(false);
-        btnEmpleados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEmpleadosActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 130, 141, 81));
-
-        jButton3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(238, 112, 82));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Roles.png"))); // NOI18N
-        jButton3.setText("Roles");
-        jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton3.setContentAreaFilled(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, 150, 81));
 
         jLabel2.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
         jLabel2.setText("Alejandro Alejo");
@@ -129,16 +94,13 @@ public class AdministradorMain extends javax.swing.JFrame {
         });
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 40));
 
+        jLabel3.setText("Empleados");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 110, 40));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 370));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadosActionPerformed
-       MantenimientoEmpleado e = new MantenimientoEmpleado();
-       e.setVisible(true);
-       this.dispose();
-    }//GEN-LAST:event_btnEmpleadosActionPerformed
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         // TODO add your handling code here:
@@ -161,12 +123,6 @@ public class AdministradorMain extends javax.swing.JFrame {
         l.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        MantenimientoRoles MR = new MantenimientoRoles();
-        MR.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,6 +150,7 @@ public class AdministradorMain extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(AdministradorMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -204,11 +161,9 @@ public class AdministradorMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEmpleados;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

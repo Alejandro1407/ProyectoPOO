@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GUI.Administrador;
+package GUI.JefeArea;
 
+import GUI.Administrador.AdministradorMain;
 import javax.swing.JOptionPane;
 
 /**

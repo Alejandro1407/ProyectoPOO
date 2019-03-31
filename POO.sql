@@ -124,7 +124,7 @@ truncate departamento
 
 
 /*Empleado*/
-CREATE TABLE Empleado(
+CREATE TABLE empleado(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL check (nombre NOT LIKE '%[0-9]%'),
     apellidos VARCHAR(50) NOT NULL check (apellidos NOT LIKE '%[0-9]%'),
@@ -136,7 +136,7 @@ CREATE TABLE Empleado(
     FOREIGN KEY (idDepartamento) REFERENCES departamento(id) on update cascade
 );
 
-/*INSERT INTO Empleado VALUES(null,'Alejandro','Alejo','alejandroalejo714@gmail.com','password',1,1);
+    /*INSERT INTO empleado VALUES(null,'Alejandro','Alejo','alejandroalejo714@gmail.com','password',1,1);
 select * from empleado;
 select * from departamento;
 call insertar_empleado('Denys','Inestroza','dennyscr@gmail.com',2,1);
@@ -225,7 +225,7 @@ delimiter $$
 CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
     BEGIN
         SELECT e.Nombre,r.rol AS Rol,d.Nombre AS Departamento
-        FROM Empleado e
+        FROM empleado e
         INNER JOIN rol r
         ON e.idRol = r.id
         INNER JOIN departamento d

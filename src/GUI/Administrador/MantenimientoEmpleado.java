@@ -1,5 +1,6 @@
 package GUI.Administrador;
 
+import GUI.JefeArea.Solicitudes;
 import Datos.Conexion;
 import java.sql.*;
 import Objetos.*;
@@ -264,7 +265,8 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
             txtApellidos.setText(Data.getString(3));
             txtEmail.setText(Data.getString(4));
             cmbRol.setSelectedItem(new Rol(Data.getInt(5),Data.getString(6)));
-            cmbDepartamento.setSelectedItem(new Departamento(Data.getInt(7), Data.getString(8))); if(!Data.next()){
+            cmbDepartamento.setSelectedItem(new Departamento(Data.getInt(7), Data.getString(8))); 
+            if(!Data.next()){
                 btnSiguiente.setEnabled(false);
             }
              Data.previous();
@@ -311,6 +313,7 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
                 proc.setInt(5, ((Departamento)cmbDepartamento.getSelectedItem()).getId());
                 ResultSet rs = proc.executeQuery();
                 rs.next();
+                System.out.println(rs.getString(1));
                 JOptionPane.showMessageDialog(this,rs.getString(1));
                 btnLimpiarActionPerformed(evt);
                 getData();
@@ -380,12 +383,11 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
             proc.setString(4,txtEmail.getText());
             proc.setInt(5, ((Rol)cmbRol.getSelectedItem()).getId());
             proc.setInt(6, ((Departamento)cmbDepartamento.getSelectedItem()).getId());
-            if(proc.execute()){
-                JOptionPane.showMessageDialog(this,"Actulizado con Exito");
-                getData();
-            }else{
-                throw new Exception("Fallo Al Actulizar");
-            }
+            ResultSet rs = proc.executeQuery();
+            rs.next();
+            System.out.println(rs.getString(1));
+            JOptionPane.showMessageDialog(this,rs.getString(1));
+            getData();
         }catch(Exception e){
             JOptionPane.showMessageDialog(this,"Ocurrio un error");
             System.out.println(e.getMessage());

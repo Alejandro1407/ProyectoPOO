@@ -550,7 +550,7 @@ create table caso(
     idEncargado int,
     pdf bit(64),
     descripcionElementos varchar(1000),
-    Tester int,
+    idTester int,
     fechaLanzamiento date check(fechaLanzamiento >= fechaFinal),
     foreign key (idDepartamento) references departamento(id) on update cascade,
     foreign key (idEstado) references estado(id) on update cascade,
@@ -638,7 +638,7 @@ create table prueba(
 	fecha date
 );
 select * from prueba;
-insert into prueba values ('2019/03/31');
+insert into prueba values ('2019/03/31');*/
 
 delimiter //
 create procedure crear_caso(v_solicitud int, v_fecha date, v_programador int, v_tester int, v_descripcion varchar(1000))

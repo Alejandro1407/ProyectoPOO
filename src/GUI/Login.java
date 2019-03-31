@@ -21,85 +21,124 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         PnelContenedor = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
         txtUsuario = new javax.swing.JTextField();
         btnIniciarSesion = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(360, 450));
+        setResizable(false);
+        setSize(new java.awt.Dimension(360, 450));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         PnelContenedor.setBackground(new java.awt.Color(255, 255, 255));
+        PnelContenedor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        jLabel1.setText("Usuario:");
-
-        jLabel2.setFont(new java.awt.Font("Noto Sans", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("MS PGothic", 1, 24)); // NOI18N
         jLabel2.setText("Iniciar Sesion");
+        PnelContenedor.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 80, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-        jLabel3.setText("Contraseña:");
+        txtPassword.setBorder(null);
+        PnelContenedor.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, 200, 30));
 
+        txtUsuario.setBorder(null);
+        PnelContenedor.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 200, 30));
+
+        btnIniciarSesion.setFont(new java.awt.Font("MS PGothic", 1, 18)); // NOI18N
         btnIniciarSesion.setText("Iniciar Sesion");
+        btnIniciarSesion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnIniciarSesion.setContentAreaFilled(false);
         btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIniciarSesionActionPerformed(evt);
             }
         });
+        PnelContenedor.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, 140, 40));
 
-        javax.swing.GroupLayout PnelContenedorLayout = new javax.swing.GroupLayout(PnelContenedor);
-        PnelContenedor.setLayout(PnelContenedorLayout);
-        PnelContenedorLayout.setHorizontalGroup(
-            PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PnelContenedorLayout.createSequentialGroup()
-                .addGap(0, 83, Short.MAX_VALUE)
-                .addGroup(PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PnelContenedorLayout.createSequentialGroup()
-                        .addGroup(PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(68, 68, 68))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PnelContenedorLayout.createSequentialGroup()
-                        .addComponent(btnIniciarSesion)
-                        .addGap(114, 114, 114))))
-        );
-        PnelContenedorLayout.setVerticalGroup(
-            PnelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PnelContenedorLayout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(btnIniciarSesion)
-                .addGap(0, 63, Short.MAX_VALUE))
-        );
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_User_96px_2.png"))); // NOI18N
+        PnelContenedor.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 100, 80));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PnelContenedor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PnelContenedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        jLabel5.setBackground(new java.awt.Color(238, 112, 82));
+        jLabel5.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(238, 112, 82));
+        jLabel5.setText("Usuario:");
+        PnelContenedor.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
+
+        jLabel6.setBackground(new java.awt.Color(238, 112, 82));
+        jLabel6.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(238, 112, 82));
+        jLabel6.setText("Contraseña:");
+        PnelContenedor.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
+        PnelContenedor.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, 230, 20));
+        PnelContenedor.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, 230, 20));
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_customer_32px_1.png"))); // NOI18N
+        PnelContenedor.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 30, 30));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_Key_32px.png"))); // NOI18N
+        PnelContenedor.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, 30, 30));
+
+        getContentPane().add(PnelContenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 360, 410));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_Multiply_32px.png"))); // NOI18N
+        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, 30, 30));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_Expand_Arrow_32px.png"))); // NOI18N
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 30, 30));
+
+        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 360, 20));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 360, 40));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        // TODO add your handling code here:
+        int dialog = JOptionPane.YES_NO_OPTION;
+        int result = JOptionPane.showConfirmDialog(null, "Desea salir del login?", "Exit", dialog);
+
+        if(result == 0){
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        // TODO add your handling code here:
+        this.setState(Login.ICONIFIED);
+    }//GEN-LAST:event_jLabel8MouseClicked
+
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-     
+
         if(txtUsuario.getText().equals("") || txtPassword.getText().equals("")){
            JOptionPane.showMessageDialog(this, "Debe Ingresar Usuario y Contraseña");
            return;
@@ -143,9 +182,18 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PnelContenedor;
     private javax.swing.JButton btnIniciarSesion;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables

@@ -740,3 +740,17 @@ call crear_caso(5,'2019/04/10',1,2,'descricpon');
 */
 
 select * from rechazo;
+										    
+delimiter //
+create procedure mostrar_casos(idDepartamento int)
+begin
+    SELECT c.nombre,c.codigo,c.descripcion,c.fechaFinal,c.descripcionElementos,c.idEncargado,p.nombre,c.idTester,t.nombre
+    FROM caso c 
+    INNER JOIN empleado p
+    ON c.idEncargado = p.id
+    INNER JOIN empleado t
+    ON c.idTester = t.id
+    WHERE c.idDepartamento = idDepartamento;
+end //
+delimiter ;
+										    

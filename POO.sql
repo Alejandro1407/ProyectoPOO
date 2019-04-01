@@ -676,6 +676,8 @@ begin
                 values
 				(v_solicitud,snombre,sdescripcion,ndepartamento,3,scodigo,current_date(),v_fecha,v_programador,v_tester,'Sin descripcion de elementos clave');
                 update solicitud set idEstado = 3 where id = v_solicitud;
+                set sdepto = (select nombre from departamento where id = ndepartamento limit 1);
+                select concat('Se ha añadio un nuevo caso para el departamento: ',sdepto);
             else
 				set sfecha = (select fecha from solicitud where id = v_solicitud limit 1);
                 set snombre = (select nombre from solicitud where id = v_solicitud limit 1);
@@ -687,6 +689,8 @@ begin
                 values
 				(v_solicitud,snombre,sdescripcion,ndepartamento,3,scodigo,current_date(),v_fecha,v_programador,v_tester,v_descripcion);
                 update solicitud set idEstado = 3 where id = v_solicitud;
+                set sdepto = (select nombre from departamento where id = ndepartamento limit 1);
+                select concat('Se ha añadio un nuevo caso para el departamento: ',sdepto);
 			end if;
         end if;
 	end if;

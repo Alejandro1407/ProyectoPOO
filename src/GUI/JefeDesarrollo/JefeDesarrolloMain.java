@@ -13,6 +13,8 @@ import java.awt.Button;
 import java.awt.Label;
 import javax.swing.JOptionPane;
 import GUI.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class JefeDesarrolloMain extends javax.swing.JFrame {
 
@@ -34,6 +36,9 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
     public void setNombreUser(String NombreUser){
         this.NombreUser =  NombreUser;
     }
+    private int getidDepartamento(){
+        return this.idDepartamento;
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -47,12 +52,12 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
+        btnCasos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Administrador");
         setName("AdministradorMain"); // NOI18N
         setUndecorated(true);
-        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -61,6 +66,7 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setForeground(new java.awt.Color(160, 160, 160));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtDepartamento.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
@@ -78,7 +84,7 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
                 btnSolicitudesActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSolicitudes, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 190, 81));
+        jPanel1.add(btnSolicitudes, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 190, 81));
 
         txtNombre.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
         txtNombre.setText("Alejandro Alejo");
@@ -115,19 +121,35 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
         });
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 370));
+        btnCasos.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnCasos.setForeground(new java.awt.Color(238, 112, 82));
+        btnCasos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Casos.png"))); // NOI18N
+        btnCasos.setText("Ver Casos");
+        btnCasos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnCasos.setContentAreaFilled(false);
+        btnCasos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCasosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 170, 190, 81));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 370));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSolicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitudesActionPerformed
        GestionSolicitudes e = new GestionSolicitudes();
-        System.out.println("Jefe Main " + idDepartamento);
-       e.setidDepartamento(idDepartamento);
+        System.out.println("Jefe Main " + getidDepartamento());
+       e.setidDepartamento(getidDepartamento());
        e.setVisible(true);
-       this.dispose();
     }//GEN-LAST:event_btnSolicitudesActionPerformed
 
+    private void makevisible(){
+        this.setVisible(true);
+    }
+    
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         // TODO add your handling code here:
         this.setState(Solicitudes.ICONIFIED);
@@ -154,6 +176,10 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
        txtNombre.setText(this.NombreUser);
        txtDepartamento.setText(NombreDepartamento);
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnCasosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCasosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCasosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,6 +218,7 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCasos;
     private javax.swing.JButton btnSolicitudes;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

@@ -306,6 +306,13 @@ CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
         WHERE e.Email = Usuario AND e.Contrasenia = Contrasenia; 
     END $$
 delimiter ;
+							     
+delimiter //
+create procedure actualizar_contrasenia(idempleado INT,newcontrasenia VARCHAR(50))
+begin
+    UPDATE empleado SET contrasenia=newcontrasenia WHERE id = idempleado;
+end //
+delimiter ;
 
 INSERT INTO empleado VALUES (null,'root','root','root@gmail.com','root',1,1);
 

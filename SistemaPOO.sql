@@ -160,7 +160,7 @@ CREATE TABLE empleado(
     nombre VARCHAR(50) NOT NULL check (nombre NOT LIKE '%[0-9]%'),
     apellidos VARCHAR(50) NOT NULL check (apellidos NOT LIKE '%[0-9]%'),
     email VARCHAR(50) NOT NULL unique check(email LIKE '%_@_%_.__%'),
-    contrasenia VARCHAR(50) NOT NULL,
+    contrasenia VARCHAR(100) NOT NULL,
     idRol INT not null,
     idDepartamento INT,
     FOREIGN KEY (idRol) REFERENCES rol(id) on update cascade,
@@ -184,7 +184,7 @@ CREATE PROCEDURE insertar_empleado (v_nombre VARCHAR(50), v_apellidos VARCHAR(50
 					select concat('Ya existe un jefe para el departamento: ',v_sdepto);
 				else
 					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
-					(v_nombre,v_apellidos,v_email,concat(lower(reverse(v_nombre)),503),v_rol,v_depto);
+					(v_nombre,v_apellidos,v_email,SHA2(concat(lower(reverse(v_nombre)),503),256),v_rol,v_depto);
 					set v_sdepto = (select nombre from departamento where id = v_depto);
 					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 				end if;
@@ -195,13 +195,13 @@ CREATE PROCEDURE insertar_empleado (v_nombre VARCHAR(50), v_apellidos VARCHAR(50
 					select concat('Ya existe un jefe de desarrollo para el departamento: ',v_sdepto);
 				else
 					insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
-					(v_nombre,v_apellidos,v_email,concat(lower(reverse(v_nombre)),503),v_rol,v_depto);
+					(v_nombre,v_apellidos,v_email,SHA2(concat(lower(reverse(v_nombre)),503),256),v_rol,v_depto);
 					set v_sdepto = (select nombre from departamento where id = v_depto);
 					select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 				end if;
 			else
 				insert into empleado(nombre,apellidos,email,contrasenia,idRol,idDepartamento) values
-				(v_nombre,v_apellidos,v_email,concat(lower(reverse(v_nombre)),503),v_rol,v_depto);
+				(v_nombre,v_apellidos,v_email,SHA2(concat(lower(reverse(v_nombre)),503),256),v_rol,v_depto);
 				set v_sdepto = (select nombre from departamento where id = v_depto);
 				select concat('Insercion correcta de un nuevo miembro al departamento: ',v_sdepto);
 			end if;
@@ -288,26 +288,26 @@ delimiter ;
 delimiter //
 create procedure mostrar_empleados()
 	begin
-		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
+		SELECT e.id,e.nombre,e.apellidos,e.email,r.id,r.rol,d.id,d.Nombre 
         FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
         INNER JOIN departamento d ON e.idDepartamento = d.id;
     end//
 delimiter ;
 
 delimiter $$
-CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
+CREATE PROCEDURE Loguearse (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
     BEGIN
-        SELECT e.Nombre,r.rol AS Rol,d.Nombre AS departamento
+        SELECT e.id,e.Nombre,r.rol,d.id,d.Nombre
         FROM empleado e
         INNER JOIN rol r
         ON e.idRol = r.id
         INNER JOIN departamento d
         ON e.idDepartamento = d.id
-        WHERE e.Email = Usuario AND e.Contrasenia = Contrasenia; 
+        WHERE e.Email = Usuario AND e.Contrasenia = SHA2(Contrasenia,256); 
     END $$
 delimiter ;
 
-INSERT INTO empleado VALUES (null,'root','root','root@gmail.com','root',1,1);
+INSERT INTO empleado VALUES (null,'root','root','root@gmail.com',SHA2('root',256),1,1);
 
 /* Fin CRUD Empleado */
 

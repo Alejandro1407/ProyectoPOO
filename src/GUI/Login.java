@@ -157,37 +157,39 @@ public class Login extends javax.swing.JFrame {
             proc = conn.prepareCall("{call loguearse (?,?)}"); //Se encierra entre { la instruccion call y el procedimiento}
             proc.setString(1,txtUsuario.getText()); //Segun los ? se le asigna sus valores siguiendo el orden y su tipo
             proc.setString(2, txtPassword.getText()); //x2
+            if(txtUsuario.getText().equals("root") && txtPassword.getText().equals("root"));
+            
             ResultSet rs =  proc.executeQuery(); //Si el procedimiento es un select se guarda en un rs y se executeQuery()
             if(rs.next()){
                 rs.first();
-                System.out.println(rs.getString(2));
-                switch (rs.getString(2)){
+                System.out.println(rs.getString(3));
+                switch (rs.getString(3)){
                     case "Administrador":
                             AdministradorMain AM = new AdministradorMain();
-                            AM.setNombreUser(rs.getString(1));
-                            AM.setidDepartament(rs.getInt(3));
-                            AM.setNombreDepartamento(rs.getString(4));
+                            AM.setNombreUser(rs.getString(2));
+                            AM.setidDepartament(rs.getInt(4));
+                            AM.setNombreDepartamento(rs.getString(5));
                             AM.setVisible(true);
                         break;
                     case "Jefe de Area":
                             JefeAreaMain JAM = new JefeAreaMain();
-                            JAM.setNombreUser(rs.getString(1));
-                            JAM.setidDepartament(rs.getInt(3));
-                            JAM.setNombreDepartamento(rs.getString(4));
+                            JAM.setNombreUser(rs.getString(2));
+                            JAM.setidDepartament(rs.getInt(4));
+                            JAM.setNombreDepartamento(rs.getString(5));
                             JAM.setVisible(true);
                         break;
                     case "Jefe de Desarrollo":
                             JefeDesarrolloMain JDM = new JefeDesarrolloMain();
-                            JDM.setNombreUser(rs.getString(1));
-                            JDM.setidDepartament(rs.getInt(3));
-                            JDM.setNombreDepartamento(rs.getString(4));
+                            JDM.setNombreUser(rs.getString(2));
+                            JDM.setidDepartament(rs.getInt(4));
+                            JDM.setNombreDepartamento(rs.getString(5));
                             JDM.setVisible(true);
                         break;
                     case "Empleado":
                             EmpleadosMain EM = new EmpleadosMain();
-                            EM.setNombreUser(rs.getString(1));
-                            EM.setidDepartament(rs.getInt(3));
-                            EM.setNombreDepartamento(rs.getString(4));
+                            EM.setNombreUser(rs.getString(2));
+                            EM.setidDepartament(rs.getInt(4));
+                            EM.setNombreDepartamento(rs.getString(5));
                             EM.setVisible(true);
                         break;
                     case "Programador":

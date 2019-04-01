@@ -672,7 +672,7 @@ begin
                 set ndepartamento = (select idDepartamento from solicitud where id = v_solicitud limit 1);
                 set sdepto = (select substring(nombre,1,3) from departamento where id = ndepartamento limit 1);
 				set scodigo = concat(sdepto,date_format(sfecha,'%y'), 100 + round(rand() * 899 ));
-				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,codigo, fechaInicio,fechaFinal,idEncargado,Tester,descripcionElementos) 
+				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,codigo, fechaInicio,fechaFinal,idEncargado,idTester,descripcionElementos) 
                 values
 				(v_solicitud,snombre,sdescripcion,ndepartamento,3,scodigo,current_date(),v_fecha,v_programador,v_tester,'Sin descripcion de elementos clave');
                 update solicitud set idEstado = 3 where id = v_solicitud;
@@ -683,7 +683,7 @@ begin
                 set ndepartamento = (select idDepartamento from solicitud where id = v_solicitud limit 1);
                 set sdepto = (select substring(nombre,1,3) from departamento where id = ndepartamento limit 1);
 				set scodigo = concat(sdepto,date_format(sfecha,'%y'), 100 + round(rand() * 899 ));
-				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,idEstado,codigo, fechaInicio,fechaFinal,idEncargado,Tester,descripcionElementos) 
+				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,idEstado,codigo, fechaInicio,fechaFinal,idEncargado,idTester,descripcionElementos) 
                 values
 				(v_solicitud,snombre,sdescripcion,ndepartamento,3,scodigo,current_date(),v_fecha,v_programador,v_tester,v_descripcion);
                 update solicitud set idEstado = 3 where id = v_solicitud;
@@ -720,6 +720,7 @@ begin
 	end if;
 end//
 delimiter ;
+
 /*
 select * from caso;
 select * from solicitud;

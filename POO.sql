@@ -753,4 +753,11 @@ begin
     WHERE c.idDepartamento = idDepartamento;
 end //
 delimiter ;
+
+delimiter //
+create procedure actulizar_caso(idCaso INT,fechalimite DATE,idEncargado INT,idTester INT)
+begin
+    UPDATE caso SET fechaFinal = fechalimite ,idEncargado = idEncargado,idTester = idTester WHERE id = idCaso;
+end //
+delimiter ;
 										    

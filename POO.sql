@@ -643,6 +643,7 @@ call mostrar_empleados();
 call crear_caso(3,'2019/04/10',1,2,'');
 */
 
+select * from empleado;
 
 delimiter //
 create procedure crear_caso(v_solicitud int, v_fecha date, v_programador int, v_tester int, v_descripcion varchar(1000))
@@ -655,7 +656,7 @@ begin
     declare snombre varchar(50);
     declare sdescripcion varchar(1000);
     declare ndepartamento int;
-    
+    select * from caso;
     set count_soli = (select count(*) from caso c inner join solicitud s on s.id = c.idSolicitud where c.idSolicitud = v_solicitud);
     if count_soli != 0 then
 		select 'Esta solicitud ya pertenece a un caso';
@@ -672,10 +673,12 @@ begin
                 set ndepartamento = (select idDepartamento from solicitud where id = v_solicitud limit 1);
                 set sdepto = (select substring(nombre,1,3) from departamento where id = ndepartamento limit 1);
 				set scodigo = concat(sdepto,date_format(sfecha,'%y'), 100 + round(rand() * 899 ));
-				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,codigo, fechaInicio,fechaFinal,idEncargado,idTester,descripcionElementos) 
+				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,idEstado,codigo, fechaInicio,fechaFinal,idEncargado,idTester,descripcionElementos) 
                 values
 				(v_solicitud,snombre,sdescripcion,ndepartamento,3,scodigo,current_date(),v_fecha,v_programador,v_tester,'Sin descripcion de elementos clave');
                 update solicitud set idEstado = 3 where id = v_solicitud;
+                set sdepto = (select nombre from departamento where id = ndepartamento limit 1);
+                select concat('Se ha añadio un nuevo caso para el departamento: ',sdepto);
             else
 				set sfecha = (select fecha from solicitud where id = v_solicitud limit 1);
                 set snombre = (select nombre from solicitud where id = v_solicitud limit 1);
@@ -683,10 +686,12 @@ begin
                 set ndepartamento = (select idDepartamento from solicitud where id = v_solicitud limit 1);
                 set sdepto = (select substring(nombre,1,3) from departamento where id = ndepartamento limit 1);
 				set scodigo = concat(sdepto,date_format(sfecha,'%y'), 100 + round(rand() * 899 ));
-				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,idEstado,codigo, fechaInicio,fechaFinal,idEncargado,Tester,descripcionElementos) 
+				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,idEstado,codigo, fechaInicio,fechaFinal,idEncargado,idTester,descripcionElementos) 
                 values
 				(v_solicitud,snombre,sdescripcion,ndepartamento,3,scodigo,current_date(),v_fecha,v_programador,v_tester,v_descripcion);
                 update solicitud set idEstado = 3 where id = v_solicitud;
+                set sdepto = (select nombre from departamento where id = ndepartamento limit 1);
+                select concat('Se ha añadio un nuevo caso para el departamento: ',sdepto);
 			end if;
         end if;
 	end if;
@@ -697,6 +702,7 @@ delimiter ;
 delimiter //
 create procedure crear_rechazo(v_solicitud int, v_motivo varchar(500))
 begin
+	declare sdepto varchar(50;
 	declare count_soli int;
     declare ssoli varchar(50);
     set count_soli = (select count(*) from caso c inner join solicitud s on s.id = c.idSolicitud where c.idSolicitud = v_solicitud);
@@ -715,11 +721,15 @@ begin
                 values
 				(v_solicitud,v_motivo);
                 update solicitud set idEstado = 2 where id = v_solicitud;
+                set ssoli = (select nombre from solicitud where id = v_solicitud);
+                set sdepto = (select d.nombre from departamento d inner join solicitud s on s.idDepartamento = d.id where s.id = v_solicitud);
+                select concat('Se ha rechazado la solicitud; ',ssoli,', del departamento: ',sdepto);
 			end if;
         end if;
 	end if;
 end//
 delimiter ;
+
 /*
 select * from caso;
 select * from solicitud;
@@ -730,3 +740,23 @@ call crear_caso(5,'2019/04/10',1,2,'descricpon');
 */
 
 select * from rechazo;
+										    
+delimiter //
+create procedure mostrar_casos(idDepartamento int)
+begin
+    SELECT c.nombre,c.codigo,c.descripcion,c.fechaFinal,c.descripcionElementos,c.idEncargado,p.nombre,c.idTester,t.nombre
+    FROM caso c 
+    INNER JOIN empleado p
+    ON c.idEncargado = p.id
+    INNER JOIN empleado t
+    ON c.idTester = t.id
+    WHERE c.idDepartamento = idDepartamento;
+end //
+delimiter ;
+
+ddelimiter //
+create procedure actualizar_caso(idCaso INT,fechalimite DATE,idEncargado INT,idTester INT,Observaciones VARCHAR(1000))
+begin
+    UPDATE caso SET fechaFinal = fechalimite ,idEncargado = idEncargado,idTester = idTester,descripcionElementos = Observaciones WHERE id = idCaso;
+end //
+delimiter ;								    

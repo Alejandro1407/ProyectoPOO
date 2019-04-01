@@ -655,7 +655,7 @@ begin
     declare snombre varchar(50);
     declare sdescripcion varchar(1000);
     declare ndepartamento int;
-    
+    select * from caso;
     set count_soli = (select count(*) from caso c inner join solicitud s on s.id = c.idSolicitud where c.idSolicitud = v_solicitud);
     if count_soli != 0 then
 		select 'Esta solicitud ya pertenece a un caso';
@@ -672,7 +672,7 @@ begin
                 set ndepartamento = (select idDepartamento from solicitud where id = v_solicitud limit 1);
                 set sdepto = (select substring(nombre,1,3) from departamento where id = ndepartamento limit 1);
 				set scodigo = concat(sdepto,date_format(sfecha,'%y'), 100 + round(rand() * 899 ));
-				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,codigo, fechaInicio,fechaFinal,idEncargado,idTester,descripcionElementos) 
+				insert into caso(idSolicitud,nombre,descripcion,idDepartamento,idEstado,codigo, fechaInicio,fechaFinal,idEncargado,idTester,descripcionElementos) 
                 values
 				(v_solicitud,snombre,sdescripcion,ndepartamento,3,scodigo,current_date(),v_fecha,v_programador,v_tester,'Sin descripcion de elementos clave');
                 update solicitud set idEstado = 3 where id = v_solicitud;

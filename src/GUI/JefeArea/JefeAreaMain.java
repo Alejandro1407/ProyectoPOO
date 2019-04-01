@@ -11,8 +11,10 @@ import GUI.*;
 public class JefeAreaMain extends javax.swing.JFrame {
 
     private int idDepartamento;
+    private int idEmpleado;
     private String NombreDepartamento;
     private String NombreUser;
+    private boolean HaveToChangePass;
     
     public JefeAreaMain() {
         initComponents();
@@ -55,7 +57,7 @@ public class JefeAreaMain extends javax.swing.JFrame {
         btnSolicitudes.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnSolicitudes.setForeground(new java.awt.Color(238, 112, 82));
         btnSolicitudes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-add-list-filled-35.png"))); // NOI18N
-        btnSolicitudes.setText("Solicitudes");
+        btnSolicitudes.setText("Hacer Solicitud");
         btnSolicitudes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnSolicitudes.setContentAreaFilled(false);
         btnSolicitudes.addActionListener(new java.awt.event.ActionListener() {
@@ -63,7 +65,7 @@ public class JefeAreaMain extends javax.swing.JFrame {
                 btnSolicitudesActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSolicitudes, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 160, 81));
+        jPanel1.add(btnSolicitudes, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, 200, 81));
 
         txtNombre.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
         txtNombre.setText("Alejandro Alejo");
@@ -111,7 +113,7 @@ public class JefeAreaMain extends javax.swing.JFrame {
                 btnCasosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 190, 81));
+        jPanel1.add(btnCasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 220, 81));
 
         btnSolicitudes1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnSolicitudes1.setForeground(new java.awt.Color(238, 112, 82));
@@ -131,6 +133,9 @@ public class JefeAreaMain extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setidEmpleado(int id){
+        this.idEmpleado = id;
+    }
      public void setidDepartament(int idDepartamento){
            this.idDepartamento = idDepartamento;
     }
@@ -142,6 +147,9 @@ public class JefeAreaMain extends javax.swing.JFrame {
     }
     private int getidDepartamento(){
         return this.idDepartamento;
+    }
+    public void setHaveToChangePass(boolean haveto){
+        this.HaveToChangePass = haveto;
     }
 
     private void btnSolicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitudesActionPerformed
@@ -186,9 +194,9 @@ public class JefeAreaMain extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnSolicitudes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitudes1ActionPerformed
-        GestionSolicitudes e = new GestionSolicitudes();
-        e.setidDepartament(getidDepartamento());
-        e.setVisible(true);
+        /*GestionSolicitudes e = new GestionSolicitudes();
+        e.setidDepartamento(getidDepartamento());
+        e.setVisible(true);*/
     }//GEN-LAST:event_btnSolicitudes1ActionPerformed
 
     /**

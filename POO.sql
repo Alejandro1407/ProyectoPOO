@@ -754,10 +754,9 @@ begin
 end //
 delimiter ;
 
-delimiter //
-create procedure actualizar_caso(idCaso INT,fechalimite DATE,idEncargado INT,idTester INT)
+ddelimiter //
+create procedure actualizar_caso(idCaso INT,fechalimite DATE,idEncargado INT,idTester INT,Observaciones VARCHAR(1000))
 begin
-    UPDATE caso SET fechaFinal = fechalimite ,idEncargado = idEncargado,idTester = idTester WHERE id = idCaso;
+    UPDATE caso SET fechaFinal = fechalimite ,idEncargado = idEncargado,idTester = idTester,descripciooonElementos = Observaciones WHERE id = idCaso;
 end //
-delimiter ;
-										    
+delimiter ;								    

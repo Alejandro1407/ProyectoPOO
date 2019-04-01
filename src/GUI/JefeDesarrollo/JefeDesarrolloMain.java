@@ -1,5 +1,6 @@
 package GUI.JefeDesarrollo;
 
+import Datos.Conexion;
 import GUI.JefeArea.*;
 import GUI.Administrador.*;
 import GUI.JefeArea.Solicitudes;
@@ -10,17 +11,24 @@ import javax.swing.JOptionPane;
 import GUI.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 
 public class JefeDesarrolloMain extends javax.swing.JFrame {
 
     private int idDepartamento;
+    private int idEmpleado;
     private String NombreDepartamento;
     private String NombreUser;
+    private boolean HaveToChangePass;
     
     public JefeDesarrolloMain() {
         initComponents();
         setLocationRelativeTo(null);
      
+    }
+    public void setidEmpleado(int id){
+        this.idEmpleado = id;
     }
     public void setidDepartament(int idDepartamento){
            this.idDepartamento = idDepartamento;
@@ -33,6 +41,9 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
     }
     private int getidDepartamento(){
         return this.idDepartamento;
+    }
+    public void setHaveToChangePass(boolean haveto){
+        this.HaveToChangePass = haveto;
     }
 
     @SuppressWarnings("unchecked")
@@ -168,7 +179,11 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
        txtNombre.setText(this.NombreUser);
+        System.out.println(idEmpleado);
        txtDepartamento.setText(NombreDepartamento);
+       if(HaveToChangePass){
+           ChangePass();
+       }
     }//GEN-LAST:event_formWindowOpened
 
     private void btnCasosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCasosActionPerformed
@@ -177,6 +192,28 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
         c.setVisible(true);
     }//GEN-LAST:event_btnCasosActionPerformed
 
+        private void ChangePass(){
+        String newPass = JOptionPane.showInputDialog(this,"Ingrese nueva contraseña");
+        if(newPass == null){
+            JOptionPane.showMessageDialog(this,"Decidio no actualizar su contraseña\nSe le preguntara el siguiente Login");
+            return;
+        }
+        try{
+            Connection conn =  Conexion.Conectarse();
+            if(conn == null){
+                JOptionPane.showMessageDialog(this,"Fallo al conectarse");
+                return;
+            }
+            CallableStatement proc = conn.prepareCall("{ call actualizar_contrasenia (?,?)}");
+            proc.setInt(1, idEmpleado);
+            proc.setString(2,newPass);
+            proc.execute();
+            System.out.println(idEmpleado+" " + newPass);
+            JOptionPane.showMessageDialog(this,"Se actulizo la contraseña");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {

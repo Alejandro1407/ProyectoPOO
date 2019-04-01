@@ -280,6 +280,7 @@ public class GestionSolicitudes extends javax.swing.JFrame {
                 System.out.println(e.getMessage());
                 JOptionPane.showMessageDialog(null, "Fallo al recuperar la informacion");
                 this.dispose();
+                return;
             }
     }
     
@@ -317,7 +318,8 @@ public class GestionSolicitudes extends javax.swing.JFrame {
                 proc.setString(5,txtObservaciones.getText());
             }
             ResultSet answer = proc.executeQuery();
-            JOptionPane.showMessageDialog(this,answer.getString(1));
+            //JOptionPane.showMessageDialog(this,answer.getString(1));
+                JOptionPane.showMessageDialog(this, "Se Acepto Correctamente");
             getData();
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -405,9 +407,9 @@ public class GestionSolicitudes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRechazarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        getData();
         getProgramadores();
-        getTesters();   
+        getTesters();
+        getData();  
     }//GEN-LAST:event_formWindowOpened
 
     private void txtFechaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFechaFocusLost

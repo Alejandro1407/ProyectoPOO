@@ -1,23 +1,30 @@
 package GUI.Administrador;
 
+import Datos.Conexion;
 import GUI.JefeArea.Solicitudes;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Label;
 import javax.swing.JOptionPane;
 import GUI.*;
+import java.sql.*;
 
 public class AdministradorMain extends javax.swing.JFrame {
     
     private int idDepartamento;
+    private int idEmpleado;
     private String NombreDepartamento;
     private String NombreUser;
+    private boolean HaveToChangePass;
     
     public AdministradorMain() {
         initComponents();
         setLocationRelativeTo(null);
     }
-
+    
+    public void setidEmpleado(int id){
+        this.idEmpleado = id;
+    }
     public void setidDepartament(int idDepartamento){
            this.idDepartamento = idDepartamento;
     }
@@ -30,6 +37,10 @@ public class AdministradorMain extends javax.swing.JFrame {
     private int getidDepartamento(){
         return this.idDepartamento;
     }
+    public void setHaveToChangePass(boolean haveto){
+        this.HaveToChangePass = haveto;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -174,11 +185,33 @@ public class AdministradorMain extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         txtNombre.setText(this.NombreUser);
        txtDepartamento.setText(NombreDepartamento);
+       if(HaveToChangePass){
+           ChangePass();
+       }
     }//GEN-LAST:event_formWindowOpened
-
-    /**
-     * @param args the command line arguments
-     */
+    private void ChangePass(){
+        String newPass = JOptionPane.showInputDialog(this,"Ingrese nueva contraseña");
+        if(newPass == null){
+            JOptionPane.showMessageDialog(this,"Decidio no actulizar su contraseña\nSe le preguntara el siguiente Login");
+            return;
+        }
+        try{
+            Connection conn =  Conexion.Conectarse();
+            if(conn == null){
+                JOptionPane.showMessageDialog(this,"Fallo al conectarse");
+                return;
+            }
+            CallableStatement proc = conn.prepareCall("{ call actualizar_contrasenia (?,?)}");
+            proc.setInt(1, idEmpleado);
+            proc.setString(2,newPass);
+            proc.execute();
+             JOptionPane.showMessageDialog(this,"Se actulizo la contraseña");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

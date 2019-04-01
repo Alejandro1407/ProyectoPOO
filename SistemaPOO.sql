@@ -616,4 +616,45 @@ create procedure actualizar_caso(idCaso INT,fechalimite DATE,idEncargado INT,idT
 begin
     UPDATE caso SET fechaFinal = fechalimite ,idEncargado = idEncargado,idTester = idTester,descripcionElementos = Observaciones WHERE id = idCaso;
 end //
-delimiter ;								    
+delimiter ;
+
+select * from empleado;
+
+delimiter //
+create trigger crear_bitacora after insert on caso
+for each row
+begin
+	insert into bitacora(idCaso,informacion,porcentajeAvance,finalizado) values (new.id,'Sin registro de avances',0,0);
+end//
+delimiter ;
+
+delimiter //
+create procedure mostrar_bitacoras()
+begin
+	select b.id, b.informacion, b.porcentajeAvance, c.nombre from bitacora b inner join caso c on b.idCaso = c.id;
+	/*where c.idEncargado = v_programador;*/
+end//
+delimiter ;
+
+delimiter //
+create procedure ingresar_en_bitacora(v_id int, v_informacion varchar(1000), v_porcentaje int)
+begin
+	declare ncaso int;
+	if length(v_informacion) = 0 then
+		select 'La descripcion de avance no puede quedar vacia';
+	else
+		if v_porcentaje = 100 then
+			update bitacora set informacion = v_informacion, porcentajeAvance = v_porcentaje, finalizado = 1 where id = v_id;
+            set ncaso = (select idCaso from bitacora where id = v_id);
+            update caso set idEstado = 5 where id = ncaso;
+            select 'Bitacora actualizada con exito';
+		else
+			update bitacora set informacion = v_informacion, porcentajeAvance = v_porcentaje, finalizado = 0 where id = v_id;
+            select 'Bitacora actualizada con exito';
+		end if;
+	end if;
+end//
+delimiter ;
+
+delete from bitacora;
+

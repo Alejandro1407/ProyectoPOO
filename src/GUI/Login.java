@@ -17,7 +17,19 @@ public class Login extends javax.swing.JFrame {
                       m.setVisible(true);
                      this.dispose();
                      /* Debug */
-           
+            
+    }
+    
+    private String DefaultPass(String x){
+            String reverse = "";// "Victor".toLowerCase() + "503";
+            String nombre = x.toLowerCase();
+            for(int i = nombre.length() - 1; i >= 0; i--)
+		{
+                    reverse = reverse + nombre.charAt(i);
+		}
+             reverse += "503";
+             System.out.println(reverse);
+             return reverse;
     }
 
     @SuppressWarnings("unchecked")
@@ -27,7 +39,7 @@ public class Login extends javax.swing.JFrame {
         PnelContenedor = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
-        txtUsuario = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
         btnIniciarSesion = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -43,7 +55,6 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(360, 450));
         setResizable(false);
         setSize(new java.awt.Dimension(360, 450));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -58,8 +69,8 @@ public class Login extends javax.swing.JFrame {
         txtPassword.setBorder(null);
         PnelContenedor.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, 200, 30));
 
-        txtUsuario.setBorder(null);
-        PnelContenedor.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 200, 30));
+        txtEmail.setBorder(null);
+        PnelContenedor.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 200, 30));
 
         btnIniciarSesion.setFont(new java.awt.Font("MS PGothic", 1, 18)); // NOI18N
         btnIniciarSesion.setText("Iniciar Sesion");
@@ -141,12 +152,24 @@ public class Login extends javax.swing.JFrame {
         this.setState(Login.ICONIFIED);
     }//GEN-LAST:event_jLabel8MouseClicked
 
+       private boolean IsNumeric(String x){
+        try{
+            int y = Integer.parseInt(x);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+    
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-
-        if(txtUsuario.getText().equals("") || txtPassword.getText().equals("")){
-           JOptionPane.showMessageDialog(this, "Debe Ingresar Usuario y Contraseña");
-           return;
-       }
+         if((!txtEmail.getText().matches("^\\w{5,}@\\w{3,}((\\.)[A-Za-z]{2,3}){1,}$") || IsNumeric(txtEmail.getText())) && (!txtEmail.getText().equals("root")) ) {
+               JOptionPane.showMessageDialog(this,"Email Ingresado es Invalido o Numerico");
+               return;
+         }
+         if(txtPassword.getText().equals("") || IsNumeric(txtPassword.getText())){
+             JOptionPane.showMessageDialog(this, "Contraseña no puede estar vacio o ser numerico");
+             return;
+         }
        try{
            
             Connection conn = Conexion.Conectarse(); //Obtenemos la conexion
@@ -155,41 +178,53 @@ public class Login extends javax.swing.JFrame {
             }
             CallableStatement proc; //Declara un objeto de CallableStatement
             proc = conn.prepareCall("{call loguearse (?,?)}"); //Se encierra entre { la instruccion call y el procedimiento}
-            proc.setString(1,txtUsuario.getText()); //Segun los ? se le asigna sus valores siguiendo el orden y su tipo
+            proc.setString(1,txtEmail.getText()); //Segun los ? se le asigna sus valores siguiendo el orden y su tipo
             proc.setString(2, txtPassword.getText()); //x2
-            if(txtUsuario.getText().equals("root") && txtPassword.getText().equals("root"));
-            
+            if(txtEmail.getText().equals("root") && txtPassword.getText().equals("root"));
             ResultSet rs =  proc.executeQuery(); //Si el procedimiento es un select se guarda en un rs y se executeQuery()
             if(rs.next()){
                 rs.first();
-                System.out.println(rs.getString(3));
+                boolean haveto = false;
+                if(DefaultPass(rs.getString(2)).equals(txtPassword.getText())){
+                    haveto = true;
+                    System.out.println("Tiene que cambiar el Pass");
+                }
+                System.out.println(rs.getInt(1));
                 switch (rs.getString(3)){
                     case "Administrador":
                             AdministradorMain AM = new AdministradorMain();
+                            AM.setidEmpleado(rs.getInt(1));
                             AM.setNombreUser(rs.getString(2));
                             AM.setidDepartament(rs.getInt(4));
                             AM.setNombreDepartamento(rs.getString(5));
+                            AM.setHaveToChangePass(haveto);
                             AM.setVisible(true);
                         break;
                     case "Jefe de Area":
                             JefeAreaMain JAM = new JefeAreaMain();
+                            JAM.setidEmpleado(rs.getInt(1));
                             JAM.setNombreUser(rs.getString(2));
                             JAM.setidDepartament(rs.getInt(4));
                             JAM.setNombreDepartamento(rs.getString(5));
+                            JAM.setHaveToChangePass(haveto);
                             JAM.setVisible(true);
                         break;
                     case "Jefe de Desarrollo":
                             JefeDesarrolloMain JDM = new JefeDesarrolloMain();
+                            JDM.setidEmpleado(rs.getInt(1));
                             JDM.setNombreUser(rs.getString(2));
                             JDM.setidDepartament(rs.getInt(4));
                             JDM.setNombreDepartamento(rs.getString(5));
+                            JDM.setHaveToChangePass(haveto);
                             JDM.setVisible(true);
                         break;
                     case "Empleado":
                             EmpleadosMain EM = new EmpleadosMain();
+                            EM.setidEmpleado(rs.getInt(1));
                             EM.setNombreUser(rs.getString(2));
                             EM.setidDepartament(rs.getInt(4));
                             EM.setNombreDepartamento(rs.getString(5));
+                            EM.setHaveToChangePass(true);
                             EM.setVisible(true);
                         break;
                     case "Programador":
@@ -229,7 +264,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTextField txtEmail;
     private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,5 +1,6 @@
 package GUI.JefeArea;
 
+import Datos.Conexion;
 import GUI.Administrador.*;
 import GUI.JefeArea.Solicitudes;
 import java.awt.BorderLayout;
@@ -7,13 +8,17 @@ import java.awt.Button;
 import java.awt.Label;
 import javax.swing.JOptionPane;
 import GUI.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 
 public class JefeAreaMain extends javax.swing.JFrame {
 
     private int idDepartamento;
+    private int idEmpleado;
     private String NombreDepartamento;
     private String NombreUser;
-    
+    private boolean HaveToChangePass;
+     
     public JefeAreaMain() {
         initComponents();
         setLocationRelativeTo(null);
@@ -116,8 +121,10 @@ public class JefeAreaMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-     public void setidDepartament(int idDepartamento){
+    public void setidEmpleado(int id){
+        this.idEmpleado = id;
+    }
+    public void setidDepartament(int idDepartamento){
            this.idDepartamento = idDepartamento;
     }
     public void setNombreDepartamento(String NombreDepartamento){
@@ -128,6 +135,9 @@ public class JefeAreaMain extends javax.swing.JFrame {
     }
     private int getidDepartamento(){
         return this.idDepartamento;
+    }
+     public void setHaveToChangePass(boolean haveto){
+        this.HaveToChangePass = haveto;
     }
 
     private void btnSolicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitudesActionPerformed
@@ -165,8 +175,33 @@ public class JefeAreaMain extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
        txtNombre.setText(this.NombreUser);
        txtDepartamento.setText(NombreDepartamento);
+        if(HaveToChangePass){
+           ChangePass();
+       }
     }//GEN-LAST:event_formWindowOpened
-
+    
+       private void ChangePass(){
+        String newPass = JOptionPane.showInputDialog(this,"Ingrese nueva contraseña");
+        if(newPass == null){
+            JOptionPane.showMessageDialog(this,"Decidio no actulizar su contraseña\nSe le preguntara el siguiente Login");
+            return;
+        }
+        try{
+            Connection conn =  Conexion.Conectarse();
+            if(conn == null){
+                JOptionPane.showMessageDialog(this,"Fallo al conectarse");
+                return;
+            }
+            CallableStatement proc = conn.prepareCall("{ call actualizar_contrasenia (?,?)}");
+            proc.setInt(1, idEmpleado);
+            proc.setString(2,newPass);
+            proc.execute();
+             JOptionPane.showMessageDialog(this,"Se actulizo la contraseña");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */

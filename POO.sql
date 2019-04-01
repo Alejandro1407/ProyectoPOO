@@ -643,6 +643,7 @@ call mostrar_empleados();
 call crear_caso(3,'2019/04/10',1,2,'');
 */
 
+select * from empleado;
 
 delimiter //
 create procedure crear_caso(v_solicitud int, v_fecha date, v_programador int, v_tester int, v_descripcion varchar(1000))
@@ -701,6 +702,7 @@ delimiter ;
 delimiter //
 create procedure crear_rechazo(v_solicitud int, v_motivo varchar(500))
 begin
+	declare sdepto varchar(50;
 	declare count_soli int;
     declare ssoli varchar(50);
     set count_soli = (select count(*) from caso c inner join solicitud s on s.id = c.idSolicitud where c.idSolicitud = v_solicitud);
@@ -719,6 +721,9 @@ begin
                 values
 				(v_solicitud,v_motivo);
                 update solicitud set idEstado = 2 where id = v_solicitud;
+                set ssoli = (select nombre from solicitud where id = v_solicitud);
+                set sdepto = (select d.nombre from departamento d inner join solicitud s on s.idDepartamento = d.id where s.id = v_solicitud);
+                select concat('Se ha rechazado la solicitud; ',ssoli,', del departamento: ',sdepto);
 			end if;
         end if;
 	end if;

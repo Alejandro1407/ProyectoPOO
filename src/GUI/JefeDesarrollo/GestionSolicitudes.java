@@ -387,13 +387,27 @@ public class GestionSolicitudes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void btnRechazarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechazarActionPerformed
-        JOptionPane.showInputDialog(this,"Dinos el Motivo");
+        String Motivo = JOptionPane.showInputDialog(this,"Dinos el Motivo");
+        if(Motivo == null){
+           return;
+        }
+        try{
+            Connection conn = Conexion.Conectarse();
+            CallableStatement proc = conn.prepareCall("{call crear_rechazo (?,?)}");
+            proc.setInt(1, Integer.parseInt(txtid.getText()));
+            proc.setString(2, Motivo);
+            ResultSet answer = proc.executeQuery();
+            JOptionPane.showMessageDialog(this, answer.getString(1));
+            getData();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this,e.getMessage());
+        }
     }//GEN-LAST:event_btnRechazarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        getProgramadores();
-        getTesters();
         getData();
+        getProgramadores();
+        getTesters();   
     }//GEN-LAST:event_formWindowOpened
 
     private void txtFechaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFechaFocusLost

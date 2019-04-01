@@ -163,11 +163,17 @@ public class Login extends javax.swing.JFrame {
                 System.out.println(rs.getString(2));
                 switch (rs.getString(2)){
                     case "Administrador":
-                            AdministradorMain am = new AdministradorMain();
-                            am.setVisible(true);
+                            AdministradorMain AM = new AdministradorMain();
+                            AM.setNombreUser(rs.getString(1));
+                            AM.setidDepartament(rs.getInt(3));
+                            AM.setNombreDepartamento(rs.getString(4));
+                            AM.setVisible(true);
                         break;
                     case "Jefe de Area":
                             JefeAreaMain JAM = new JefeAreaMain();
+                            JAM.setNombreUser(rs.getString(1));
+                            JAM.setidDepartament(rs.getInt(3));
+                            JAM.setNombreDepartamento(rs.getString(4));
                             JAM.setVisible(true);
                         break;
                     case "Jefe de Desarrollo":
@@ -179,6 +185,9 @@ public class Login extends javax.swing.JFrame {
                         break;
                     case "Empleado":
                             EmpleadosMain EM = new EmpleadosMain();
+                            EM.setNombreUser(rs.getString(1));
+                            EM.setidDepartament(rs.getInt(3));
+                            EM.setNombreDepartamento(rs.getString(4));
                             EM.setVisible(true);
                         break;
                     case "Programador":

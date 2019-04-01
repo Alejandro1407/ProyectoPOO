@@ -457,14 +457,10 @@ public class MantenimientoEmpleado extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
-        // TODO add your handling code here:
         this.setState(Solicitudes.ICONIFIED);
     }//GEN-LAST:event_jLabel8MouseClicked
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-        // TODO add your handling code here:
-        AdministradorMain a = new AdministradorMain();
-        a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel7MouseClicked
 

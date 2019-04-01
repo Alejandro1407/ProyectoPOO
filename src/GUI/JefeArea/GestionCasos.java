@@ -1,10 +1,12 @@
-package GUI.JefeDesarrollo;
+package GUI.JefeArea;
 
+import GUI.JefeDesarrollo.*;
 import GUI.Administrador.*;
 import GUI.JefeArea.Solicitudes;
 import Datos.Conexion;
 import java.sql.*;
 import Objetos.*;
+import static java.lang.String.format;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.swing.DefaultComboBoxModel;
@@ -53,7 +55,6 @@ public class GestionCasos extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         btnAnterior = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
-        btnActulizar = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JSeparator();
         txtid = new javax.swing.JTextField();
 
@@ -125,9 +126,11 @@ public class GestionCasos extends javax.swing.JFrame {
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, -1, -1));
 
         cmbTester.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Seleccione Uno" }));
+        cmbTester.setEnabled(false);
         jPanel2.add(cmbTester, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 300, 150, -1));
 
         cmbProgramador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Selecione Uno" }));
+        cmbProgramador.setEnabled(false);
         jPanel2.add(cmbProgramador, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, 150, -1));
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
@@ -150,6 +153,7 @@ public class GestionCasos extends javax.swing.JFrame {
         jLabel11.setText("Programador:");
         jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, -1, -1));
 
+        txtFecha.setEditable(false);
         txtFecha.setText("YYYY/MM/DD");
         txtFecha.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -161,6 +165,7 @@ public class GestionCasos extends javax.swing.JFrame {
         });
         jPanel2.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 220, 150, -1));
 
+        txtObservaciones.setEditable(false);
         txtObservaciones.setColumns(20);
         txtObservaciones.setRows(5);
         txtObservaciones.setText("(Opcional)");
@@ -209,7 +214,7 @@ public class GestionCasos extends javax.swing.JFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel3.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 60, 30));
+        jPanel3.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 60, 30));
 
         btnSiguiente.setText("Siguiente");
         btnSiguiente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -219,17 +224,7 @@ public class GestionCasos extends javax.swing.JFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-        jPanel3.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, 70, 30));
-
-        btnActulizar.setText("Actualizar");
-        btnActulizar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnActulizar.setContentAreaFilled(false);
-        btnActulizar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActulizarActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnActulizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 70, 30));
+        jPanel3.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 70, 30));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 510, 280, 80));
 
@@ -256,8 +251,6 @@ public class GestionCasos extends javax.swing.JFrame {
     }
     
     private void getData(){
-        getProgramadores();
-        getTesters();
         btnAnterior.setEnabled(false);
         btnSiguiente.setEnabled(true);
         try{
@@ -276,11 +269,11 @@ public class GestionCasos extends javax.swing.JFrame {
             Data.beforeFirst();
             Data.next();
            
-            DefaultComboBoxModel modelP = (DefaultComboBoxModel) cmbProgramador.getModel();
+            DefaultComboBoxModel modelP = new DefaultComboBoxModel();
             modelP.addElement(new Empleado(Data.getInt(7),Data.getString(8)) );
             cmbProgramador.setModel(modelP);
             
-            DefaultComboBoxModel modelT =  (DefaultComboBoxModel) cmbTester.getModel();
+            DefaultComboBoxModel modelT =  new DefaultComboBoxModel();
             modelT.addElement(new Empleado(Data.getInt(9),Data.getString(10)));
             cmbTester.setModel(modelT);
             
@@ -307,16 +300,13 @@ public class GestionCasos extends javax.swing.JFrame {
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
         try{
            btnSiguiente.setEnabled(true);
-           cmbProgramador.removeItem(new Empleado(Data.getInt(7),Data.getString(8)));
-           cmbTester.removeItem(new Empleado(Data.getInt(9),Data.getString(10)));
-           
            if(Data.previous()){
             
-            DefaultComboBoxModel modelP = (DefaultComboBoxModel) cmbProgramador.getModel();
+            DefaultComboBoxModel modelP = new DefaultComboBoxModel();
             modelP.addElement(new Empleado(Data.getInt(7),Data.getString(8)) );
             cmbProgramador.setModel(modelP);
             
-            DefaultComboBoxModel modelT =  (DefaultComboBoxModel) cmbTester.getModel();
+            DefaultComboBoxModel modelT =  new DefaultComboBoxModel();
             modelT.addElement(new Empleado(Data.getInt(9),Data.getString(10)));
             cmbTester.setModel(modelT);  
             
@@ -328,11 +318,10 @@ public class GestionCasos extends javax.swing.JFrame {
             txtObservaciones.setText(Data.getString(6));
             cmbProgramador.setSelectedItem(new Empleado(Data.getInt(7),Data.getString(8)));
             cmbTester.setSelectedItem(new Empleado(Data.getInt(9),Data.getString(10)));
-                 if(!Data.previous()){
+            if(!Data.previous()){
                     btnAnterior.setEnabled(false);
-                }
+            }
                 Data.next();
-                
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -363,15 +352,12 @@ public class GestionCasos extends javax.swing.JFrame {
         try{
              
            btnAnterior.setEnabled(true);
-           cmbProgramador.removeItem(new Empleado(Data.getInt(7),Data.getString(8)));
-           cmbTester.removeItem(new Empleado(Data.getInt(9),Data.getString(10)));
-           
             if(Data.next()){
-            DefaultComboBoxModel modelP = (DefaultComboBoxModel) cmbProgramador.getModel();
+            DefaultComboBoxModel modelP = new DefaultComboBoxModel();
             modelP.addElement(new Empleado(Data.getInt(7),Data.getString(8)) );
             cmbProgramador.setModel(modelP);
             
-            DefaultComboBoxModel modelT =  (DefaultComboBoxModel) cmbTester.getModel();
+            DefaultComboBoxModel modelT = new DefaultComboBoxModel();
             modelT.addElement(new Empleado(Data.getInt(9),Data.getString(10)));
             cmbTester.setModel(modelT);  
             
@@ -420,50 +406,6 @@ public class GestionCasos extends javax.swing.JFrame {
             txtObservaciones.setText("(Opcional)");
         }
     }//GEN-LAST:event_txtObservacionesFocusLost
-
-    private void btnActulizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActulizarActionPerformed
-         
-        try{ 
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date fecha = format.parse(txtFecha.getText());
-            Date Actual = new Date();
-             System.out.println(fecha);
-             System.out.println(Actual);
-            if(fecha.compareTo(Actual) <= 0){
-                JOptionPane.showMessageDialog(this,"Fecha No puede ser menor o igual que el dia Actual");
-                return;
-            }
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(this,"Formato de Fecha Invalido\n(YYYY-MM-DD)");
-            return;
-        }
-        if(cmbProgramador.getSelectedIndex() == 0){
-            JOptionPane.showMessageDialog(this,"Dese asignar un programador para el caso");
-            return;
-        }
-        if(cmbTester.getSelectedIndex() == 0){
-            JOptionPane.showMessageDialog(this,"Debe asignar un Tester al caso");
-            return;
-        }
-        if(IsNumeric(txtObservaciones.getText())){
-            JOptionPane.showConfirmDialog(this,"Observaciones no pueden ser numeros");
-                return;
-        }
-        try{
-            Connection conn = Conexion.Conectarse();
-            CallableStatement proc = conn.prepareCall("{call actualizar_caso (?,?,?,?,?)}");
-            proc.setInt(1, Integer.parseInt(txtid.getText()));
-            proc.setString(2, txtFecha.getText());
-            proc.setInt(3, ((Empleado)cmbProgramador.getSelectedItem()).getId());
-            proc.setInt(4, ((Empleado)cmbTester.getSelectedItem()).getId() );
-            proc.setString(5, txtObservaciones.getText());
-            proc.executeQuery();
-            JOptionPane.showMessageDialog(this, "Actulizado con Exito");
-            getData();
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }//GEN-LAST:event_btnActulizarActionPerformed
    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -545,7 +487,6 @@ public class GestionCasos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActulizar;
     private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JComboBox<String> cmbProgramador;

@@ -1,15 +1,27 @@
-create database POO;
+/* Script de Base de Datos POO Ciclo 01 2019 Universidad Don Bosco */
 
-use POO;
+/*
+* Administrador (SU): 1
+* Jefes de area: 2
+* Jefe de desarrollo: 3
+* Empleado: 4
+* Programador: 5
+*/
 
 set SQL_SAFE_UPDATES = 0;
 
+create database SistemaPOO;
+
+use SistemaPOO;
+
 create table departamento(
-	id int primary key auto_increment,
+    id int primary key auto_increment,
     codigo varchar(20) unique,
     nombre varchar(50) not null unique,
     descripcion varchar(100) not null default 'Sin descripcion'
 );
+
+/* CRUD Departamento */
 
 /*Procedimiento para la insercion de departamentos*/
 delimiter $$
@@ -64,12 +76,21 @@ begin
 end$$
 delimiter ;
 
+call insertar_departamento ('Desarrollo','Departamento mas importante de todos');
+call insertar_departamento ('Ventas','Marketing de la compañia');
+call insertar_departamento ('Finanzas','Encargados de las Finanzas de la compañia');
+call insertar_departamento ('Facturación Fija','Encargados de la linea fija');
+call insertar_departamento ('Facturación Móvil','Encargadaos de la linea Movil');
+
+/* Fin CRUD Departamento */
 
 create table rol(
 	id int primary key auto_increment,
     rol varchar(25) not null unique,
     descripcion varchar(100) not null default 'Sin descripcion'
 );
+
+/* CRUD Rol */
 
 /*Procedimiento para la insercion de roles*/
 delimiter $$
@@ -116,14 +137,22 @@ delimiter ;
 delimiter $$
 create procedure buscar_rol(v_buscar varchar(50))
 begin
-	select R.id, R.rol, R.descripcion  from rol R where R.rol LIKE concat('%',v_buscar,'%') OR R.descripcion LIKE concat('%',v_buscar,'%');
+	select R.id, R.rol, R.descripcion  from rol R where R.rol LIKE concat('%',v_buscar,'%') OR R.descripcion LIKE      concat('%',v_buscar,'%');
 end$$
 delimiter ;
-/*call buscar_rol('sin des');
 
-drop procedure buscar_departamento
-truncate departamento
-*/
+call insertar_rol ('Administrador','Con la capacidad de registrar y gestionar áreas departamentos de la empresa,jefes de áreas funcionales y jefes de desarrollo.');
+
+call insertar_rol ('Jefe de Area','Con la capacidad de solicitar la apertura de casos y monitorear el porcentaje de progreso y bitácora de los casos aperturados.');
+
+call insertar_rol ('Jefe de Desarrollo','Tiene la capacidad de aceptar o rechazar las solicitudes de casos realizadas por los jefes de las áreas funcionales que tiene a su cargo. Además, debe tener la capacidad de monitorear el trabajo de los programadores que tiene a su cargo.');
+
+call insertar_rol ('Empleado','Pueden ser asignados como “probadores” de un caso, en tal situación deben monitorear el porcentaje de progreso y bitácoras de trabajo de dicho caso y aprobarlo o rechazarlo una vez que este haya sido entregado por el programador asignado.');
+
+call insertar_rol ('Programador','Debe actualizar los porcentajes de progreso y bitácoras de trabajo de los casos a los que ha sido asignado.');
+
+/* Fin CRUD Rol */
+
 
 /*Empleado*/
 CREATE TABLE empleado(
@@ -138,15 +167,7 @@ CREATE TABLE empleado(
     FOREIGN KEY (idDepartamento) REFERENCES departamento(id) on update cascade
 );
 
-/*INSERT INTO Empleado VALUES(null,'Alejandro','Alejo','alejandroalejo714@gmail.com','password',1,1);
-select * from empleado;
-select * from departamento;
-call insertar_empleado('Denys','Inestroza','dennyscr@gmail.com',2,1);
-call actualizar_empleado(2,'Enrique','Inestroza','enr@gmail.com',4,1);
-call actualizar_empleado(3,'Denys','Inestroza','de@gmail.com',3,1);
-call mostrar_empleados;
-select * from empleado;
-*/
+/* CRUD Empleado */
 
 delimiter $$
 CREATE PROCEDURE insertar_empleado (v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_rol int, v_depto int)
@@ -189,24 +210,6 @@ CREATE PROCEDURE insertar_empleado (v_nombre VARCHAR(50), v_apellidos VARCHAR(50
 		end if;
     END $$
 delimiter ;
-/*
-call insertar_empleado('Jose','Alejo','alejo@gmail.com',2,2);
-call actualizar_empleado(1,'Denys','Inestroza','contrasenia','denny@gmail.com',2,2);
-select * from empleado;
-*/
-
-/*
-delimiter $$
-CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_rol int, v_depto int)
-    BEGIN
-		declare v_cnt int;
-        declare v_sdepto varchar(50);
-			update empleado set nombre = v_nombre, apellidos = v_apellidos, email = v_email, idRol = v_rol, idDepartamento = v_depto where id = v_id;
-			set v_sdepto = (select nombre from departamento where id = v_depto);
-			select concat('Se actualizo un miembro del departamento: ',v_sdepto);
-    END $$
-delimiter ;
-*/
 
 delimiter $$
 CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellidos VARCHAR(50), v_email varchar(50), v_rol int, v_depto int)
@@ -260,24 +263,6 @@ CREATE PROCEDURE actualizar_empleado (v_id int, v_nombre VARCHAR(50), v_apellido
     END $$
 delimiter ;
 
-
-delimiter $$
-CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
-    BEGIN
-        SELECT e.Nombre,r.rol AS Rol,d.Nombre AS departamento
-        FROM empleado e
-        INNER JOIN rol r
-        ON e.idRol = r.id
-        INNER JOIN departamento d
-        ON e.idDepartamento = d.id
-        WHERE e.Email = Usuario AND e.Contrasenia = Contrasenia; 
-    END $$
-delimiter ;
-
-
-/*
-CALL Loguearse ('alejandroalejo714@gmail.com','password');
-*/
 delimiter //
 create procedure eliminar_empleado(v_id int)
 	begin
@@ -309,90 +294,42 @@ create procedure mostrar_empleados()
     end//
 delimiter ;
 
-/*
-Administrador (SU): 1
-Jefes de area: 2
-Jefe de desarrollo: 3
-Empleado: 4
-Programador: 5
-*/
-delimiter //
-create procedure mostrar_administradores()
-	begin
-		SELECT e.id,e.nombre,e.apellidos,e.email,r.id,r.rol,d.id,d.Nombre 
-        FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
-        INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol in (1,2,3);
-    end//
+delimiter $$
+CREATE PROCEDURE Loguearse  (Usuario VARCHAR(50),Contrasenia VARCHAR(50))
+    BEGIN
+        SELECT e.Nombre,r.rol AS Rol,d.Nombre AS departamento
+        FROM empleado e
+        INNER JOIN rol r
+        ON e.idRol = r.id
+        INNER JOIN departamento d
+        ON e.idDepartamento = d.id
+        WHERE e.Email = Usuario AND e.Contrasenia = Contrasenia; 
+    END $$
 delimiter ;
 
+INSERT INTO empleado VALUES (null,'root','root','root@gmail.com','root',1,1);
 
-delimiter //
-create procedure mostrar_solo_empleados()
-	begin
-		SELECT e.id,e.nombre,e.apellidos,e.email,r.id,r.rol,d.id,d.Nombre 
-        FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
-        INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol not in(1,2,3);
-    end//
-delimiter ;
+/* Fin CRUD Empleado */
 
-
-delimiter //
-create procedure mostrar_jefes_area()
-	begin
-		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
-        FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
-        INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol = 2;
-    end//
-delimiter ;
-
-delimiter //
-create procedure mostrar_jefes_desarrollo()
-	begin
-		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
-        FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
-        INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol = 3;
-    end//
-delimiter ;
-
-
-delimiter //
-create procedure mostrar_jefes_todos()
-	begin
-		SELECT e.id,e.nombre,e.apellidos,e.email,r.rol,d.Nombre 
-        FROM empleado e INNER JOIN rol r ON e.idRol = r.id 
-        INNER JOIN departamento d ON e.idDepartamento = d.id
-        where e.idRol = 3 and e.idRol = 2;
-    end//
-delimiter ;
-
-
-call mostrar_empleados;
-
-/*Para diferenciar los estados y solo mostrar los estados de solicitudes para las opciones de solicitudes y de igual manera para los casos*/
+/* Para diferenciar los estados y solo mostrar los estados de solicitudes para las opciones de solicitudes y de igual manera para los casos */
 create table tipo_estado(
-	id int primary key auto_increment,
+    id int primary key auto_increment,
     tipo_estado varchar(50) not null unique
 );
-/**/
 
 insert into tipo_estado(tipo_estado) values ('Solicitud');
 insert into tipo_estado(tipo_estado) values ('Caso');
 insert into tipo_estado(tipo_estado) values ('Ambos');
 insert into tipo_estado(tipo_estado) values ('Probador');
 
-select * from tipo_estado order by id;
-
-/*Estado*/
+/* Estado */
 create table estado(
 	id int primary key auto_increment,
     estado varchar(50) not null,
     tipo int not null check(tipo = 1 OR tipo = 2 OR tipo = 3 OR tipo = 4),
     foreign key (tipo) references tipo_estado(id) on update cascade
 );
+
 insert into estado(estado,tipo) values ('En espera de respuesta',1);
 insert into estado(estado,tipo) values ('Solicitud rechazada',1);
 insert into estado(estado,tipo) values ('En desarrollo',3);
@@ -401,19 +338,16 @@ insert into estado(estado,tipo) values ('Esperando aprobacion del area solicitan
 insert into estado(estado,tipo) values ('Devuelto con observaciones',4);
 insert into estado(estado,tipo) values ('Aprobado',4);
 insert into estado(estado,tipo) values ('Rechazado',4);
+insert into estado(estado,tipo) values ('Finalizado',3);
 
-select * from estado;
+/* Los estados que se mostraran para los diferentes usuarios */
 
-
-/*Los estados que se mostraran para los diferentes usuarios*/
 delimiter //
 create procedure estados_programador()
 	begin
 		select E.id, E.estado from estado E join tipo_estado TE on E.tipo = TE.id where TE.id = 2 OR TE.id = 3 order by E.id;
 	end//
 delimiter ;
-call estados_programador;
-
 
 delimiter //
 create procedure estados_probador()
@@ -421,8 +355,6 @@ create procedure estados_probador()
 		select E.id, E.estado from estado E join tipo_estado TE on E.tipo = TE.id where TE.id = 4 order by E.id;
 	end//
 delimiter ;
-call estados_probador;
-
 
 delimiter //
 create procedure estados_solicitud()
@@ -430,10 +362,8 @@ create procedure estados_solicitud()
 		select E.id, E.estado from estado E join tipo_estado TE on E.tipo = TE.id where TE.id = 1 OR TE.id = 3 order by E.id;
 	end//
 delimiter ;
-call estados_solicitud;
 
-
-/*Solicitud*/
+/* Solicitud */
 
 create table solicitud(
 	id int primary key auto_increment,
@@ -447,6 +377,7 @@ create table solicitud(
     foreign key (idEstado) references estado(id)
 );
 
+/* CRUD Solicitudes */
 
 delimiter //
 create procedure realizar_solicitud(v_nombre varchar(50), v_descripcion varchar(1000),v_depto int)
@@ -466,8 +397,6 @@ begin
 	end if;
 end//
 delimiter ;
-call realizar_solicitud('solicitud v2','',1);
-
 
 delimiter //
 create procedure mostrar_solicitudes(v_idDepto int)
@@ -475,8 +404,6 @@ begin
        SELECT id,nombre,descripcion FROM solicitud WHERE idDepartamento = v_idDepto AND idEstado = 1;
 end //
 delimiter ;
-/*call mostrar_solicitud_jefe(1);*/
-
 
 delimiter //
 create procedure buscar_solicitud_jefe(v_buscar varchar(50), v_depto int)
@@ -492,12 +419,6 @@ create procedure buscar_solicitud_jefe(v_buscar varchar(50), v_depto int)
 		end if;
 	end//
 delimiter ;
-/*call buscar_solicitud_jefe('you',1);*/
-
-
-
-select * from solicitud;
-select * from departamento;
 
 delimiter //
 create procedure modificar_solicitud_jefe(v_id int, v_nombre varchar(50), v_descripcion varchar(1000), v_depto int)
@@ -517,30 +438,25 @@ begin
     end if;
 end//
 delimiter ;
-/*call modificar_solicitud_jefe(3,'Prueba','con descripcion',1);*/
 
 delimiter //
 create procedure eliminar_solicitud (v_id int)
 begin
-	delete from solicitud where id=v_id;
+	delete from solicitud where id= v_id;
     if (row_count() > 0 ) then
 			select 'Se elimino con exito';
 		else
 			select 'No se pudo eliminar';
 		end if;
-end//
+end //
 delimiter ;
-call eliminar_solicitud (7);
 
-select * from empleado;
+/* Tabla Caso */
 
-/*
-update solicitud set idEstado = 3 where id = 4;
-*/
 create table caso(
-	id int primary key auto_increment,
+    id int primary key auto_increment,
     codigo char(9) not null,
-	nombre varchar(50) not null,
+    nombre varchar(50) not null,
     idSolicitud int not null,
     descripcion varchar(1000) not null default 'Sin descripcion',
     fechaInicio date check(fechaInicio >= now()),
@@ -558,7 +474,6 @@ create table caso(
     foreign key (idTester) references empleado(id) on update cascade
 );
 
-
 create table rechazo(
 	id int primary key auto_increment,
     idSolicitud int unique not null,
@@ -566,16 +481,14 @@ create table rechazo(
     foreign key(idSolicitud) references solicitud(id)
 );
 
+/*Encontrar programadores y empleados sin caso */
 
-/*Encontrar programadores y empleados sin caso*/
 delimiter //
 create procedure programadores_sin_caso(v_depto int)
 begin
 	select e.id, e.nombre from empleado e left join caso c on e.id = c.idEncargado where c.idEncargado is null and e.idRol = 5 and e.idDepartamento = v_depto;
 end//
 delimiter ;
-call programadores_sin_caso(1);
-
 
 delimiter //
 create procedure empleados_sin_caso(v_depto int)
@@ -583,45 +496,6 @@ begin
 	select e.id, e.nombre from empleado e left join caso c on e.id = c.idTester where c.idEncargado is null and e.idRol = 4 and e.idDepartamento = v_depto;
 end//
 delimiter ;
-call empleados_sin_caso(1);
-
-delimiter //
-create trigger solicitud_accion after update on solicitud
-for each row
-begin
-	declare sdepto varchar(9);
-    declare scodigo varchar(9);
-	if new.idEstado = 3 then
-		set sdepto = (select substring(d.codigo,1,3) from departamento d inner join solicitud s on s.idDepartamento = d.id where s.idDepartamento = new.idDepartamento limit 1);
-		set scodigo = concat(sdepto,date_format(new.fecha,'%y'),100 + round(rand() * 899 ));
-		insert into caso(idSolicitud,nombre,descripcion,idDepartamento,idEstado,codigo) values
-		(new.id,new.nombre,new.descripcion,new.idDepartamento,new.idEstado,scodigo);
-    else
-		if new.idEstado = 2 then
-			insert into rechazo(idSolicitud,nombre) values
-			(new.id,new.nombre);
-		end if;
-	end if;
-end//
-delimiter ;
-
-/*
-select * from solicitud;
-
-use poo;
-call insertar_departamento('Administracion','');
-select * from departamento;
-
-/*
-insert into solicitud(nombre,descripcion,pdf,idDepartamento,fecha,idEstado) values ('prueba v2',default,null,2,default,default);
-
-update solicitud set idEstado = 3 where id = 8;
-*/
-
-select * from departamento;
-select * from solicitud;
-select * from caso;
-select * from rechazo;
 
 create table bitacora(
 	id int primary key auto_increment,
@@ -631,19 +505,6 @@ create table bitacora(
     finalizado boolean,
     foreign key (idCaso) references caso(id)
 );
-
-/*
-select * from prueba;
-<<<<<<< HEAD
-insert into prueba values ('2019/03/31');
-select * from solicitud;
-select * from caso;
-delete from caso;
-call mostrar_empleados();
-call crear_caso(3,'2019/04/10',1,2,'');
-*/
-
-select * from empleado;
 
 delimiter //
 create procedure crear_caso(v_solicitud int, v_fecha date, v_programador int, v_tester int, v_descripcion varchar(1000))
@@ -702,9 +563,9 @@ delimiter ;
 delimiter //
 create procedure crear_rechazo(v_solicitud int, v_motivo varchar(500))
 begin
-	declare sdepto varchar(50;
+	declare sdepto varchar(50);
 	declare count_soli int;
-    declare ssoli varchar(50);
+        declare ssoli varchar(50);
     set count_soli = (select count(*) from caso c inner join solicitud s on s.id = c.idSolicitud where c.idSolicitud = v_solicitud);
     if count_soli != 0 then
 		select 'Esta solicitud ya pertenece a un caso';
@@ -727,19 +588,8 @@ begin
 			end if;
         end if;
 	end if;
-end//
+end //
 delimiter ;
-
-/*
-select * from caso;
-select * from solicitud;
-call crear_rechazo(5,'Algun motivo debe haber');
-*/
-/*
-call crear_caso(5,'2019/04/10',1,2,'descricpon');
-*/
-
-select * from rechazo;
 										    
 delimiter //
 create procedure mostrar_casos(idDepartamento int)
@@ -754,7 +604,7 @@ begin
 end //
 delimiter ;
 
-ddelimiter //
+delimiter //
 create procedure actualizar_caso(idCaso INT,fechalimite DATE,idEncargado INT,idTester INT,Observaciones VARCHAR(1000))
 begin
     UPDATE caso SET fechaFinal = fechalimite ,idEncargado = idEncargado,idTester = idTester,descripcionElementos = Observaciones WHERE id = idCaso;

@@ -7,19 +7,34 @@ package GUI.JefeArea;
 
 import GUI.Administrador.AdministradorMain;
 import javax.swing.JOptionPane;
-
+import java.sql.*;
+import Datos.Conexion;
 /**
  *
  * @author ramos
  */
 public class Solicitudes extends javax.swing.JFrame {
 
+    private int idDepartamento;
     /**
      * Creates new form Solicitudes
      */
     public Solicitudes() {
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+    
+        private boolean IsNumeric(String x){
+        try{
+            int y = Integer.parseInt(x);
+            return true;
+        }catch(NumberFormatException e){
+            return false;
+        }
+    }
+    
+     public void setidDepartamento(int idDepartamento){
+        this.idDepartamento = idDepartamento;
     }
 
     /**
@@ -42,8 +57,6 @@ public class Solicitudes extends javax.swing.JFrame {
         txtDescripcion = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jEstado = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
 
@@ -57,8 +70,8 @@ public class Solicitudes extends javax.swing.JFrame {
 
         jLabel1.setBackground(new java.awt.Color(238, 112, 82));
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
-        jLabel1.setText("Crear solicitud");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 40, 190, 40));
+        jLabel1.setText(".::Crear solicitud::.");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, 230, 40));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_Expand_Arrow_32px.png"))); // NOI18N
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -111,22 +124,16 @@ public class Solicitudes extends javax.swing.JFrame {
         jLabel4.setText("Nombre:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
-        jLabel5.setBackground(new java.awt.Color(238, 112, 82));
-        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(238, 112, 82));
-        jLabel5.setText("Estado:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 190, -1, -1));
-
-        jEstado.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "En espera de aprovacion" }));
-        jEstado.setEnabled(false);
-        jPanel1.add(jEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, 200, 30));
-
         jButton1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jButton1.setText("Enviar");
         jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jButton1.setContentAreaFilled(false);
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 270, 130, 40));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 210, 130, 40));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-reply-arrow-32.png"))); // NOI18N
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -163,6 +170,37 @@ public class Solicitudes extends javax.swing.JFrame {
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(txtNombre.getText().equals("") || IsNumeric(txtNombre.getText())){
+            JOptionPane.showMessageDialog(null, "El nombre no puede quedar vacio");
+            return;
+        }
+        if(txtDescripcion.getText().equals("") || IsNumeric(txtDescripcion.getText())){
+            JOptionPane.showMessageDialog(null, "La descripcion no puede quedar vacia");
+            return;
+        }
+        
+        try{
+            Connection con = Conexion.Conectarse();
+            if(con == null){
+                throw new Exception("No se pudo Conectar");
+            }
+            CallableStatement proc;
+            proc = con.prepareCall("{call realizar_solicitud(?,?,?)}");
+            proc.setString(1, txtNombre.getText());
+            proc.setString(2, txtDescripcion.getText());
+            proc.setInt(3, idDepartamento);
+            ResultSet rs = proc.executeQuery();
+            System.out.println(rs.getString(1));
+            //JOptionPane.showMessageDialog(this,rs.getString(1));
+        }
+        catch(Exception e){     
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,11 +240,9 @@ public class Solicitudes extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

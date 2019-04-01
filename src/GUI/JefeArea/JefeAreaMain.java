@@ -1,6 +1,5 @@
 package GUI.JefeArea;
 
-import Datos.Conexion;
 import GUI.Administrador.*;
 import GUI.JefeArea.Solicitudes;
 import java.awt.BorderLayout;
@@ -8,17 +7,13 @@ import java.awt.Button;
 import java.awt.Label;
 import javax.swing.JOptionPane;
 import GUI.*;
-import java.sql.CallableStatement;
-import java.sql.Connection;
 
 public class JefeAreaMain extends javax.swing.JFrame {
 
     private int idDepartamento;
-    private int idEmpleado;
     private String NombreDepartamento;
     private String NombreUser;
-    private boolean HaveToChangePass;
-     
+    
     public JefeAreaMain() {
         initComponents();
         setLocationRelativeTo(null);
@@ -36,6 +31,7 @@ public class JefeAreaMain extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         btnCasos = new javax.swing.JButton();
+        btnSolicitudes1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Administrador");
@@ -115,16 +111,27 @@ public class JefeAreaMain extends javax.swing.JFrame {
                 btnCasosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 150, 190, 81));
+        jPanel1.add(btnCasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 190, 81));
+
+        btnSolicitudes1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnSolicitudes1.setForeground(new java.awt.Color(238, 112, 82));
+        btnSolicitudes1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-view-filled-35.png"))); // NOI18N
+        btnSolicitudes1.setText("Ver solicitudes");
+        btnSolicitudes1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnSolicitudes1.setContentAreaFilled(false);
+        btnSolicitudes1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSolicitudes1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSolicitudes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, 190, 81));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 370));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public void setidEmpleado(int id){
-        this.idEmpleado = id;
-    }
-    public void setidDepartament(int idDepartamento){
+
+     public void setidDepartament(int idDepartamento){
            this.idDepartamento = idDepartamento;
     }
     public void setNombreDepartamento(String NombreDepartamento){
@@ -136,12 +143,13 @@ public class JefeAreaMain extends javax.swing.JFrame {
     private int getidDepartamento(){
         return this.idDepartamento;
     }
-     public void setHaveToChangePass(boolean haveto){
-        this.HaveToChangePass = haveto;
-    }
 
     private void btnSolicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitudesActionPerformed
-     
+        Solicitudes s = new Solicitudes();
+        System.out.println("Jefe Main " + idDepartamento);
+        s.setidDepartamento(idDepartamento);
+        s.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnSolicitudesActionPerformed
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
@@ -175,33 +183,14 @@ public class JefeAreaMain extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
        txtNombre.setText(this.NombreUser);
        txtDepartamento.setText(NombreDepartamento);
-        if(HaveToChangePass){
-           ChangePass();
-       }
     }//GEN-LAST:event_formWindowOpened
-    
-       private void ChangePass(){
-        String newPass = JOptionPane.showInputDialog(this,"Ingrese nueva contraseña");
-        if(newPass == null){
-            JOptionPane.showMessageDialog(this,"Decidio no actulizar su contraseña\nSe le preguntara el siguiente Login");
-            return;
-        }
-        try{
-            Connection conn =  Conexion.Conectarse();
-            if(conn == null){
-                JOptionPane.showMessageDialog(this,"Fallo al conectarse");
-                return;
-            }
-            CallableStatement proc = conn.prepareCall("{ call actualizar_contrasenia (?,?)}");
-            proc.setInt(1, idEmpleado);
-            proc.setString(2,newPass);
-            proc.execute();
-             JOptionPane.showMessageDialog(this,"Se actulizo la contraseña");
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }
-    
+
+    private void btnSolicitudes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitudes1ActionPerformed
+        GestionSolicitudes e = new GestionSolicitudes();
+        e.setidDepartament(getidDepartamento());
+        e.setVisible(true);
+    }//GEN-LAST:event_btnSolicitudes1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -241,6 +230,7 @@ public class JefeAreaMain extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCasos;
     private javax.swing.JButton btnSolicitudes;
+    private javax.swing.JButton btnSolicitudes1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

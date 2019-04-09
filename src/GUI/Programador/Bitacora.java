@@ -19,7 +19,6 @@ public class Bitacora extends javax.swing.JFrame {
     public Bitacora() {
         initComponents();
         setLocationRelativeTo(null);
-        getData();
     }
 
     public void setidEmpleado(int id){
@@ -211,7 +210,6 @@ public class Bitacora extends javax.swing.JFrame {
     }
     
     private void getData(){
-        System.out.println(idEmpleado);
         btnActualizar.setEnabled(true);
         btnLimpiar.setEnabled(true);
         try{
@@ -223,7 +221,8 @@ public class Bitacora extends javax.swing.JFrame {
             proc = conn.prepareCall("{call  mostrar_bitacoras (?) }");
             proc.setInt(1, idEmpleado);
             this.Data = proc.executeQuery();
-            if(!Data.next()){
+            Data.beforeFirst();
+            if(!(Data.next())){
                 JOptionPane.showMessageDialog(this,"No Hay Registro que mostrar");
                 this.dispose();
                 return;
@@ -234,7 +233,7 @@ public class Bitacora extends javax.swing.JFrame {
             txtNombre.setText(Data.getString(4));
             txtDescripcion.setText(Data.getString(2));
             txtObservaciones.setText(Data.getString(5));
-            cmbPorcentaje.setSelectedIndex(Integer.parseInt(Data.getString(3)));
+            cmbPorcentaje.setSelectedIndex((Integer.parseInt(Data.getString(3)) - 1));
         }catch(Exception e){
             System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null, "Fallo al recuperar la informacion");

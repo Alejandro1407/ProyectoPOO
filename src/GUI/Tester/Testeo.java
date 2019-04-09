@@ -20,7 +20,7 @@ public class Testeo extends javax.swing.JFrame {
     public Testeo() {
         initComponents();
         setLocationRelativeTo(null);
-        getData();
+       
     }
 
     public void setidEmpleado(int id){
@@ -59,6 +59,11 @@ public class Testeo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -224,7 +229,6 @@ public class Testeo extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel8MouseClicked
 
     private void getData(){
-        System.out.println(idEmpleado);
         btnActualizar1.setEnabled(true);
         btnActualizar.setEnabled(true);
         btnLimpiar.setEnabled(true);
@@ -235,7 +239,7 @@ public class Testeo extends javax.swing.JFrame {
             }
             CallableStatement proc;
             proc = conn.prepareCall("{call  mostrar_al_tester (?) }");
-            proc.setInt(1,4);
+            proc.setInt(1,idEmpleado);
             this.Data = proc.executeQuery();
             if(!Data.next()){
                 JOptionPane.showMessageDialog(this,"No Hay Registro que mostrar");
@@ -255,8 +259,8 @@ public class Testeo extends javax.swing.JFrame {
     }
     
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        if (txtDescripcion.getText().equals("") || IsNumeric(txtObservaciones.getText())){
-            JOptionPane.showMessageDialog(this,"La descripcion no puede estar vacio o ser numerico");
+        if (txtObservaciones.getText().equals("") || IsNumeric(txtObservaciones.getText())){
+            JOptionPane.showMessageDialog(this,"Las Observaciones no pueden estar vacio o ser numerico");
             return;
         }
         try{
@@ -267,7 +271,7 @@ public class Testeo extends javax.swing.JFrame {
             CallableStatement proc; //Declara un objeto de CallableStatement
             proc = conn.prepareCall("{call agregar_observacion (?,?)}"); //Se encierra entre { la instruccion call y el procedimiento}
             proc.setString(1,txtId.getText());
-            proc.setString(2, txtDescripcion.getText());
+            proc.setString(2, txtObservaciones.getText());
             ResultSet rs = proc.executeQuery();
             rs.next();
             System.out.println(rs.getString(1));
@@ -308,6 +312,10 @@ public class Testeo extends javax.swing.JFrame {
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_btnActualizar1ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+         getData();
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments

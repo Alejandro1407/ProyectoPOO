@@ -1,27 +1,30 @@
+/*
+Victor Alejandro Alejo Galvez AG181471
+Matthew Emilio Gaitan Ramos GR180499
+Dennis Enrique Cruz Inestrosa CI180440
+Marco Antonio Hernandez Hernandez HH182006
+Javier Ernesto Perez Pablo PP180605
+*/
 package GUI;
 
 import Datos.Conexion;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import GUI.Administrador.AdministradorMain;
-import GUI.Empleados.EmpleadosMain;
+import GUI.Programador.ProgramadorMain;
 import GUI.JefeArea.JefeAreaMain;
 import GUI.JefeDesarrollo.JefeDesarrolloMain;
+import GUI.Tester.TesterMain;
 
 public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
-           /* AdministradorMain m = new AdministradorMain();
-                      m.setVisible(true);
-                     this.dispose();
-                     /* Debug */
-            
     }
     
     private String DefaultPass(String x){
-            String reverse = "";// "Victor".toLowerCase() + "503";
+            String reverse = "";
             String nombre = x.toLowerCase();
             for(int i = nombre.length() - 1; i >= 0; i--)
 		{
@@ -185,9 +188,12 @@ public class Login extends javax.swing.JFrame {
             if(rs.next()){
                 rs.first();
                 boolean haveto = false;
+                /* Si es su primer login */
+                if(txtEmail.getText().equals("root") && txtPassword.getText().equals("root") ){
+                    haveto =  true;
+                }
                 if(DefaultPass(rs.getString(2)).equals(txtPassword.getText())){
                     haveto = true;
-                    System.out.println("Tiene que cambiar el Pass");
                 }
                 System.out.println(rs.getInt(1));
                 switch (rs.getString(3)){
@@ -219,17 +225,32 @@ public class Login extends javax.swing.JFrame {
                             JDM.setVisible(true);
                         break;
                     case "Empleado":
-                            EmpleadosMain EM = new EmpleadosMain();
-                            EM.setidEmpleado(rs.getInt(1));
-                            EM.setNombreUser(rs.getString(2));
-                            EM.setidDepartament(rs.getInt(4));
-                            EM.setNombreDepartamento(rs.getString(5));
-                            EM.setHaveToChangePass(true);
-                            EM.setVisible(true);
+                            TesterMain TM =  new TesterMain();
+                            TM.setidEmpleado(rs.getInt(1));
+                            TM.setNombreUser(rs.getString(2));
+                            TM.setidDepartament(rs.getInt(4));
+                            TM.setNombreDepartamento(rs.getString(5));
+                            TM.setHaveToChangePass(haveto);
+                            TM.setVisible(true);
                         break;
                     case "Programador":
-                            EmpleadosMain EM2 = new EmpleadosMain();
+                            ProgramadorMain EM2 = new ProgramadorMain();
+                            EM2.setidEmpleado(rs.getInt(1));
+                            EM2.setNombreUser(rs.getString(2));
+                            EM2.setidDepartament(rs.getInt(4));
+                            EM2.setNombreDepartamento(rs.getString(5));
+                            EM2.setHaveToChangePass(haveto);
                             EM2.setVisible(true);
+                        break;
+                    default:
+                            TesterMain TMA =  new TesterMain();
+                            TMA.setidEmpleado(rs.getInt(1));
+                            TMA.setNombreUser(rs.getString(2));
+                            TMA.setidDepartament(rs.getInt(4));
+                            TMA.setNombreDepartamento(rs.getString(5));
+                            TMA.setHaveToChangePass(haveto);
+                            TMA.setVisible(true);
+                        break;
                 }
                 this.dispose();
             }else{

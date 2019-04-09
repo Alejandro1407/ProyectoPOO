@@ -1,3 +1,10 @@
+/*
+Victor Alejandro Alejo Galvez AG181471
+Matthew Emilio Gaitan Ramos GR180499
+Dennis Enrique Cruz Inestrosa CI180440
+Marco Antonio Hernandez Hernandez HH182006
+Javier Ernesto Perez Pablo PP180605
+*/
 package GUI.JefeDesarrollo;
 
 import GUI.Administrador.*;
@@ -252,6 +259,8 @@ public class GestionSolicitudes extends javax.swing.JFrame {
     }
     
     private void getData(){
+        getProgramadores();
+        getTesters();
         btnAnterior.setEnabled(false);
         btnSiguiente.setEnabled(true);
        try{
@@ -318,8 +327,8 @@ public class GestionSolicitudes extends javax.swing.JFrame {
                 proc.setString(5,txtObservaciones.getText());
             }
             ResultSet answer = proc.executeQuery();
-            //JOptionPane.showMessageDialog(this,answer.getString(1));
-                JOptionPane.showMessageDialog(this, "Se Acepto Correctamente");
+            //answer.next();
+            JOptionPane.showMessageDialog(this,"Solicitud Aceptada con exito");
             getData();
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -399,6 +408,7 @@ public class GestionSolicitudes extends javax.swing.JFrame {
             proc.setInt(1, Integer.parseInt(txtid.getText()));
             proc.setString(2, Motivo);
             ResultSet answer = proc.executeQuery();
+            answer.next();
             JOptionPane.showMessageDialog(this, answer.getString(1));
             getData();
         }catch(Exception e){
@@ -407,8 +417,6 @@ public class GestionSolicitudes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRechazarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        getProgramadores();
-        getTesters();
         getData();  
     }//GEN-LAST:event_formWindowOpened
 
@@ -480,7 +488,7 @@ public class GestionSolicitudes extends javax.swing.JFrame {
             ResultSet rs = proc.executeQuery();
            if(!rs.next()){
                 JOptionPane.showMessageDialog(this,"Lo Sentimos no hay Programadores Disponibles");
-                this.dispose();
+                return;
             }
             rs.beforeFirst();
             while(rs.next()){
@@ -503,7 +511,7 @@ public class GestionSolicitudes extends javax.swing.JFrame {
             ResultSet rs = proc.executeQuery();
             if(!rs.next()){
                 JOptionPane.showMessageDialog(this,"Lo Sentimos no hay Testers Disponibles");
-                this.dispose();
+                return;
             }
            rs.beforeFirst();
             while(rs.next()){

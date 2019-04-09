@@ -1,3 +1,10 @@
+/*
+Victor Alejandro Alejo Galvez AG181471
+Matthew Emilio Gaitan Ramos GR180499
+Dennis Enrique Cruz Inestrosa CI180440
+Marco Antonio Hernandez Hernandez HH182006
+Javier Ernesto Perez Pablo PP180605
+*/
 package GUI.JefeDesarrollo;
 
 import Datos.Conexion;
@@ -59,6 +66,7 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         btnCasos = new javax.swing.JButton();
+        btnContraseña3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Administrador");
@@ -90,7 +98,7 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
                 btnSolicitudesActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSolicitudes, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 190, 81));
+        jPanel1.add(btnSolicitudes, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 190, 81));
 
         txtNombre.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
         txtNombre.setText("Alejandro Alejo");
@@ -138,7 +146,20 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
                 btnCasosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 170, 190, 81));
+        jPanel1.add(btnCasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 200, 81));
+
+        btnContraseña3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnContraseña3.setForeground(new java.awt.Color(238, 112, 82));
+        btnContraseña3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_Key_32px.png"))); // NOI18N
+        btnContraseña3.setText("Cambiar Contraseña");
+        btnContraseña3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnContraseña3.setContentAreaFilled(false);
+        btnContraseña3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContraseña3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnContraseña3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 240, 230, 81));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 370));
 
@@ -184,6 +205,7 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
        if(HaveToChangePass){
            ChangePass();
        }
+      
     }//GEN-LAST:event_formWindowOpened
 
     private void btnCasosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCasosActionPerformed
@@ -192,18 +214,29 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
         c.setVisible(true);
     }//GEN-LAST:event_btnCasosActionPerformed
 
+    private void btnContraseña3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContraseña3ActionPerformed
+        ChangePass();
+    }//GEN-LAST:event_btnContraseña3ActionPerformed
+
         private void ChangePass(){
         String newPass = JOptionPane.showInputDialog(this,"Ingrese nueva contraseña");
-        if(newPass == null){
-            JOptionPane.showMessageDialog(this,"Decidio no actualizar su contraseña\nSe le preguntara el siguiente Login");
-            return;
+       if(newPass == null){
+            if(HaveToChangePass){
+                JOptionPane.showMessageDialog(this,"Decidio no actulizar su contraseña\nSe le preguntara el siguiente Login");
+            }
+          return;
         }
+         if(newPass.equals("") || IsNumeric(newPass)){
+             JOptionPane.showMessageDialog(this, "Contraseña no puede estar vacio o ser numerico");
+             return;
+         }
         try{
             Connection conn =  Conexion.Conectarse();
             if(conn == null){
                 JOptionPane.showMessageDialog(this,"Fallo al conectarse");
                 return;
             }
+           
             CallableStatement proc = conn.prepareCall("{ call actualizar_contrasenia (?,?)}");
             proc.setInt(1, idEmpleado);
             proc.setString(2,newPass);
@@ -214,6 +247,15 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
+       private boolean IsNumeric(String x){
+        try{
+            int y = Integer.parseInt(x);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }  
+        
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -225,6 +267,9 @@ public class JefeDesarrolloMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCasos;
+    private javax.swing.JButton btnContraseña;
+    private javax.swing.JButton btnContraseña1;
+    private javax.swing.JButton btnContraseña3;
     private javax.swing.JButton btnSolicitudes;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

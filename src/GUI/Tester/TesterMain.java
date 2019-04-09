@@ -1,36 +1,37 @@
 /*
-Victor Alejandro Alejo Galvez AG181471
-Matthew Emilio Gaitan Ramos GR180499
-Dennis Enrique Cruz Inestrosa CI180440
-Marco Antonio Hernandez Hernandez HH182006
-Javier Ernesto Perez Pablo PP180605
-*/
-package GUI.Administrador;
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package GUI.Tester;
 
+import GUI.Programador.*;
 import Datos.Conexion;
+import GUI.Administrador.*;
 import GUI.JefeArea.Solicitudes;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Label;
 import javax.swing.JOptionPane;
 import GUI.*;
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 
-public class AdministradorMain extends javax.swing.JFrame {
-    
+public class TesterMain extends javax.swing.JFrame {
+
     private int idDepartamento;
     private int idEmpleado;
     private String NombreDepartamento;
     private String NombreUser;
     private boolean HaveToChangePass;
-    
-    public AdministradorMain() {
+     
+    public TesterMain() {
         initComponents();
         setLocationRelativeTo(null);
     }
     
-    public void setidEmpleado(int id){
-        this.idEmpleado = id;
+    public void setidEmpleado(int idEmp){
+        this.idEmpleado = idEmp;
     }
     public void setidDepartament(int idDepartamento){
            this.idDepartamento = idDepartamento;
@@ -47,23 +48,20 @@ public class AdministradorMain extends javax.swing.JFrame {
     public void setHaveToChangePass(boolean haveto){
         this.HaveToChangePass = haveto;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         txtDepartamento = new javax.swing.JLabel();
-        btnEmpleados = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         txtNombre = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
+        btnBitacora = new javax.swing.JButton();
         btnContraseña = new javax.swing.JButton();
-        btnReportes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Administrador");
@@ -80,48 +78,9 @@ public class AdministradorMain extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(238, 112, 82));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Departamento.png"))); // NOI18N
-        jButton1.setText("Departamentos");
-        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton1.setContentAreaFilled(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 190, 82));
-
         txtDepartamento.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
         txtDepartamento.setText("Administración");
         jPanel1.add(txtDepartamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, -1, -1));
-
-        btnEmpleados.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnEmpleados.setForeground(new java.awt.Color(238, 112, 82));
-        btnEmpleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Empleados.png"))); // NOI18N
-        btnEmpleados.setText("Empleados");
-        btnEmpleados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnEmpleados.setContentAreaFilled(false);
-        btnEmpleados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEmpleadosActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 180, 81));
-
-        jButton3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(238, 112, 82));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Roles.png"))); // NOI18N
-        jButton3.setText("Roles");
-        jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton3.setContentAreaFilled(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, 190, 81));
 
         txtNombre.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
         txtNombre.setText("Alejandro Alejo");
@@ -158,6 +117,19 @@ public class AdministradorMain extends javax.swing.JFrame {
         });
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 40));
 
+        btnBitacora.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnBitacora.setForeground(new java.awt.Color(238, 112, 82));
+        btnBitacora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-add-list-filled-35.png"))); // NOI18N
+        btnBitacora.setText("Cambios");
+        btnBitacora.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnBitacora.setContentAreaFilled(false);
+        btnBitacora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBitacoraActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBitacora, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 230, 81));
+
         btnContraseña.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnContraseña.setForeground(new java.awt.Color(238, 112, 82));
         btnContraseña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_Key_32px.png"))); // NOI18N
@@ -169,30 +141,12 @@ public class AdministradorMain extends javax.swing.JFrame {
                 btnContraseñaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 240, 230, 81));
-
-        btnReportes.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnReportes.setForeground(new java.awt.Color(238, 112, 82));
-        btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/reportes.png"))); // NOI18N
-        btnReportes.setText("Reportes");
-        btnReportes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnReportes.setContentAreaFilled(false);
-        btnReportes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReportesActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 240, 190, 81));
+        jPanel1.add(btnContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 230, 81));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 370));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadosActionPerformed
-       MantenimientoEmpleado e = new MantenimientoEmpleado();
-       e.setVisible(true);
-    }//GEN-LAST:event_btnEmpleadosActionPerformed
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         // TODO add your handling code here:
@@ -216,33 +170,25 @@ public class AdministradorMain extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        MantenimientoRoles MR = new MantenimientoRoles();
-        MR.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnBitacoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBitacoraActionPerformed
+         Testeo b = new Testeo();
+        b.setidEmpleado(idEmpleado);
+        b.setVisible(true);
+    }//GEN-LAST:event_btnBitacoraActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        txtNombre.setText(this.NombreUser);
+       txtNombre.setText(this.NombreUser);
        txtDepartamento.setText(NombreDepartamento);
-       if(HaveToChangePass){
+        if(HaveToChangePass){
            ChangePass();
        }
+        System.out.println(NombreUser);
     }//GEN-LAST:event_formWindowOpened
 
     private void btnContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContraseñaActionPerformed
         ChangePass();
     }//GEN-LAST:event_btnContraseñaActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Mantenimientodepartamentos MD = new Mantenimientodepartamentos();
-        MD.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
-       Reportes R =new  Reportes();
-       R.setVisible(true);
-    }//GEN-LAST:event_btnReportesActionPerformed
-    private void ChangePass(){
+      private void ChangePass(){
         String newPass = JOptionPane.showInputDialog(this,"Ingrese nueva contraseña");
         if(newPass == null){
             if(HaveToChangePass){
@@ -250,7 +196,7 @@ public class AdministradorMain extends javax.swing.JFrame {
             }
           return;
         }
-         if(newPass.equals("") || IsNumeric(newPass)){
+          if(newPass.equals("") || IsNumeric(newPass)){
              JOptionPane.showMessageDialog(this, "Contraseña no puede estar vacio o ser numerico");
              return;
          }
@@ -269,15 +215,18 @@ public class AdministradorMain extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
-     private boolean IsNumeric(String x){
+          private boolean IsNumeric(String x){
         try{
             int y = Integer.parseInt(x);
             return true;
         }catch(Exception e){
             return false;
         }
-    }
+    }  
     
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -301,6 +250,7 @@ public class AdministradorMain extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(AdministradorMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -311,11 +261,8 @@ public class AdministradorMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBitacora;
     private javax.swing.JButton btnContraseña;
-    private javax.swing.JButton btnEmpleados;
-    private javax.swing.JButton btnReportes;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

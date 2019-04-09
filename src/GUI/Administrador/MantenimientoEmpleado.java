@@ -1,3 +1,10 @@
+/*
+Victor Alejandro Alejo Galvez AG181471
+Matthew Emilio Gaitan Ramos GR180499
+Dennis Enrique Cruz Inestrosa CI180440
+Marco Antonio Hernandez Hernandez HH182006
+Javier Ernesto Perez Pablo PP180605
+*/
 package GUI.Administrador;
 
 import GUI.JefeArea.Solicitudes;

@@ -53,18 +53,26 @@ end$$
 delimiter ;
 
 /*Procedimiento para la eliminacion de departamentos*/
-delimiter $$
-create procedure eliminar_departamento (v_id int)
+delimiter //
+create procedure eliminar_departamento(v_depto int)
 begin
-	delete from departamento where id = v_id;
-end$$
+    DECLARE empl_dep INT;
+    SET empl_dep = (SELECT COUNT(e.id) FROM empleado e WHERE e.idDepartamento = v_depto);
+    if(empl_dep = 0) then
+        DELETE FROM departamento WHERE id = v_depto;
+        SELECT CONCAT ('Se elimino correctamente'); 
+    else
+        SELECT CONCAT ('Aun hay ' ,empl_dep, ' en este Departamento'); 
+    end if;
+end //
 delimiter ;
+
 
 /*Procedimiento para mostrar departamentos*/
 delimiter $$
 create procedure mostrar_departamento ()
 begin
-	select D.codigo, D.nombre, D.descripcion  from departamento D;
+	select D.id, D.nombre, D.descripcion  from departamento D;
 end$$
 delimiter ;
 
@@ -118,11 +126,18 @@ end$$
 delimiter ;
 
 /*Procedimiento para la eliminacion de departamentos*/
-delimiter $$
-create procedure eliminar_rol (v_id int)
+delimiter //
+create procedure eliminar_rol(v_rol int)
 begin
-	delete from rol where id = v_id;
-end$$
+    DECLARE empl_dep INT;
+    SET empl_dep = (SELECT COUNT(e.id) FROM empleado e WHERE e.idRol = v_rol);
+    if(empl_dep = 0) then
+        DELETE FROM rol WHERE id = v_rol;
+        SELECT CONCAT ('Se elimino correctamente'); 
+    else
+        SELECT CONCAT ('Aun hay ' ,empl_dep, ' desempeñando este rol'); 
+    end if;
+end //
 delimiter ;
 
 /*Procedimiento para mostrar departamentos*/
@@ -310,11 +325,11 @@ delimiter ;
 delimiter //
 create procedure actualizar_contrasenia(idempleado INT,newcontrasenia VARCHAR(50))
 begin
-    UPDATE empleado SET contrasenia=newcontrasenia WHERE id = idempleado;
+    UPDATE empleado SET contrasenia=SHA2(newcontrasenia,256) WHERE id = idempleado;
 end //
 delimiter ;
 
-INSERT INTO empleado VALUES (null,'root','root','root@gmail.com',SHA2('root',256),1,1);
+INSERT INTO empleado VALUES (null,'root','root','root',SHA2('root',256),1,1);
 
 /* Fin CRUD Empleado */
 
@@ -385,6 +400,13 @@ create table solicitud(
 );
 
 /* CRUD Solicitudes */
+/* Cancelar solicitudes */
+delimiter //
+create procedure cancelar_soli(v_soli INT)
+begin
+    DELETE FROM solicitud WHERE id = v_soli;
+end //
+delimiter ;
 
 delimiter //
 create procedure realizar_solicitud(v_nombre varchar(50), v_descripcion varchar(1000),v_depto int)
@@ -396,8 +418,10 @@ begin
     if count_nombre = 0 then
 		if length(v_descripcion) = 0 then
 			insert into solicitud(nombre, descripcion,idDepartamento) values (v_nombre,default,v_depto);
+			SELECT CONCAT('Se inserto la Solicitud ',v_nombre);
         else 
 			insert into solicitud(nombre, descripcion,idDepartamento) values (v_nombre,v_descripcion,v_depto);
+			SELECT CONCAT('Se inserto la Solicitud ',v_nombre);
 		end if;
 	else
 		select concat('ya existe una solicitud con el nombre: ',v_nombre,', en el departamento: ', sdepto);
@@ -457,6 +481,25 @@ begin
 		end if;
 end //
 delimiter ;
+										 
+/* Reporte Solicitudes */
+delimiter //
+create procedure reporte_todo()
+	begin
+	SELECT (SELECT COUNT(id) FROM solicitud) AS Totales, (SELECT COUNT(id) FROM solicitud WHERE idEstado = 9) AS Finalizados
+	,(SELECT COUNT(id) FROM solicitud WHERE idEstado in (1,3,5,6)) AS Desarrollo, (SELECT COUNT(id) FROM solicitud WHERE idEstado = 2) AS Rechazados;
+end //
+delimiter ;
+	
+/* Reporte departamento */
+delimiter //
+create procedure reporte_dep(v_depid int)
+	begin
+	SELECT (SELECT COUNT(id) FROM solicitud WHERE idDepartamento = v_depid ) AS Totales, (SELECT COUNT(id) FROM solicitud WHERE idEstado = 9 && idDepartamento = v_depid ) AS Finalizados
+    ,(SELECT COUNT(id) FROM solicitud WHERE idEstado in (1,3,5,6) && idDepartamento = v_depid ) AS Desarrollo, (SELECT COUNT(id) FROM solicitud WHERE idEstado = 2 && idDepartamento = v_depid ) AS Rechazados;
+end //
+delimiter ;
+						     
 
 /* Tabla Caso */
 
@@ -512,6 +555,8 @@ create table bitacora(
     finalizado boolean,
     foreign key (idCaso) references caso(id)
 );
+alter table bitacora
+add observaciones_tester varchar(200);
 
 delimiter //
 create procedure crear_caso(v_solicitud int, v_fecha date, v_programador int, v_tester int, v_descripcion varchar(1000))
@@ -601,12 +646,14 @@ delimiter ;
 delimiter //
 create procedure mostrar_casos(idDepartamento int)
 begin
-    SELECT c.nombre,c.codigo,c.descripcion,c.fechaFinal,c.descripcionElementos,c.idEncargado,p.nombre,c.idTester,t.nombre
+    SELECT c.id,c.nombre,c.codigo,c.descripcion,c.fechaFinal,c.descripcionElementos,c.idEncargado,p.nombre,c.idTester,t.nombre,d.nombre
     FROM caso c 
     INNER JOIN empleado p
     ON c.idEncargado = p.id
     INNER JOIN empleado t
     ON c.idTester = t.id
+    INNER JOIN departamento d
+    ON c.idDepartamento = d.id
     WHERE c.idDepartamento = idDepartamento;
 end //
 delimiter ;
@@ -628,13 +675,6 @@ begin
 end//
 delimiter ;
 
-delimiter //
-create procedure mostrar_bitacoras()
-begin
-	select b.id, b.informacion, b.porcentajeAvance, c.nombre from bitacora b inner join caso c on b.idCaso = c.id;
-	/*where c.idEncargado = v_programador;*/
-end//
-delimiter ;
 
 delimiter //
 create procedure ingresar_en_bitacora(v_id int, v_informacion varchar(1000), v_porcentaje int)
@@ -644,7 +684,7 @@ begin
 		select 'La descripcion de avance no puede quedar vacia';
 	else
 		if v_porcentaje = 100 then
-			update bitacora set informacion = v_informacion, porcentajeAvance = v_porcentaje, finalizado = 1 where id = v_id;
+			update bitacora set informacion = v_informacion, porcentajeAvance = v_porcentaje, finalizado = 0 where id = v_id;
             set ncaso = (select idCaso from bitacora where id = v_id);
             update caso set idEstado = 5 where id = ncaso;
             select 'Bitacora actualizada con exito';
@@ -656,5 +696,38 @@ begin
 end//
 delimiter ;
 
-delete from bitacora;
+delimiter //
+create procedure finalizar_caso(v_id int)
+begin
+	declare nsoli int;
+	update caso set idEstado = 7 where id = v_id;
+    update bitacora set finalizado = 1 where idCaso = v_id;
+    set nsoli = (select s.id from solicitud s join caso c on c.idSolicitud = s.id where c.id = v_id limit 1);
+    update solicitud set idEstado = 7 where id = nsoli;
+    select 'El caso ha sido aprobado';
+end//
+delimiter ;
 
+delimiter //
+create procedure agregar_observacion(v_id int, v_observacion varchar(200))
+begin
+	update bitacora set observaciones_tester = v_observacion, porcentajeAvance = 0 where idCaso = v_id;
+    update caso set idEstado = 6 where id = v_id;
+    select 'Se ha enviado las observaciones';
+end//
+delimiter ;
+
+delimiter //
+create procedure mostrar_al_tester(v_id int)
+begin
+	select c.id,c.nombre, c.descripcion from caso c where idTester = v_id;
+end//
+delimiter ;
+
+delimiter //
+create procedure mostrar_bitacoras(v_programador int)
+begin
+	select b.id, b.informacion, b.porcentajeAvance, c.nombre, b.observaciones_tester from bitacora b inner join caso c on b.idCaso = c.id
+	where c.idEncargado = v_programador and c.idEstado != 7;
+end//
+delimiter ;

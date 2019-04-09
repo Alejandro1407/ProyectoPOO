@@ -1,3 +1,10 @@
+/*
+Victor Alejandro Alejo Galvez AG181471
+Matthew Emilio Gaitan Ramos GR180499
+Dennis Enrique Cruz Inestrosa CI180440
+Marco Antonio Hernandez Hernandez HH182006
+Javier Ernesto Perez Pablo PP180605
+*/
 package GUI.JefeArea;
 
 import GUI.JefeDesarrollo.*;
@@ -52,6 +59,8 @@ public class GestionCasos extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         txtCodigo = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
+        txtEstado = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btnAnterior = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
@@ -109,7 +118,7 @@ public class GestionCasos extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(238, 112, 82));
         jLabel2.setText("Descripción:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
 
         txtNombre.setEditable(false);
         txtNombre.setBorder(null);
@@ -118,40 +127,40 @@ public class GestionCasos extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(238, 112, 82));
         jLabel5.setText("Fecha Limite:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(238, 112, 82));
         jLabel6.setText("Tester:");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, -1, -1));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 340, -1, -1));
 
         cmbTester.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Seleccione Uno" }));
         cmbTester.setEnabled(false);
-        jPanel2.add(cmbTester, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 300, 150, -1));
+        jPanel2.add(cmbTester, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, 150, -1));
 
         cmbProgramador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Selecione Uno" }));
         cmbProgramador.setEnabled(false);
-        jPanel2.add(cmbProgramador, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, 150, -1));
+        jPanel2.add(cmbProgramador, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 290, 150, -1));
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         jPanel2.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 220, 20));
 
         jLabel10.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(238, 112, 82));
-        jLabel10.setText("Codigo:");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
+        jLabel10.setText("Estado:");
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         txtDescripcion.setEditable(false);
         txtDescripcion.setColumns(20);
         txtDescripcion.setRows(5);
         jScrollPane1.setViewportView(txtDescripcion);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, -1, -1));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(238, 112, 82));
         jLabel11.setText("Programador:");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, -1, -1));
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, -1, -1));
 
         txtFecha.setEditable(false);
         txtFecha.setText("YYYY/MM/DD");
@@ -163,7 +172,7 @@ public class GestionCasos extends javax.swing.JFrame {
                 txtFechaFocusLost(evt);
             }
         });
-        jPanel2.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 220, 150, -1));
+        jPanel2.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 250, 150, -1));
 
         txtObservaciones.setEditable(false);
         txtObservaciones.setColumns(20);
@@ -179,12 +188,12 @@ public class GestionCasos extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(txtObservaciones);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, -1, -1));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 390, -1, 90));
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(238, 112, 82));
         jLabel3.setText("Observaciones:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, -1, -1));
 
         jLabel12.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(238, 112, 82));
@@ -198,7 +207,15 @@ public class GestionCasos extends javax.swing.JFrame {
         jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
         jPanel2.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 220, 20));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 370, 440));
+        txtEstado.setText("En Desarrollo");
+        jPanel2.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, -1, -1));
+
+        jLabel13.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(238, 112, 82));
+        jLabel13.setText("Codigo:");
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 370, 490));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Acciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 12), new java.awt.Color(238, 112, 82))); // NOI18N
@@ -226,7 +243,7 @@ public class GestionCasos extends javax.swing.JFrame {
         });
         jPanel3.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 70, 30));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 510, 280, 80));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 570, 280, 80));
 
         jSeparator4.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 400, 20));
@@ -234,7 +251,7 @@ public class GestionCasos extends javax.swing.JFrame {
         txtid.setEnabled(false);
         jPanel1.add(txtid, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 40, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 390, 610));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 390, 660));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -286,6 +303,7 @@ public class GestionCasos extends javax.swing.JFrame {
             txtObservaciones.setText(Data.getString(6));
             cmbProgramador.setSelectedItem(new Empleado(Data.getInt(7),Data.getString(8)));
             cmbTester.setSelectedItem(new Empleado(Data.getInt(9),Data.getString(10)));
+             txtEstado.setText(Data.getString(11));
             if(!Data.next()){
               btnSiguiente.setEnabled(false);
             }
@@ -318,6 +336,7 @@ public class GestionCasos extends javax.swing.JFrame {
             txtObservaciones.setText(Data.getString(6));
             cmbProgramador.setSelectedItem(new Empleado(Data.getInt(7),Data.getString(8)));
             cmbTester.setSelectedItem(new Empleado(Data.getInt(9),Data.getString(10)));
+             txtEstado.setText(Data.getString(11));
             if(!Data.previous()){
                     btnAnterior.setEnabled(false);
             }
@@ -369,6 +388,7 @@ public class GestionCasos extends javax.swing.JFrame {
             txtObservaciones.setText(Data.getString(6));
             cmbProgramador.setSelectedItem(new Empleado(Data.getInt(7),Data.getString(8)));
             cmbTester.setSelectedItem(new Empleado(Data.getInt(9),Data.getString(10)));
+            txtEstado.setText(Data.getString(11));
                  if(!Data.next()){
                     btnSiguiente.setEnabled(false);
                 }
@@ -495,6 +515,7 @@ public class GestionCasos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
@@ -512,6 +533,7 @@ public class GestionCasos extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextArea txtDescripcion;
+    private javax.swing.JLabel txtEstado;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextArea txtObservaciones;

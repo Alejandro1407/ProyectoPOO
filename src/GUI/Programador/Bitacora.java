@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GUI.Empleados;
+package GUI.Programador;
 
 import java.sql.ResultSet;
 import Datos.Conexion;
@@ -14,13 +14,18 @@ import javax.swing.JOptionPane;
 
 public class Bitacora extends javax.swing.JFrame {
     private ResultSet Data;
-
+    private int idEmpleado;
+    
     public Bitacora() {
         initComponents();
         setLocationRelativeTo(null);
         getData();
     }
 
+    public void setidEmpleado(int id){
+            this.idEmpleado = id;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -39,6 +44,9 @@ public class Bitacora extends javax.swing.JFrame {
         cmbPorcentaje = new javax.swing.JComboBox<>();
         txtId = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtObservaciones = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         btnActualizar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
@@ -47,6 +55,11 @@ public class Bitacora extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -90,25 +103,25 @@ public class Bitacora extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(238, 112, 82));
         jLabel2.setText("Descripción");
         jLabel2.setToolTipText("");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
 
         txtNombre.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         txtNombre.setText("Nombre del caso");
-        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, 230, 60));
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, 230, 30));
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setRows(5);
         jScrollPane1.setViewportView(txtDescripcion);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, -1, -1));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 56, 330, 90));
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(238, 112, 82));
         jLabel3.setText("Porcentaje Avanzado");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
 
         cmbPorcentaje.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1\t", "2", "3\t", "4\t", "5\t", "6\t", "7\t", "8\t", "9", "10\t", "11\t", "12\t", "13\t", "14", "15\t", "16\t", "17\t", "18\t", "19\t", "20\t", "21", "22\t", "23\t", "24\t", "25\t", "26\t", "27\t", "28\t", "29\t", "30\t", "31\t", "32\t", "33\t", "34\t", "35\t", "36\t", "37\t", "38\t", "39\t", "40\t", "41\t", "42\t", "43\t", "44\t", "45\t", "46\t", "47\t", "48\t", "49\t", "50\t", "51\t", "52\t", "53", "54\t", "55\t", "56\t", "57\t", "58\t", "59\t", "60", "61\t", "62", "63", "64\t", "65\t", "66\t", "67\t", "68\t", "69\t", "70\t", "71\t", "72\t", "73\t", "74\t", "75", "76\t", "77\t", "78\t", "79\t", "80\t", "81\t", "82\t", "83\t", "84\t", "85\t", "86\t", "87\t", "88\t", "89\t", "90\t", "91\t", "92\t", "93\t", "94\t", "95\t", "96\t", "97\t", "98\t", "99\t", "100", " " }));
-        jPanel2.add(cmbPorcentaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 150, -1, -1));
+        jPanel2.add(cmbPorcentaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 160, -1, -1));
 
         txtId.setText("id");
         jPanel2.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(339, 60, 0, -1));
@@ -116,9 +129,24 @@ public class Bitacora extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(238, 112, 82));
         jLabel10.setText("Caso");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 240, 40, -1));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 40, 30));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 370, 290));
+        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(238, 112, 82));
+        jLabel4.setText("Observaciones\ndel tester");
+        jLabel4.setToolTipText("");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 190, -1));
+        jLabel4.getAccessibleContext().setAccessibleName("Observaciones del tester");
+
+        txtObservaciones.setColumns(20);
+        txtObservaciones.setRows(5);
+        txtObservaciones.setEnabled(false);
+        jScrollPane2.setViewportView(txtObservaciones);
+
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 330, 60));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 370, 340));
+        jPanel2.getAccessibleContext().setAccessibleName("Información Bitacora");
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Acciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 12), new java.awt.Color(238, 112, 82))); // NOI18N
@@ -133,7 +161,7 @@ public class Bitacora extends javax.swing.JFrame {
                 btnActualizarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 80, 30));
+        jPanel3.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 80, 30));
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -143,9 +171,9 @@ public class Bitacora extends javax.swing.JFrame {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 40, 90, 30));
+        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 90, 30));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 370, 100));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 370, 60));
 
         jSeparator4.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 400, 20));
@@ -183,6 +211,7 @@ public class Bitacora extends javax.swing.JFrame {
     }
     
     private void getData(){
+        System.out.println(idEmpleado);
         btnActualizar.setEnabled(true);
         btnLimpiar.setEnabled(true);
         try{
@@ -191,7 +220,8 @@ public class Bitacora extends javax.swing.JFrame {
                throw new Exception("No se pudo Conectar");
             }
             CallableStatement proc;
-            proc = conn.prepareCall("{call  mostrar_bitacoras }");
+            proc = conn.prepareCall("{call  mostrar_bitacoras (?) }");
+            proc.setInt(1, idEmpleado);
             this.Data = proc.executeQuery();
             if(!Data.next()){
                 JOptionPane.showMessageDialog(this,"No Hay Registro que mostrar");
@@ -203,6 +233,7 @@ public class Bitacora extends javax.swing.JFrame {
             txtId.setText(Data.getString(1));
             txtNombre.setText(Data.getString(4));
             txtDescripcion.setText(Data.getString(2));
+            txtObservaciones.setText(Data.getString(5));
             cmbPorcentaje.setSelectedIndex(Integer.parseInt(Data.getString(3)));
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -249,7 +280,7 @@ public class Bitacora extends javax.swing.JFrame {
             System.out.println(rs.getString(1));
             JOptionPane.showMessageDialog(this,rs.getString(1));
             btnLimpiarActionPerformed(evt);
-            getData();
+            this.dispose();
            }catch(Exception e){
                JOptionPane.showMessageDialog(this, e.getMessage());
                System.out.println(e.getMessage());
@@ -264,6 +295,10 @@ public class Bitacora extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
 
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        getData();
+    }//GEN-LAST:event_formWindowOpened
 
     public static void main(String args[]) {
 
@@ -283,6 +318,7 @@ public class Bitacora extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -290,9 +326,11 @@ public class Bitacora extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextField txtId;
     private javax.swing.JLabel txtNombre;
+    private javax.swing.JTextArea txtObservaciones;
     // End of variables declaration//GEN-END:variables
 }

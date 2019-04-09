@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GUI.Empleados;
+package GUI.Programador;
 
 import Datos.Conexion;
 import GUI.Administrador.*;
@@ -16,21 +16,21 @@ import GUI.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 
-public class EmpleadosMain extends javax.swing.JFrame {
+public class ProgramadorMain extends javax.swing.JFrame {
 
     private int idDepartamento;
-     private int idEmpleado;
+    private int idEmpleado;
     private String NombreDepartamento;
     private String NombreUser;
     private boolean HaveToChangePass;
      
-    public EmpleadosMain() {
+    public ProgramadorMain() {
         initComponents();
         setLocationRelativeTo(null);
     }
     
-    public void setidEmpleado(int id){
-        this.idEmpleado = id;
+    public void setidEmpleado(int idEmp){
+        this.idEmpleado = idEmp;
     }
     public void setidDepartament(int idDepartamento){
            this.idDepartamento = idDepartamento;
@@ -60,6 +60,7 @@ public class EmpleadosMain extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         btnBitacora = new javax.swing.JButton();
+        btnContraseña = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Administrador");
@@ -118,7 +119,7 @@ public class EmpleadosMain extends javax.swing.JFrame {
         btnBitacora.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnBitacora.setForeground(new java.awt.Color(238, 112, 82));
         btnBitacora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-add-list-filled-35.png"))); // NOI18N
-        btnBitacora.setText("Solicitudes");
+        btnBitacora.setText("Actualizar Bitacora");
         btnBitacora.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnBitacora.setContentAreaFilled(false);
         btnBitacora.addActionListener(new java.awt.event.ActionListener() {
@@ -126,7 +127,20 @@ public class EmpleadosMain extends javax.swing.JFrame {
                 btnBitacoraActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBitacora, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 160, 81));
+        jPanel1.add(btnBitacora, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 230, 81));
+
+        btnContraseña.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnContraseña.setForeground(new java.awt.Color(238, 112, 82));
+        btnContraseña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_Key_32px.png"))); // NOI18N
+        btnContraseña.setText("Cambiar Contraseña");
+        btnContraseña.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnContraseña.setContentAreaFilled(false);
+        btnContraseña.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContraseñaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 230, 81));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 370));
 
@@ -157,6 +171,7 @@ public class EmpleadosMain extends javax.swing.JFrame {
 
     private void btnBitacoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBitacoraActionPerformed
         Bitacora b = new Bitacora();
+        b.setidEmpleado(idEmpleado);
         b.setVisible(true);
     }//GEN-LAST:event_btnBitacoraActionPerformed
 
@@ -166,13 +181,24 @@ public class EmpleadosMain extends javax.swing.JFrame {
         if(HaveToChangePass){
            ChangePass();
        }
+        System.out.println(NombreUser);
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContraseñaActionPerformed
+        ChangePass();
+    }//GEN-LAST:event_btnContraseñaActionPerformed
       private void ChangePass(){
         String newPass = JOptionPane.showInputDialog(this,"Ingrese nueva contraseña");
-        if(newPass == null){
-            JOptionPane.showMessageDialog(this,"Decidio no actulizar su contraseña\nSe le preguntara el siguiente Login");
-            return;
+         if(newPass == null){
+            if(HaveToChangePass){
+                JOptionPane.showMessageDialog(this,"Decidio no actulizar su contraseña\nSe le preguntara el siguiente Login");
+            }
+          return;
         }
+        if(newPass.equals("") || IsNumeric(newPass)){
+             JOptionPane.showMessageDialog(this, "Contraseña no puede estar vacio o ser numerico");
+             return;
+         }
         try{
             Connection conn =  Conexion.Conectarse();
             if(conn == null){
@@ -188,6 +214,14 @@ public class EmpleadosMain extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
+    private boolean IsNumeric(String x){
+        try{
+            int y = Integer.parseInt(x);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }  
     
     /**
      * @param args the command line arguments
@@ -227,6 +261,7 @@ public class EmpleadosMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBitacora;
+    private javax.swing.JButton btnContraseña;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

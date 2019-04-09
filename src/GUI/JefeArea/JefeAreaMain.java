@@ -1,5 +1,13 @@
+/*
+Victor Alejandro Alejo Galvez AG181471
+Matthew Emilio Gaitan Ramos GR180499
+Dennis Enrique Cruz Inestrosa CI180440
+Marco Antonio Hernandez Hernandez HH182006
+Javier Ernesto Perez Pablo PP180605
+*/
 package GUI.JefeArea;
 
+import Datos.Conexion;
 import GUI.Administrador.*;
 import GUI.JefeArea.Solicitudes;
 import java.awt.BorderLayout;
@@ -7,6 +15,8 @@ import java.awt.Button;
 import java.awt.Label;
 import javax.swing.JOptionPane;
 import GUI.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 
 public class JefeAreaMain extends javax.swing.JFrame {
 
@@ -33,7 +43,9 @@ public class JefeAreaMain extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         btnCasos = new javax.swing.JButton();
-        btnSolicitudes1 = new javax.swing.JButton();
+        btnverSolicitudes = new javax.swing.JButton();
+        btnContraseña3 = new javax.swing.JButton();
+        btnReportes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Administrador");
@@ -65,7 +77,7 @@ public class JefeAreaMain extends javax.swing.JFrame {
                 btnSolicitudesActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSolicitudes, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, 200, 81));
+        jPanel1.add(btnSolicitudes, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, 200, 81));
 
         txtNombre.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
         txtNombre.setText("Alejandro Alejo");
@@ -113,22 +125,48 @@ public class JefeAreaMain extends javax.swing.JFrame {
                 btnCasosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 220, 81));
+        jPanel1.add(btnCasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 240, 230, 81));
 
-        btnSolicitudes1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnSolicitudes1.setForeground(new java.awt.Color(238, 112, 82));
-        btnSolicitudes1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-view-filled-35.png"))); // NOI18N
-        btnSolicitudes1.setText("Ver solicitudes");
-        btnSolicitudes1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnSolicitudes1.setContentAreaFilled(false);
-        btnSolicitudes1.addActionListener(new java.awt.event.ActionListener() {
+        btnverSolicitudes.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnverSolicitudes.setForeground(new java.awt.Color(238, 112, 82));
+        btnverSolicitudes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-view-filled-35.png"))); // NOI18N
+        btnverSolicitudes.setText("Ver solicitudes");
+        btnverSolicitudes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnverSolicitudes.setContentAreaFilled(false);
+        btnverSolicitudes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSolicitudes1ActionPerformed(evt);
+                btnverSolicitudesActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSolicitudes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, 190, 81));
+        jPanel1.add(btnverSolicitudes, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 240, 200, 81));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 370));
+        btnContraseña3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnContraseña3.setForeground(new java.awt.Color(238, 112, 82));
+        btnContraseña3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_Key_32px.png"))); // NOI18N
+        btnContraseña3.setText("Cambiar Contraseña");
+        btnContraseña3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnContraseña3.setContentAreaFilled(false);
+        btnContraseña3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContraseña3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnContraseña3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 230, 81));
+
+        btnReportes.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnReportes.setForeground(new java.awt.Color(238, 112, 82));
+        btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/reportes.png"))); // NOI18N
+        btnReportes.setText("Reportes");
+        btnReportes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnReportes.setContentAreaFilled(false);
+        btnReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 340, 190, 81));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 440));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -154,10 +192,8 @@ public class JefeAreaMain extends javax.swing.JFrame {
 
     private void btnSolicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitudesActionPerformed
         Solicitudes s = new Solicitudes();
-        System.out.println("Jefe Main " + idDepartamento);
         s.setidDepartamento(idDepartamento);
-        s.setVisible(true);
-        this.dispose();
+        s.setVisible(true); 
     }//GEN-LAST:event_btnSolicitudesActionPerformed
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
@@ -191,13 +227,63 @@ public class JefeAreaMain extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
        txtNombre.setText(this.NombreUser);
        txtDepartamento.setText(NombreDepartamento);
+       if(HaveToChangePass){
+           ChangePass();
+       }
     }//GEN-LAST:event_formWindowOpened
-
-    private void btnSolicitudes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitudes1ActionPerformed
-        /*GestionSolicitudes e = new GestionSolicitudes();
+    
+        private void ChangePass(){
+        String newPass = JOptionPane.showInputDialog(this,"Ingrese nueva contraseña");
+         if(newPass == null){
+            if(HaveToChangePass){
+                JOptionPane.showMessageDialog(this,"Decidio no actulizar su contraseña\nSe le preguntara el siguiente Login");
+            }
+          return;
+        }
+        if(newPass.equals("") || IsNumeric(newPass)){
+             JOptionPane.showMessageDialog(this, "Contraseña no puede estar vacio o ser numerico");
+             return;
+         }
+        try{
+            Connection conn =  Conexion.Conectarse();
+            if(conn == null){
+                JOptionPane.showMessageDialog(this,"Fallo al conectarse");
+                return;
+            }
+            CallableStatement proc = conn.prepareCall("{ call actualizar_contrasenia (?,?)}");
+            proc.setInt(1, idEmpleado);
+            proc.setString(2,newPass);
+            proc.execute();
+            System.out.println(idEmpleado+" " + newPass);
+            JOptionPane.showMessageDialog(this,"Se actulizo la contraseña");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    private boolean IsNumeric(String x){
+        try{
+            int y = Integer.parseInt(x);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+    private void btnverSolicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnverSolicitudesActionPerformed
+        GestionSolicitudes e = new GestionSolicitudes();
         e.setidDepartamento(getidDepartamento());
-        e.setVisible(true);*/
-    }//GEN-LAST:event_btnSolicitudes1ActionPerformed
+        e.setVisible(true);
+    }//GEN-LAST:event_btnverSolicitudesActionPerformed
+
+    private void btnContraseña3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContraseña3ActionPerformed
+        ChangePass();
+    }//GEN-LAST:event_btnContraseña3ActionPerformed
+
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+        Reportes R = new  Reportes();
+        R.setidDepartamento(idDepartamento);
+        R.setNombreDepartamento(NombreDepartamento);
+        R.setVisible(true);
+    }//GEN-LAST:event_btnReportesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,8 +323,10 @@ public class JefeAreaMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCasos;
+    private javax.swing.JButton btnContraseña3;
+    private javax.swing.JButton btnReportes;
     private javax.swing.JButton btnSolicitudes;
-    private javax.swing.JButton btnSolicitudes1;
+    private javax.swing.JButton btnverSolicitudes;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

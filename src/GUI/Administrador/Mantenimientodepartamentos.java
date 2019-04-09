@@ -14,10 +14,10 @@ import java.awt.HeadlessException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
-public class MantenimientoRoles extends javax.swing.JFrame {
+public class Mantenimientodepartamentos extends javax.swing.JFrame {
     private ResultSet Data;
     
-    public MantenimientoRoles() {
+    public Mantenimientodepartamentos() {
         initComponents();
         txtid.setVisible(false);
         setLocationRelativeTo(null);
@@ -31,10 +31,10 @@ public class MantenimientoRoles extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtDescripcion = new javax.swing.JTextField();
         txtid = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         btnAgregar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
@@ -43,8 +43,8 @@ public class MantenimientoRoles extends javax.swing.JFrame {
         btnAnterior = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
-        jSeparator4 = new javax.swing.JSeparator();
         jLabel7 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
 
@@ -55,7 +55,7 @@ public class MantenimientoRoles extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Noto Sans", 1, 18)); // NOI18N
-        jLabel1.setText(".::ROLES::.");
+        jLabel1.setText(".::DEPARTAMENTOS::.");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, 32));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -65,24 +65,12 @@ public class MantenimientoRoles extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(238, 112, 82));
         jLabel2.setText("Nombre:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, -1, -1));
-
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
-            }
-        });
-        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtNombreKeyPressed(evt);
-            }
-        });
-        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 190, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(238, 112, 82));
         jLabel3.setText("Descripcion:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
 
         txtDescripcion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,13 +82,27 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                 txtDescripcionKeyPressed(evt);
             }
         });
-        jPanel2.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 190, 70));
-        jPanel2.add(txtid, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, -1, -1));
+        jPanel2.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 180, 70));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 308, 200));
+        txtid.setEditable(false);
+        jPanel2.add(txtid, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, -1, -1));
+
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNombreKeyPressed(evt);
+            }
+        });
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 180, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 310, 200));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Acciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(238, 112, 82))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Acciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnAgregar.setText("Agregar");
@@ -110,7 +112,7 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                 btnAgregarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 74, -1, -1));
+        jPanel3.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 74, -1, -1));
 
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +120,7 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(117, 74, -1, -1));
+        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(118, 74, -1, -1));
 
         btnSiguiente.setText("Siguiente");
         btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
@@ -126,7 +128,7 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-        jPanel3.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 31, -1, -1));
+        jPanel3.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 31, -1, -1));
 
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -134,7 +136,7 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                 btnEditarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 74, 66, -1));
+        jPanel3.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 74, 66, -1));
 
         btnAnterior.setText("Anterior");
         btnAnterior.setEnabled(false);
@@ -143,7 +145,7 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel3.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(117, 31, -1, -1));
+        jPanel3.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(118, 31, -1, -1));
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -151,9 +153,9 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 31, 60, -1));
+        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 31, 60, -1));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 308, 120));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, 310, 130));
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Buscar.png"))); // NOI18N
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -161,10 +163,7 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 50, 40, 37));
-
-        jSeparator4.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 400, 20));
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 37, 37));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-reply-arrow-32.png"))); // NOI18N
         jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -174,6 +173,9 @@ public class MantenimientoRoles extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 30));
+
+        jSeparator4.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 400, 20));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8_Expand_Arrow_32px.png"))); // NOI18N
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -201,7 +203,7 @@ public class MantenimientoRoles extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
         );
 
         pack();
@@ -225,9 +227,8 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                throw new Exception("No se pudo Conectar");
             }
             CallableStatement proc;
-            proc = conn.prepareCall("{call  mostrar_rol }");
+            proc = conn.prepareCall("{call  mostrar_departamento }");
             this.Data = proc.executeQuery();
-            //this.Data = Conexion.ExecuteQuery("SELECT e.id,e.nombre,e.apellidos,e.email,r.id,r.rol,d.id,d.Nombre FROM empleado e INNER JOIN rol r ON e.idRol = r.id INNER JOIN departamento d ON e.idDepartamento = d.id");//proc.executeQuery();
             if(!Data.next()){
                 JOptionPane.showMessageDialog(this,"No Hay Registro que mostrar");
                 return;
@@ -237,9 +238,6 @@ public class MantenimientoRoles extends javax.swing.JFrame {
             txtid.setText(Data.getString(1));
             txtNombre.setText(Data.getString(2));
             txtDescripcion.setText(Data.getString(3));
-            if(!Data.next()){
-                btnSiguiente.setEnabled(false);
-            }
              Data.previous();
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -257,22 +255,23 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                JOptionPane.showMessageDialog(this,"Descripcion no puede estar vacio o ser numerico");
                return;
            }
+        
             try{
                 Connection conn = Conexion.Conectarse();
                 if(conn == null){
                     throw new Exception("No se pudo Conectar");
                 }
                 CallableStatement proc; //Declara un objeto de CallableStatement
-                proc = conn.prepareCall("{call insertar_rol(?,?)}"); //Se encierra entre { la instruccion call y el procedimiento}
+                proc = conn.prepareCall("{call insertar_departamento (?,?) }"); //Se encierra entre { la instruccion call y el procedimiento}
                 proc.setString(1,txtNombre.getText());
                 proc.setString(2,txtDescripcion.getText());
-                if(!proc.execute()){
-                    JOptionPane.showMessageDialog(this, "Registro exitoso");
-                    getData();
-                }
-           }catch(Exception e){
+                ResultSet rs = proc.executeQuery();
+                JOptionPane.showMessageDialog(rootPane, "Registro exitoso");
+                 getData();
+            }catch(Exception e){
                System.out.println(e.getMessage());
-               JOptionPane.showMessageDialog(this, "Ocurrio un Error");
+                getData();
+               JOptionPane.showMessageDialog(rootPane, "Registro exitoso");
            }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -286,50 +285,46 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                throw new Exception("No se Pudo Conectar");
             }
             CallableStatement proc; //Declara un objeto de CallableStatement
-            proc = conn.prepareCall("{call eliminar_rol (?)}"); //Se encierra entre { la instruccion call y el procedimiento}
+            proc = conn.prepareCall("{call eliminar_departamento (?) }"); //Se encierra entre { la instruccion call y el procedimiento}
             proc.setInt(1,Integer.parseInt(txtid.getText()));
-            ResultSet answer = proc.executeQuery();
-            answer.next();
-            JOptionPane.showMessageDialog(this, answer.getString(1));
+            ResultSet rs = proc.executeQuery();
+            rs.next();
+            JOptionPane.showMessageDialog(this,rs.getString(1));
             getData();
-            
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-            if(txtNombre.getText().equals("") || IsNumeric(txtNombre.getText())){
+             if(txtNombre.getText().equals("") || IsNumeric(txtNombre.getText())){
                JOptionPane.showMessageDialog(this,"Nombre no puede estar vacio o ser numerico");
                return;
-            }
-            if(txtDescripcion.getText().equals("") || IsNumeric(txtDescripcion.getText())){
+           }
+           if(txtDescripcion.getText().equals("") || IsNumeric(txtDescripcion.getText())){
                JOptionPane.showMessageDialog(this,"Descripcion no puede estar vacio o ser numerico");
                return;
-            }
-            if(JOptionPane.showConfirmDialog(this,"¿Seguro desea Actulizar este registro?") != JOptionPane.YES_OPTION){
-                return;
-            } 
+           }
+        if(JOptionPane.showConfirmDialog(this,"¿Seguro desea Actualizar este registro?") != JOptionPane.YES_OPTION){
+            return;
+        } 
         try{ 
             Connection conn = Conexion.Conectarse(); //Obtenemos la conexion
             if(conn == null){
                throw new Exception("No se Pudo Conectar");
             }
             CallableStatement proc; //Declara un objeto de CallableStatement
-            proc = conn.prepareCall("{ call  actualizar_rol (?,?,?) }"); //Se encierra entre { la instruccion call y el procedimiento}
+            proc = conn.prepareCall("{call  actualizar_departamento(?,?,?)}"); //Se encierra entre { la instruccion call y el procedimiento}
             proc.setInt(1,Integer.parseInt(txtid.getText()));
             proc.setString(2,txtNombre.getText());
             proc.setString(3,txtDescripcion.getText());
-            System.out.println(txtid.getText() + " " +txtNombre.getText() + " " + txtDescripcion.getText());
-            if(!proc.execute()){
+            proc.executeQuery();
                 JOptionPane.showMessageDialog(this,"Actualizado con Exito");
                 getData();
-            }else{
-                throw new Exception("Fallo Al Actulizar");
-            }
         }catch(Exception e){
-            JOptionPane.showMessageDialog(this,e.getMessage());
             System.out.println(e.getMessage());
+            getData();
+            
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -351,7 +346,6 @@ public class MantenimientoRoles extends javax.swing.JFrame {
             btnEditar.setEnabled(true);
             btnEliminar.setEnabled(true);
             btnAgregar.setEnabled(false);
-            
             if(Data.next()){
             txtid.setText(Data.getString(1));
             txtNombre.setText(Data.getString(2));
@@ -376,16 +370,13 @@ public class MantenimientoRoles extends javax.swing.JFrame {
             btnAgregar.setEnabled(false);
             
             if(Data.previous()){
-              
                 txtid.setText(Data.getString(1));
-            txtNombre.setText(Data.getString(2));
-            txtDescripcion.setText(Data.getString(3));
-              
-                 if(!Data.previous()){
-                    btnAnterior.setEnabled(false);
-                }
-                Data.next();
-                
+                txtNombre.setText(Data.getString(2));
+                txtDescripcion.setText(Data.getString(3));
+            if(!Data.previous()){
+                  btnAnterior.setEnabled(false);
+            }
+            Data.next();
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -393,24 +384,24 @@ public class MantenimientoRoles extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-       String var = JOptionPane.showInputDialog(this,"Ingrese Nombre del rol");
+       String var = JOptionPane.showInputDialog(this,"Ingrese Nombre del Departamento");
        if(var == null){
-           System.out.println("ño");
+           System.out.println("Error Buscando");
            return;
        }
        try{
             Connection conn = Conexion.Conectarse();
-            CallableStatement proc = conn.prepareCall("{call buscar_rol(?)}");
+            CallableStatement proc = conn.prepareCall("{call buscar_departamento(?)}");
             proc.setString(1, var);
             ResultSet rs =  proc.executeQuery();
             if(!rs.next()){
                 JOptionPane.showMessageDialog(this,"Busqueda no Obtuvo Resultados");
                 return;
             }
-            rs.first();
-            txtid.setText(Data.getString(1));
-            txtNombre.setText(Data.getString(2));
-            txtDescripcion.setText(Data.getString(3));
+            Data.first();
+            txtid.setText(rs.getString(1));
+            txtNombre.setText(rs.getString(2));
+            txtDescripcion.setText(rs.getString(3));
             Data.beforeFirst();
             btnSiguiente.setEnabled(true);
             btnAnterior.setEnabled(false);
@@ -421,21 +412,21 @@ public class MantenimientoRoles extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        btnAgregar.setEnabled(true);
-    }//GEN-LAST:event_txtNombreActionPerformed
-
     private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
         btnAgregar.setEnabled(true);
     }//GEN-LAST:event_txtDescripcionActionPerformed
 
-    private void txtNombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyPressed
-         btnAgregar.setEnabled(true);
-    }//GEN-LAST:event_txtNombreKeyPressed
-
     private void txtDescripcionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyPressed
          btnAgregar.setEnabled(true);
     }//GEN-LAST:event_txtDescripcionKeyPressed
+
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void txtNombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreKeyPressed
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         this.dispose();
@@ -468,13 +459,13 @@ public class MantenimientoRoles extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoRoles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Mantenimientodepartamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoRoles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Mantenimientodepartamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoRoles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Mantenimientodepartamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoRoles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Mantenimientodepartamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -488,10 +479,11 @@ public class MantenimientoRoles extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MantenimientoRoles().setVisible(true);
+                new Mantenimientodepartamentos().setVisible(true);
             }
         });
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnAnterior;

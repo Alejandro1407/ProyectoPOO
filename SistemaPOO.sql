@@ -432,7 +432,7 @@ delimiter ;
 delimiter //
 create procedure mostrar_solicitudes(v_idDepto int)
 begin
-       SELECT id,nombre,descripcion FROM solicitud WHERE idDepartamento = v_idDepto AND idEstado = 1;
+       SELECT id,nombre,descripcion FROM solicitud WHERE idDepartamento = v_idDepto AND idEstado = 1 AND idEstado != 7;
 end //
 delimiter ;
 
@@ -654,7 +654,7 @@ begin
     ON c.idTester = t.id
     INNER JOIN departamento d
     ON c.idDepartamento = d.id
-    WHERE c.idDepartamento = idDepartamento;
+    WHERE c.idDepartamento = idDepartamento AND c.idEstado != 7;
 end //
 delimiter ;
 

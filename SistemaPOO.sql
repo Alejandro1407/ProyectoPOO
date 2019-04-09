@@ -7,12 +7,11 @@
 * Empleado: 4
 * Programador: 5
 */
-
-set SQL_SAFE_UPDATES = 0;
-
 create database SistemaPOO;
 
 use SistemaPOO;
+
+set SQL_SAFE_UPDATES = 0;
 
 create table departamento(
     id int primary key auto_increment,
@@ -493,11 +492,10 @@ delimiter ;
 delimiter //
 create procedure reporte_dep(v_depid int)
 	begin
-	SELECT (SELECT COUNT(id) FROM solicitud WHERE idDepartamento = v_depid ) AS Totales, (SELECT COUNT(id) FROM solicitud WHERE idEstado = 9 && idDepartamento = v_depid ) AS Finalizados
+	SELECT (SELECT COUNT(id) FROM solicitud WHERE idDepartamento = v_depid ) AS Totales, (SELECT COUNT(id) FROM solicitud WHERE idEstado = 7 && idDepartamento = v_depid ) AS Finalizados
     ,(SELECT COUNT(id) FROM solicitud WHERE idEstado in (1,3,5,6) && idDepartamento = v_depid ) AS Desarrollo, (SELECT COUNT(id) FROM solicitud WHERE idEstado = 2 && idDepartamento = v_depid ) AS Rechazados;
 end //
 delimiter ;
-						     
 
 /* Tabla Caso */
 
@@ -534,14 +532,14 @@ create table rechazo(
 delimiter //
 create procedure programadores_sin_caso(v_depto int)
 begin
-	select e.id, e.nombre from empleado e left join caso c on e.id = c.idEncargado where c.idEncargado is null and e.idRol = 5 and e.idDepartamento = v_depto;
+	select e.id, e.nombre from empleado e left join caso c on e.id = c.idEncargado where c.idEncargado is null and e.idRol = 5 AND c.idEstado = 7 and e.idDepartamento = v_depto;
 end//
 delimiter ;
 
 delimiter //
 create procedure empleados_sin_caso(v_depto int)
 begin
-	select e.id, e.nombre from empleado e left join caso c on e.id = c.idTester where c.idEncargado is null and e.idRol = 4 and e.idDepartamento = v_depto;
+	select e.id, e.nombre from empleado e left join caso c on e.id = c.idTester where (c.idTester is null and e.idRol = 4 OR c.idEstado != 7) and e.idDepartamento = v_depto;
 end//
 delimiter ;
 
@@ -709,7 +707,7 @@ delimiter ;
 delimiter //
 create procedure agregar_observacion(v_id int, v_observacion varchar(200))
 begin
-	update bitacora set observaciones_tester = v_observacion, porcentajeAvance = 0 where idCaso = v_id;
+	update bitacora set observaciones_tester = v_observacion, porcentajeAvance = 90 where idCaso = v_id;
     update caso set idEstado = 6 where id = v_id;
     select 'Se ha enviado las observaciones';
 end//
@@ -718,7 +716,7 @@ delimiter ;
 delimiter //
 create procedure mostrar_al_tester(v_id int)
 begin
-	select c.id,c.nombre, c.descripcion from caso c where idTester = v_id;
+	select c.id,c.nombre, c.descripcion from caso c join bitacora b on b.idCaso = c.id where idTester = v_id and b.porcentajeAvance = 100 and c.idEstado != 7;
 end//
 delimiter ;
 
@@ -726,6 +724,8 @@ delimiter //
 create procedure mostrar_bitacoras(v_programador int)
 begin
 	select b.id, b.informacion, b.porcentajeAvance, c.nombre, b.observaciones_tester from bitacora b inner join caso c on b.idCaso = c.id
-	where c.idEncargado = v_programador and c.idEstado != 7;
+	where c.idEncargado = v_programador and c.idEstado != 7 and b.porcentajeAvance != 100;
 end//
 delimiter ;
+
+select * from empleado;

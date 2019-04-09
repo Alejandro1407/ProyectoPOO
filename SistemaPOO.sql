@@ -358,8 +358,6 @@ insert into estado(estado,tipo) values ('En desarrollo',3);
 insert into estado(estado,tipo) values ('Vencido',2);
 insert into estado(estado,tipo) values ('Esperando aprobacion del area solicitante',2);
 insert into estado(estado,tipo) values ('Devuelto con observaciones',4);
-insert into estado(estado,tipo) values ('Aprobado',4);
-insert into estado(estado,tipo) values ('Rechazado',4);
 insert into estado(estado,tipo) values ('Finalizado',3);
 
 /* Los estados que se mostraran para los diferentes usuarios */
